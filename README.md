@@ -8,7 +8,7 @@ _Seamlessly integrate SmartLead's complete API suite with Claude, Cursor, Windsu
 
 > **🤝 Unofficial Partner Integration** - We are proud partners of [SmartLead](https://smartlead.ai) and absolutely love their product! This is an unofficial MCP server implementation that provides seamless access to SmartLead's powerful email marketing automation platform. SmartLead's API is incredibly well-designed, their deliverability is outstanding, and their feature set is unmatched.
 
-[![npm version](https://img.shields.io/npm/v/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/smartlead-mcp-server) [![Downloads](https://img.shields.io/npm/dm/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=brightgreen)](https://www.npmjs.com/package/smartlead-mcp-server) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=opensource&logoColor=white)](https://opensource.org/licenses/MIT) [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![npm version](https://img.shields.io/npm/v/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/smartlead-mcp-server) [![Downloads](https://img.shields.io/npm/dm/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=brightgreen)](https://www.npmjs.com/package/smartlead-mcp-server) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=opensource&logoColor=white)](https://opensource.org/licenses/MIT) [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.0.0-brightgreen.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue?style=for-the-badge&logo=protocol&logoColor=white)](https://modelcontextprotocol.io) [![Production Ready](https://img.shields.io/badge/Production-Ready-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server) [![Security](https://img.shields.io/badge/Security-Verified-green?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server/security)
 
@@ -45,11 +45,14 @@ The easiest way to get started - works on **macOS**, **Windows**, and **Linux**.
 npx smartlead-mcp-server install
 ```
 
-**✨ The installer will:**
-- ✅ Guide you through API key setup
-- ✅ Automatically detect and configure your preferred AI tool
-- ✅ Provide configuration examples for all supported clients
-- ✅ Show usage examples and helpful links
+**✨ The enhanced installer features:**
+- 🎨 **Beautiful modern UI** with gradient text and interactive components
+- ✅ **Guided API key setup** with real-time validation
+- 🔍 **Smart client detection** for all supported AI tools
+- ⚙️ **Automatic configuration** with zero manual setup
+- 🚀 **Lightning fast** - up and running in under 2 minutes!
+- 🛡️ **Mandatory security** - API key validation before any installation
+- 📱 **Node.js 20+ optimized** for enhanced performance
 
 ### 📱 Option 2: Quick Manual Setup
 
@@ -273,7 +276,7 @@ Once installed, you can use natural language commands in your AI tool:
 
 ### 📋 Prerequisites
 
-- 📦 Node.js 18.0.0 or higher
+- 📦 Node.js 20.0.0 or higher (LTS recommended for optimal performance)
 - 🔑 SmartLead API key from [smartlead.ai](https://smartlead.ai)
 
 ### 💻 Local Development

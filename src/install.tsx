@@ -11,9 +11,13 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { render, Box, Text, useInput, useApp } from 'ink';
+import { render, Box, Text, useInput, useApp, Newline } from 'ink';
 import Link from 'ink-link';
 import Spinner from 'ink-spinner';
+import Gradient from 'ink-gradient';
+import BigText from 'ink-big-text';
+import SelectInput from 'ink-select-input';
+import TextInput from 'ink-text-input';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
@@ -368,65 +372,65 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
   });
 
   return (
-    <Box flexDirection="column" padding={2} borderStyle="round" borderColor="cyan">
-      <Box justifyContent="center" marginBottom={1}>
-        <Text color="cyan" bold>
-          🚀 SmartLead MCP Server - Interactive Installer
+    <Box flexDirection="column" alignItems="center" paddingY={2}>
+      {/* Modern gradient title */}
+      <Box marginBottom={2}>
+        <Gradient name="rainbow">
+          <BigText text="SmartLead" />
+        </Gradient>
+      </Box>
+
+      <Box marginBottom={1}>
+        <Gradient name="cristal">
+          <Text bold>MCP SERVER INSTALLER</Text>
+        </Gradient>
+      </Box>
+
+      <Box marginBottom={2}>
+        <Text color="cyan" dimColor>
+          ────────────────────────────────────────────────────────────
         </Text>
       </Box>
 
-      <Box flexDirection="column" paddingX={2}>
+      <Box marginBottom={2} flexDirection="column" alignItems="center">
         <Text color="green" bold>
-          Welcome to the SmartLead MCP Server installer!
+          🤝 Unofficial SmartLead Partner • We ❤️ their product!
         </Text>
-        <Text></Text>
-        <Text>
-          This will get you set up to use <Text color="yellow" bold>100+ powerful email marketing tools</Text>
+        <Text color="yellow" dimColor>
+          The most comprehensive email marketing automation MCP server
         </Text>
-        <Text>
-          in your favorite AI environment.
+      </Box>
+
+      <Box marginBottom={2} flexDirection="column" alignItems="center">
+        <Text color="magenta" bold>✨ What you'll get:</Text>
+        <Text color="white">🎯 <Text color="cyan" bold>120+ API tools</Text> • 🛡️ <Text color="green" bold>Production ready</Text> • 🎨 <Text color="yellow" bold>Beautiful installer</Text></Text>
+        <Text color="white">🔧 <Text color="blue" bold>TypeScript first</Text> • 🌍 <Text color="magenta" bold>Cross platform</Text> • ⚡ <Text color="red" bold>Zero config</Text></Text>
+        <Text color="white">📊 <Text color="cyan" bold>Real-time analytics</Text> • 🔄 <Text color="green" bold>Smart retries</Text> • 🎯 <Text color="yellow" bold>Rate limiting</Text></Text>
+      </Box>
+
+      <Box marginBottom={2} padding={1} borderStyle="round" borderColor="red">
+        <Text color="red" bold>
+          ⚠️  SECURITY: API key validation required before installation
         </Text>
-        <Text></Text>
+      </Box>
 
-        <Box borderStyle="single" borderColor="yellow" padding={1} marginY={1}>
-          <Box flexDirection="column">
-            <Text color="yellow" bold>
-              🤖 What is MCP?
-            </Text>
-            <Text dimColor>
-              The Model Context Protocol (MCP) allows AI assistants like Claude,
-            </Text>
-            <Text dimColor>
-              Cursor, and Continue.dev to use external tools. This server exposes
-            </Text>
-            <Text dimColor>
-              the entire SmartLead API as a suite of MCP tools.
-            </Text>
-          </Box>
-        </Box>
+      <Box marginBottom={2} flexDirection="column" alignItems="center">
+        <Text color="gray" dimColor>Compatible with:</Text>
+        <Text color="white">
+          <Text color="cyan">Claude</Text> • <Text color="green">Cursor</Text> • <Text color="yellow">Windsurf</Text> • <Text color="magenta">Continue</Text> • <Text color="blue">Cline</Text>
+        </Text>
+      </Box>
 
-        <Box borderStyle="single" borderColor="green" padding={1} marginY={1}>
-          <Box flexDirection="column">
-            <Text color="green" bold>
-              ✨ What you'll get:
-            </Text>
-            <Text>• Campaign Management (12 tools)</Text>
-            <Text>• Lead Management (17 tools)</Text>
-            <Text>• Email Account Management (10 tools)</Text>
-            <Text>• Analytics & Statistics (13 tools)</Text>
-            <Text>• Smart Delivery & Spam Testing (25 tools)</Text>
-            <Text>• Webhooks & Integrations (5 tools)</Text>
-            <Text>• Client Management (6 tools)</Text>
-            <Text>• Smart Senders (5 tools)</Text>
-            <Text>• Global Analytics (20 tools)</Text>
-          </Box>
-        </Box>
+      <Box marginBottom={1}>
+        <Text color="blue">
+          <Spinner type="dots" /> Ready to transform your email automation{dots}
+        </Text>
+      </Box>
 
-        <Box justifyContent="center" marginTop={1}>
-          <Text color="green" bold>
-            Press ENTER to continue{dots}
-          </Text>
-        </Box>
+      <Box padding={1} borderStyle="double" borderColor="green">
+        <Text color="green" bold>
+          ▶️  Press ENTER or SPACE to begin installation
+        </Text>
       </Box>
     </Box>
   );
@@ -444,6 +448,7 @@ const ApiKeyScreen: React.FC<{
   const [error, setError] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [showInput, setShowInput] = useState(false);
 
   const getDetailedErrorMessage = (err: unknown): string => {
     if (err instanceof SmartLeadError) {
@@ -488,21 +493,19 @@ const ApiKeyScreen: React.FC<{
     }
   };
 
+  const handleSubmit = () => {
+    if (!input || input.length < 10) {
+      setError('Invalid API key format. Please enter a valid key from SmartLead (minimum 10 characters).');
+    } else {
+      validateApiKey(input.trim());
+    }
+  };
+
   useInput((inputChar, key) => {
     if (key.escape) {
       onBack();
-    } else if (key.return) {
-      if (!input || input.length < 10) {
-        setError('Invalid API key format. Please enter a valid key from SmartLead (minimum 10 characters).');
-      } else {
-        validateApiKey(input.trim());
-      }
-    } else if (key.backspace || key.delete) {
-      setInput(current => current.slice(0, -1));
-      if (error) setError(''); // Clear error when user starts typing
-    } else if (inputChar && !key.ctrl && !key.meta && inputChar !== '\r' && inputChar !== '\n') {
-      setInput(current => current + inputChar);
-      if (error) setError(''); // Clear error when user starts typing
+    } else if (key.return && !isValidating) {
+      handleSubmit();
     }
   });
 
@@ -539,14 +542,24 @@ const ApiKeyScreen: React.FC<{
         </Box>
 
         <Box borderStyle="single" borderColor={input.length >= 10 ? 'green' : 'gray'} padding={1} marginBottom={1}>
-          <Text>
-            API Key: {input ? '•'.repeat(Math.min(input.length, 50)) : '(start typing...)'}
-          </Text>
-          {input.length > 0 && input.length < 10 && (
-            <Text color="yellow" dimColor>
-              Need at least 10 characters...
-            </Text>
-          )}
+          <Box flexDirection="column">
+            <Text color="cyan" bold>Enter your SmartLead API Key:</Text>
+            <TextInput
+              value={input}
+              onChange={(value) => {
+                setInput(value);
+                if (error) setError(''); // Clear error when user starts typing
+              }}
+              onSubmit={handleSubmit}
+              placeholder="Paste your SmartLead API key here..."
+              mask="•"
+            />
+            {input.length > 0 && input.length < 10 && (
+              <Text color="yellow" dimColor>
+                Need at least 10 characters...
+              </Text>
+            )}
+          </Box>
         </Box>
 
         {isValidating && (
@@ -615,8 +628,6 @@ const ClientSelectionScreen: React.FC<{
   onNext: (clients: string[]) => void;
   onBack: () => void;
 }> = ({ onNext, onBack }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
   const clients: MCPClient[] = [
     { id: 'all', name: 'All Supported Clients', emoji: '🌟', description: 'Configure all detected clients automatically (Recommended)' },
     { id: 'claude', name: 'Claude Desktop', emoji: '🤖', description: 'For the native Anthropic Claude app' },
@@ -648,24 +659,22 @@ const ClientSelectionScreen: React.FC<{
     }
   };
 
+  const handleSelect = (item: any) => {
+    const selected = clients.find(c => c.id === item.value);
+    if (selected) {
+      if (selected.id === 'env') {
+        onNext(['env']);
+      } else if (selected.id === 'all') {
+        onNext(['claude', 'cursor', 'windsurf', 'continue', 'vscode', 'zed']);
+      } else {
+        onNext([selected.id]);
+      }
+    }
+  };
+
   useInput((_, key) => {
     if (key.escape) {
       onBack();
-    } else if (key.upArrow) {
-      setSelectedIndex(i => Math.max(0, i - 1));
-    } else if (key.downArrow) {
-      setSelectedIndex(i => Math.min(clients.length - 1, i + 1));
-    } else if (key.return) {
-      const selected = clients[selectedIndex];
-      if (selected) {
-        if (selected.id === 'env') {
-          onNext(['env']);
-        } else if (selected.id === 'all') {
-          onNext(['claude', 'cursor', 'windsurf', 'continue', 'vscode', 'zed']);
-        } else {
-          onNext([selected.id]);
-        }
-      }
     }
   });
 
@@ -702,37 +711,15 @@ const ClientSelectionScreen: React.FC<{
           </Box>
         </Box>
 
-        <Box flexDirection="column" marginBottom={1}>
-          {clients.map((client, index) => (
-            <Box key={client.id} flexDirection="column" marginBottom={1}>
-              <Box
-                borderStyle={index === selectedIndex ? "double" : "single"}
-                borderColor={index === selectedIndex ? "cyan" : "gray"}
-                padding={1}
-              >
-                <Box flexDirection="column">
-                  <Box>
-                    <Text color={index === selectedIndex ? 'cyan' : 'white'} bold={index === selectedIndex}>
-                      {index === selectedIndex ? "→ " : "  "}
-                      {client.emoji} {client.name}
-                    </Text>
-                    {client.id !== 'all' && client.id !== 'env' && (
-                      <Text color={getClientStatus(client.id).includes('✅') ? 'green' : 'yellow'} dimColor>
-                        {" "}{getClientStatus(client.id)}
-                      </Text>
-                    )}
-                  </Box>
-                  {index === selectedIndex && (
-                    <Box marginTop={1}>
-                      <Text dimColor>
-                        {client.description}
-                      </Text>
-                    </Box>
-                  )}
-                </Box>
-              </Box>
-            </Box>
-          ))}
+        <Box marginBottom={2}>
+          <SelectInput
+            items={clients.map(client => ({
+              label: `${client.emoji} ${client.name} ${client.id !== 'all' && client.id !== 'env' ? `(${getClientStatus(client.id)})` : ''}`,
+              value: client.id,
+              key: client.id
+            }))}
+            onSelect={handleSelect}
+          />
         </Box>
 
         <Box justifyContent="center" marginTop={1}>
