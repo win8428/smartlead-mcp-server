@@ -1,0 +1,110 @@
+{
+  "name": "smartlead-mcp-server",
+  "version": "1.0.0",
+  "description": "🚀 Production-ready Model Context Protocol server for SmartLead API - Complete email marketing automation suite with powerful campaign management, lead tracking, and analytics tools. Zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
+  "type": "module",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "smartlead",
+    "email-marketing",
+    "campaign-management",
+    "lead-generation",
+    "email-automation",
+    "outreach",
+    "claude",
+    "cursor",
+    "windsurf",
+    "continue",
+    "ai-tools",
+    "typescript",
+    "production-ready",
+    "zero-config",
+    "enterprise",
+    "api-client",
+    "nodejs",
+    "sdk",
+    "automation",
+    "sales-automation",
+    "email-sequences",
+    "analytics",
+    "webhooks",
+    "smart-delivery"
+  ],
+  "author": {
+    "name": "LeadMagic Team",
+    "email": "jesse@leadmagic.io",
+    "url": "https://leadmagic.io"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/LeadMagic/smartlead-mcp-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LeadMagic/smartlead-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LeadMagic/smartlead-mcp-server/issues",
+    "email": "jesse@leadmagic.io"
+  },
+  "main": "dist/index.js",
+  "bin": {
+    "smartlead-mcp-server": "dist/index.js",
+    "smartlead-mcp-install": "dist/install.js"
+  },
+  "files": [
+    "dist/",
+    ".env.example",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "watch": "tsx watch src/index.ts",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run validate",
+    "inspector": "npx @modelcontextprotocol/inspector",
+    "validate": "npm run type-check && npm run build && echo '✅ Validation passed'",
+    "install-interactive": "tsx src/install.tsx",
+    "test-api": "npm run build && node dist/test-api.js",
+    "quick-setup": "npm install -g smartlead-mcp-server && smartlead-mcp-install"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": ">=1.0.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "ink": "^5.0.1",
+    "ink-link": "^4.1.0",
+    "ink-spinner": "^5.0.0",
+    "react": "^18.2.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "@modelcontextprotocol/sdk": ">=1.0.0"
+  }
+}
