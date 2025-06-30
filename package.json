@@ -1,6 +1,6 @@
 {
   "name": "smartlead-mcp-server",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "🚀 Production-ready Model Context Protocol server for SmartLead API - Complete email marketing automation suite with powerful campaign management, lead tracking, and analytics tools. Zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
   "type": "module",
   "keywords": [
@@ -60,23 +60,28 @@
     "SECURITY.md"
   ],
   "scripts": {
-    "build": "npm run clean && tsc",
-    "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "watch": "tsx watch src/index.ts",
-    "test": "jest",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix",
-    "format": "prettier --write src/**/*.ts",
+    "build": "bun run clean && bun run compile",
+    "compile": "tsc",
+    "dev": "bun --watch src/index.ts",
+    "start": "bun run dist/index.js",
+    "watch": "bun --watch src/index.ts",
+    "test": "bun test",
+    "lint": "biome lint src/",
+    "lint:fix": "biome lint --write src/",
+    "format": "biome format src/",
+    "format:fix": "biome format --write src/",
+    "check": "biome check src/",
+    "check:fix": "biome check --write src/",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run validate",
-    "inspector": "npx @modelcontextprotocol/inspector",
-    "validate": "npm run type-check && npm run build && echo '✅ Validation passed'",
-    "install-interactive": "tsx src/install.tsx",
-    "test-api": "npm run build && node dist/test-api.js",
-    "quick-setup": "npm install -g smartlead-mcp-server && smartlead-mcp-install"
+    "prepare": "bun run build",
+    "prepublishOnly": "bun run validate",
+    "inspector": "bunx @modelcontextprotocol/inspector",
+    "validate": "bun run type-check && bun run build && echo '✅ Validation passed'",
+    "install-interactive": "bun run src/install.tsx",
+    "test-api": "bun run build && bun run dist/test-api.js",
+    "quick-setup": "bun install -g smartlead-mcp-server && smartlead-mcp-install",
+    "install:deps": "bun install"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": ">=1.0.0",
@@ -93,6 +98,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
     "@types/jest": "^29.5.0",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.0",

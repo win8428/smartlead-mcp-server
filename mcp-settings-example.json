@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "smartlead": {
+      "command": "node",
+      "args": ["/path/to/smartlead-mcp-server/dist/index.js"],
+      "env": {
+        "SMARTLEAD_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}

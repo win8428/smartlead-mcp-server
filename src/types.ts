@@ -1,9 +1,9 @@
 /**
  * SmartLead MCP Server - Type Definitions
- * 
+ *
  * Comprehensive TypeScript type definitions and Zod schemas for all SmartLead API endpoints.
  * This file provides type safety, runtime validation, and documentation for the entire API surface.
- * 
+ *
  * API Coverage:
  * - Campaign management (13 endpoints)
  * - Lead management (8 endpoints)
@@ -12,7 +12,7 @@
  * - Webhooks (3 endpoints)
  * - Client management (4 endpoints)
  * - Smart senders (5 endpoints)
- * 
+ *
  * @author LeadMagic Team
  * @version 1.0.0
  */
@@ -188,7 +188,9 @@ export const EmailSequenceSchema = z.object({
   /** Sample percentage for AI testing */
   lead_distribution_percentage: z.number().optional(),
   /** Metric for determining winner */
-  winning_metric_property: z.enum(['OPEN_RATE', 'CLICK_RATE', 'REPLY_RATE', 'POSITIVE_REPLY_RATE']).optional(),
+  winning_metric_property: z
+    .enum(['OPEN_RATE', 'CLICK_RATE', 'REPLY_RATE', 'POSITIVE_REPLY_RATE'])
+    .optional(),
   /** Email variants */
   seq_variants: z.array(SequenceVariantSchema),
 });
@@ -201,6 +203,70 @@ export const SaveCampaignSequenceRequestSchema = z.object({
   campaign_id: z.number(),
   /** Email sequence array */
   sequence: z.array(EmailSequenceSchema),
+});
+
+/**
+ * Request schema for getting campaign sequence
+ */
+export const GetCampaignSequenceRequestSchema = z.object({
+  /** Campaign ID */
+  campaign_id: z.number(),
+});
+
+/**
+ * Request schema for deleting campaign
+ */
+export const DeleteCampaignRequestSchema = z.object({
+  /** Campaign ID */
+  campaign_id: z.number(),
+});
+
+/**
+ * Request schema for exporting campaign data
+ */
+export const ExportCampaignDataRequestSchema = z.object({
+  /** Campaign ID */
+  campaign_id: z.number(),
+  /** Export format (csv, excel, json) */
+  format: z.enum(['csv', 'excel', 'json']).optional(),
+  /** Date range start */
+  start_date: z.string().optional(),
+  /** Date range end */
+  end_date: z.string().optional(),
+});
+
+/**
+ * Request schema for fetching campaign analytics by date range
+ */
+export const FetchCampaignAnalyticsByDateRangeRequestSchema = z.object({
+  /** Campaign ID */
+  campaign_id: z.number(),
+  /** Start date in YYYY-MM-DD format */
+  start_date: z.string(),
+  /** End date in YYYY-MM-DD format */
+  end_date: z.string(),
+  /** Timezone */
+  timezone: z.string().default('Etc/GMT'),
+});
+
+/**
+ * Request schema for getting campaign sequence analytics
+ */
+export const GetCampaignSequenceAnalyticsRequestSchema = z.object({
+  /** Campaign ID */
+  campaign_id: z.number(),
+  /** Start date in YYYY-MM-DD format */
+  start_date: z.string().optional(),
+  /** End date in YYYY-MM-DD format */
+  end_date: z.string().optional(),
+});
+
+/**
+ * Request schema for fetching all campaigns using lead ID
+ */
+export const FetchAllCampaignsUsingLeadIdRequestSchema = z.object({
+  /** Lead ID */
+  lead_id: z.number(),
 });
 
 // ================================
@@ -320,22 +386,24 @@ export const BulkImportLeadsRequestSchema = z.object({
   /** Campaign ID */
   campaign_id: z.number(),
   /** Array of leads to import */
-  leads: z.array(z.object({
-    /** Email address */
-    email: z.string().email(),
-    /** First name */
-    first_name: z.string().optional(),
-    /** Last name */
-    last_name: z.string().optional(),
-    /** Company */
-    company: z.string().optional(),
-    /** Job title */
-    title: z.string().optional(),
-    /** Phone number */
-    phone: z.string().optional(),
-    /** Custom fields */
-    custom_fields: z.record(z.unknown()).optional(),
-  })),
+  leads: z.array(
+    z.object({
+      /** Email address */
+      email: z.string().email(),
+      /** First name */
+      first_name: z.string().optional(),
+      /** Last name */
+      last_name: z.string().optional(),
+      /** Company */
+      company: z.string().optional(),
+      /** Job title */
+      title: z.string().optional(),
+      /** Phone number */
+      phone: z.string().optional(),
+      /** Custom fields */
+      custom_fields: z.record(z.unknown()).optional(),
+    })
+  ),
 });
 
 /**
@@ -695,6 +763,18 @@ export type ListCampaignsRequest = z.infer<typeof ListCampaignsRequestSchema>;
 export type EmailSequence = z.infer<typeof EmailSequenceSchema>;
 export type SequenceVariant = z.infer<typeof SequenceVariantSchema>;
 export type SaveCampaignSequenceRequest = z.infer<typeof SaveCampaignSequenceRequestSchema>;
+export type GetCampaignSequenceRequest = z.infer<typeof GetCampaignSequenceRequestSchema>;
+export type DeleteCampaignRequest = z.infer<typeof DeleteCampaignRequestSchema>;
+export type ExportCampaignDataRequest = z.infer<typeof ExportCampaignDataRequestSchema>;
+export type FetchCampaignAnalyticsByDateRangeRequest = z.infer<
+  typeof FetchCampaignAnalyticsByDateRangeRequestSchema
+>;
+export type GetCampaignSequenceAnalyticsRequest = z.infer<
+  typeof GetCampaignSequenceAnalyticsRequestSchema
+>;
+export type FetchAllCampaignsUsingLeadIdRequest = z.infer<
+  typeof FetchAllCampaignsUsingLeadIdRequestSchema
+>;
 
 /** Lead management types */
 export type Lead = z.infer<typeof LeadSchema>;
@@ -708,12 +788,18 @@ export type DeleteLeadRequest = z.infer<typeof DeleteLeadRequestSchema>;
 
 /** Analytics types */
 export type CampaignAnalyticsByDateRequest = z.infer<typeof CampaignAnalyticsByDateRequestSchema>;
-export type CampaignSequenceAnalyticsRequest = z.infer<typeof CampaignSequenceAnalyticsRequestSchema>;
+export type CampaignSequenceAnalyticsRequest = z.infer<
+  typeof CampaignSequenceAnalyticsRequestSchema
+>;
 export type CampaignStatisticsRequest = z.infer<typeof CampaignStatisticsRequestSchema>;
 export type WarmupStatsByEmailRequest = z.infer<typeof WarmupStatsByEmailRequestSchema>;
-export type CampaignTopLevelAnalyticsRequest = z.infer<typeof CampaignTopLevelAnalyticsRequestSchema>;
+export type CampaignTopLevelAnalyticsRequest = z.infer<
+  typeof CampaignTopLevelAnalyticsRequestSchema
+>;
 export type CampaignLeadStatisticsRequest = z.infer<typeof CampaignLeadStatisticsRequestSchema>;
-export type CampaignMailboxStatisticsRequest = z.infer<typeof CampaignMailboxStatisticsRequestSchema>;
+export type CampaignMailboxStatisticsRequest = z.infer<
+  typeof CampaignMailboxStatisticsRequestSchema
+>;
 export type DownloadCampaignDataRequest = z.infer<typeof DownloadCampaignDataRequestSchema>;
 export type ViewDownloadStatisticsRequest = z.infer<typeof ViewDownloadStatisticsRequestSchema>;
 
@@ -725,8 +811,12 @@ export type WebhookPublishSummaryRequest = z.infer<typeof WebhookPublishSummaryR
 export type RetriggerFailedEventsRequest = z.infer<typeof RetriggerFailedEventsRequestSchema>;
 
 /** Smart Delivery types */
-export type CreateManualPlacementTestRequest = z.infer<typeof CreateManualPlacementTestRequestSchema>;
-export type CreateAutomatedPlacementTestRequest = z.infer<typeof CreateAutomatedPlacementTestRequestSchema>;
+export type CreateManualPlacementTestRequest = z.infer<
+  typeof CreateManualPlacementTestRequestSchema
+>;
+export type CreateAutomatedPlacementTestRequest = z.infer<
+  typeof CreateAutomatedPlacementTestRequestSchema
+>;
 export type GetSpamTestDetailsRequest = z.infer<typeof GetSpamTestDetailsRequestSchema>;
 export type DeleteSmartDeliveryTestsRequest = z.infer<typeof DeleteSmartDeliveryTestsRequestSchema>;
 export type ListTestsRequest = z.infer<typeof ListTestsRequestSchema>;
@@ -745,17 +835,15 @@ export const GetCampaignsWithAnalyticsRequestSchema = z.object({
   client_id: z.string().optional(),
   /** Filter campaigns by status (recommended for large accounts) */
   status: z.enum(['ACTIVE', 'PAUSED', 'COMPLETED', 'DRAFT']).optional(),
-  /** Maximum number of campaigns to return */
-  limit: z.number().int().min(1).max(100).default(50),
-  /** Number of campaigns to skip for pagination */
-  offset: z.number().int().min(0).default(0),
   /** Start date for analytics (YYYY-MM-DD format) */
-  start_date: z.string().default('2024-01-01'),
-  /** End date for analytics (YYYY-MM-DD format, defaults to today) */
+  start_date: z.string().optional(),
+  /** End date for analytics (YYYY-MM-DD format) */
   end_date: z.string().optional(),
 });
 
-export type GetCampaignsWithAnalyticsRequest = z.infer<typeof GetCampaignsWithAnalyticsRequestSchema>;
+export type GetCampaignsWithAnalyticsRequest = z.infer<
+  typeof GetCampaignsWithAnalyticsRequestSchema
+>;
 
 // ================================
 // LEAD MANAGEMENT SCHEMAS
@@ -777,14 +865,16 @@ export const FetchLeadByEmailRequestSchema = z.object({
 
 export const AddLeadsToCampaignRequestSchema = z.object({
   campaign_id: z.number().int().positive(),
-  leads: z.array(z.object({
-    email: z.string().email(),
-    first_name: z.string().optional(),
-    last_name: z.string().optional(),
-    company: z.string().optional(),
-    title: z.string().optional(),
-    phone: z.string().optional(),
-  })),
+  leads: z.array(
+    z.object({
+      email: z.string().email(),
+      first_name: z.string().optional(),
+      last_name: z.string().optional(),
+      company: z.string().optional(),
+      title: z.string().optional(),
+      phone: z.string().optional(),
+    })
+  ),
 });
 
 export const ResumeLeadByCampaignRequestSchema = z.object({
@@ -860,11 +950,235 @@ export type AddLeadsToCampaignRequest = z.infer<typeof AddLeadsToCampaignRequest
 export type ResumeLeadByCampaignRequest = z.infer<typeof ResumeLeadByCampaignRequestSchema>;
 export type PauseLeadByCampaignRequest = z.infer<typeof PauseLeadByCampaignRequestSchema>;
 export type DeleteLeadByCampaignRequest = z.infer<typeof DeleteLeadByCampaignRequestSchema>;
-export type UnsubscribeLeadFromCampaignRequest = z.infer<typeof UnsubscribeLeadFromCampaignRequestSchema>;
-export type UnsubscribeLeadFromAllCampaignsRequest = z.infer<typeof UnsubscribeLeadFromAllCampaignsRequestSchema>;
+export type UnsubscribeLeadFromCampaignRequest = z.infer<
+  typeof UnsubscribeLeadFromCampaignRequestSchema
+>;
+export type UnsubscribeLeadFromAllCampaignsRequest = z.infer<
+  typeof UnsubscribeLeadFromAllCampaignsRequestSchema
+>;
 export type AddLeadToGlobalBlocklistRequest = z.infer<typeof AddLeadToGlobalBlocklistRequestSchema>;
 export type UpdateLeadByIdRequest = z.infer<typeof UpdateLeadByIdRequestSchema>;
 export type UpdateLeadCategoryRequest = z.infer<typeof UpdateLeadCategoryRequestSchema>;
 export type FetchLeadMessageHistoryRequest = z.infer<typeof FetchLeadMessageHistoryRequestSchema>;
-export type ReplyToLeadFromMasterInboxRequest = z.infer<typeof ReplyToLeadFromMasterInboxRequestSchema>;
+export type ReplyToLeadFromMasterInboxRequest = z.infer<
+  typeof ReplyToLeadFromMasterInboxRequestSchema
+>;
 export type ForwardReplyRequest = z.infer<typeof ForwardReplyRequestSchema>;
+
+// ================================
+// ANALYTICS API SCHEMAS (VERSION 1.5)
+// ================================
+
+/**
+ * Schema for analytics campaign list request
+ */
+export const AnalyticsCampaignListRequestSchema = z.object({
+  client_ids: z.string().optional().describe('Comma-separated client IDs to filter campaigns'),
+});
+
+/**
+ * Schema for analytics client list request
+ */
+export const AnalyticsClientListRequestSchema = z.object({});
+
+/**
+ * Schema for monthly client count request
+ */
+export const AnalyticsClientMonthWiseCountRequestSchema = z.object({});
+
+/**
+ * Schema for overall analytics request
+ */
+export const AnalyticsOverallStatsV2RequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for day-wise overall analytics request
+ */
+export const AnalyticsDayWiseOverallStatsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+});
+
+/**
+ * Schema for email health metrics request
+ */
+export const AnalyticsMailboxNameWiseHealthMetricsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for domain health metrics request
+ */
+export const AnalyticsMailboxDomainWiseHealthMetricsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for email provider health metrics request
+ */
+export const AnalyticsMailboxProviderWiseOverallPerformanceRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for campaign overall stats request
+ */
+export const AnalyticsCampaignOverallStatsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for client overall stats request
+ */
+export const AnalyticsClientOverallStatsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for team board stats request
+ */
+export const AnalyticsTeamBoardOverallStatsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for lead stats request
+ */
+export const AnalyticsLeadOverallStatsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+});
+
+/**
+ * Schema for lead response category wise request
+ */
+export const AnalyticsLeadCategoryWiseResponseRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+});
+
+/**
+ * Schema for leads take for first reply request
+ */
+export const AnalyticsCampaignLeadsTakeForFirstReplyRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+});
+
+/**
+ * Schema for follow up reply rate request
+ */
+export const AnalyticsCampaignFollowUpReplyRateRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+});
+
+/**
+ * Schema for lead to reply time request
+ */
+export const AnalyticsCampaignLeadToReplyTimeRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Etc/GMT').describe('Timezone for the date range'),
+});
+
+/**
+ * Schema for campaign response stats request
+ */
+export const AnalyticsCampaignResponseStatsRequestSchema = z.object({
+  start_date: z.string().describe('Start date in YYYY-MM-DD format'),
+  end_date: z.string().describe('End date in YYYY-MM-DD format'),
+  timezone: z.string().default('Asia/Kolkata').describe('Timezone for the date range'),
+  full_data: z.boolean().default(true).describe('Whether to include full data'),
+});
+
+/**
+ * Schema for campaign status stats request
+ */
+export const AnalyticsCampaignStatusStatsRequestSchema = z.object({});
+
+/**
+ * Schema for mailbox overall stats request
+ */
+export const AnalyticsMailboxOverallStatsRequestSchema = z.object({});
+
+// Analytics types
+export type AnalyticsCampaignListRequest = z.infer<typeof AnalyticsCampaignListRequestSchema>;
+export type AnalyticsClientListRequest = z.infer<typeof AnalyticsClientListRequestSchema>;
+export type AnalyticsClientMonthWiseCountRequest = z.infer<
+  typeof AnalyticsClientMonthWiseCountRequestSchema
+>;
+export type AnalyticsOverallStatsV2Request = z.infer<typeof AnalyticsOverallStatsV2RequestSchema>;
+export type AnalyticsDayWiseOverallStatsRequest = z.infer<
+  typeof AnalyticsDayWiseOverallStatsRequestSchema
+>;
+export type AnalyticsMailboxNameWiseHealthMetricsRequest = z.infer<
+  typeof AnalyticsMailboxNameWiseHealthMetricsRequestSchema
+>;
+export type AnalyticsMailboxDomainWiseHealthMetricsRequest = z.infer<
+  typeof AnalyticsMailboxDomainWiseHealthMetricsRequestSchema
+>;
+export type AnalyticsMailboxProviderWiseOverallPerformanceRequest = z.infer<
+  typeof AnalyticsMailboxProviderWiseOverallPerformanceRequestSchema
+>;
+export type AnalyticsCampaignOverallStatsRequest = z.infer<
+  typeof AnalyticsCampaignOverallStatsRequestSchema
+>;
+export type AnalyticsClientOverallStatsRequest = z.infer<
+  typeof AnalyticsClientOverallStatsRequestSchema
+>;
+export type AnalyticsTeamBoardOverallStatsRequest = z.infer<
+  typeof AnalyticsTeamBoardOverallStatsRequestSchema
+>;
+export type AnalyticsLeadOverallStatsRequest = z.infer<
+  typeof AnalyticsLeadOverallStatsRequestSchema
+>;
+export type AnalyticsLeadCategoryWiseResponseRequest = z.infer<
+  typeof AnalyticsLeadCategoryWiseResponseRequestSchema
+>;
+export type AnalyticsCampaignLeadsTakeForFirstReplyRequest = z.infer<
+  typeof AnalyticsCampaignLeadsTakeForFirstReplyRequestSchema
+>;
+export type AnalyticsCampaignFollowUpReplyRateRequest = z.infer<
+  typeof AnalyticsCampaignFollowUpReplyRateRequestSchema
+>;
+export type AnalyticsCampaignLeadToReplyTimeRequest = z.infer<
+  typeof AnalyticsCampaignLeadToReplyTimeRequestSchema
+>;
+export type AnalyticsCampaignResponseStatsRequest = z.infer<
+  typeof AnalyticsCampaignResponseStatsRequestSchema
+>;
+export type AnalyticsCampaignStatusStatsRequest = z.infer<
+  typeof AnalyticsCampaignStatusStatsRequestSchema
+>;
+export type AnalyticsMailboxOverallStatsRequest = z.infer<
+  typeof AnalyticsMailboxOverallStatsRequestSchema
+>;

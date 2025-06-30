@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * SmartLead MCP Server - Interactive Installer (Ink-powered)
- * 
+ *
  * CRITICAL REQUIREMENT: API key validation MUST pass before any MCP client installation
- * 
+ *
  * Built with Ink - React for command-line interfaces
- * 
+ *
  * @author LeadMagic Team
  * @version 1.0.0
  */
@@ -49,7 +49,14 @@ interface ContinueConfig {
   [key: string]: unknown;
 }
 
-type InstallationStep = 'welcome' | 'apiKey' | 'validating' | 'clientSelection' | 'installing' | 'complete' | 'error';
+type InstallationStep =
+  | 'welcome'
+  | 'apiKey'
+  | 'validating'
+  | 'clientSelection'
+  | 'installing'
+  | 'complete'
+  | 'error';
 
 interface MCPClient {
   id: string;
@@ -73,9 +80,22 @@ function getConfigPaths() {
 
   const basePaths = {
     darwin: {
-      claude: path.join(home, 'Library', 'Application Support', 'Claude', 'claude_desktop_config.json'),
+      claude: path.join(
+        home,
+        'Library',
+        'Application Support',
+        'Claude',
+        'claude_desktop_config.json'
+      ),
       cursor: path.join(home, 'Library', 'Application Support', 'Cursor', 'User', 'settings.json'),
-      windsurf: path.join(home, 'Library', 'Application Support', 'Windsurf', 'User', 'settings.json'),
+      windsurf: path.join(
+        home,
+        'Library',
+        'Application Support',
+        'Windsurf',
+        'User',
+        'settings.json'
+      ),
       continue: path.join(home, '.continue', 'config.json'),
       vscode: path.join(home, 'Library', 'Application Support', 'Code', 'User', 'settings.json'),
       zed: path.join(home, '.config', 'zed', 'settings.json'),
@@ -131,10 +151,10 @@ function writeConfig(configPath: string, config: Record<string, unknown>): void 
 }
 
 const smartleadServerConfig = (apiKey: string) => ({
-  command: "smartlead-mcp-server",
+  command: 'smartlead-mcp-server',
   env: {
-    SMARTLEAD_API_KEY: apiKey
-  }
+    SMARTLEAD_API_KEY: apiKey,
+  },
 });
 
 function createEnvFile(apiKey: string): InstallationResult {
@@ -183,7 +203,7 @@ function installForClaude(apiKey: string): InstallationResult {
 
     config.mcpServers = {
       ...config.mcpServers,
-      smartlead: serverConfig
+      smartlead: serverConfig,
     };
 
     writeConfig(configPath, config);
@@ -198,7 +218,7 @@ function installForClaude(apiKey: string): InstallationResult {
       client: 'Claude Desktop',
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      configPath
+      configPath,
     };
   }
 }
@@ -212,7 +232,7 @@ function installForCursor(apiKey: string): InstallationResult {
 
     config['cline.mcpServers'] = {
       ...config['cline.mcpServers'],
-      smartlead: serverConfig
+      smartlead: serverConfig,
     };
 
     writeConfig(configPath, config);
@@ -227,7 +247,7 @@ function installForCursor(apiKey: string): InstallationResult {
       client: 'Cursor (Cline)',
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      configPath
+      configPath,
     };
   }
 }
@@ -241,7 +261,7 @@ function installForWindsurf(apiKey: string): InstallationResult {
 
     config.mcpServers = {
       ...config.mcpServers,
-      smartlead: serverConfig
+      smartlead: serverConfig,
     };
 
     writeConfig(configPath, config);
@@ -256,7 +276,7 @@ function installForWindsurf(apiKey: string): InstallationResult {
       client: 'Windsurf',
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      configPath
+      configPath,
     };
   }
 }
@@ -267,12 +287,12 @@ function installForContinue(apiKey: string): InstallationResult {
     ensureConfigDir(configPath);
     const config = readConfigSafely<ContinueConfig>(configPath);
     const serverConfig = {
-      name: "smartlead",
-      ...smartleadServerConfig(apiKey)
+      name: 'smartlead',
+      ...smartleadServerConfig(apiKey),
     };
 
     if (!config.mcpServers) config.mcpServers = [];
-    config.mcpServers = config.mcpServers.filter(server => server.name !== 'smartlead');
+    config.mcpServers = config.mcpServers.filter((server) => server.name !== 'smartlead');
     config.mcpServers.push(serverConfig);
 
     writeConfig(configPath, config);
@@ -287,7 +307,7 @@ function installForContinue(apiKey: string): InstallationResult {
       client: 'Continue.dev',
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      configPath
+      configPath,
     };
   }
 }
@@ -301,7 +321,7 @@ function installForVSCode(apiKey: string): InstallationResult {
 
     config['cline.mcpServers'] = {
       ...config['cline.mcpServers'],
-      smartlead: serverConfig
+      smartlead: serverConfig,
     };
 
     writeConfig(configPath, config);
@@ -316,7 +336,7 @@ function installForVSCode(apiKey: string): InstallationResult {
       client: 'VS Code',
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      configPath
+      configPath,
     };
   }
 }
@@ -330,7 +350,7 @@ function installForZed(apiKey: string): InstallationResult {
 
     config.mcpServers = {
       ...config.mcpServers,
-      smartlead: serverConfig
+      smartlead: serverConfig,
     };
 
     writeConfig(configPath, config);
@@ -345,7 +365,7 @@ function installForZed(apiKey: string): InstallationResult {
       client: 'Zed Editor',
       success: false,
       message: error instanceof Error ? error.message : 'Unknown error',
-      configPath
+      configPath,
     };
   }
 }
@@ -360,7 +380,7 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDots(prev => prev.length >= 3 ? '' : prev + '.');
+      setDots((prev) => (prev.length >= 3 ? '' : prev + '.'));
     }, 500);
     return () => clearInterval(interval);
   }, []);
@@ -402,22 +422,67 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
       </Box>
 
       <Box marginBottom={2} flexDirection="column" alignItems="center">
-        <Text color="magenta" bold>✨ What you'll get:</Text>
-        <Text color="white">🎯 <Text color="cyan" bold>120+ API tools</Text> • 🛡️ <Text color="green" bold>Production ready</Text> • 🎨 <Text color="yellow" bold>Beautiful installer</Text></Text>
-        <Text color="white">🔧 <Text color="blue" bold>TypeScript first</Text> • 🌍 <Text color="magenta" bold>Cross platform</Text> • ⚡ <Text color="red" bold>Zero config</Text></Text>
-        <Text color="white">📊 <Text color="cyan" bold>Real-time analytics</Text> • 🔄 <Text color="green" bold>Smart retries</Text> • 🎯 <Text color="yellow" bold>Rate limiting</Text></Text>
+        <Text color="magenta" bold>
+          ✨ What you'll get:
+        </Text>
+        <Text color="white">
+          🎯{' '}
+          <Text color="cyan" bold>
+            120+ API tools
+          </Text>{' '}
+          • 🛡️{' '}
+          <Text color="green" bold>
+            Production ready
+          </Text>{' '}
+          • 🎨{' '}
+          <Text color="yellow" bold>
+            Beautiful installer
+          </Text>
+        </Text>
+        <Text color="white">
+          🔧{' '}
+          <Text color="blue" bold>
+            TypeScript first
+          </Text>{' '}
+          • 🌍{' '}
+          <Text color="magenta" bold>
+            Cross platform
+          </Text>{' '}
+          • ⚡{' '}
+          <Text color="red" bold>
+            Zero config
+          </Text>
+        </Text>
+        <Text color="white">
+          📊{' '}
+          <Text color="cyan" bold>
+            Real-time analytics
+          </Text>{' '}
+          • 🔄{' '}
+          <Text color="green" bold>
+            Smart retries
+          </Text>{' '}
+          • 🎯{' '}
+          <Text color="yellow" bold>
+            Rate limiting
+          </Text>
+        </Text>
       </Box>
 
       <Box marginBottom={2} padding={1} borderStyle="round" borderColor="red">
         <Text color="red" bold>
-          ⚠️  SECURITY: API key validation required before installation
+          ⚠️ SECURITY: API key validation required before installation
         </Text>
       </Box>
 
       <Box marginBottom={2} flexDirection="column" alignItems="center">
-        <Text color="gray" dimColor>Compatible with:</Text>
+        <Text color="gray" dimColor>
+          Compatible with:
+        </Text>
         <Text color="white">
-          <Text color="cyan">Claude</Text> • <Text color="green">Cursor</Text> • <Text color="yellow">Windsurf</Text> • <Text color="magenta">Continue</Text> • <Text color="blue">Cline</Text>
+          <Text color="cyan">Claude</Text> • <Text color="green">Cursor</Text> •{' '}
+          <Text color="yellow">Windsurf</Text> • <Text color="magenta">Continue</Text> •{' '}
+          <Text color="blue">Cline</Text>
         </Text>
       </Box>
 
@@ -429,7 +494,7 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
 
       <Box padding={1} borderStyle="double" borderColor="green">
         <Text color="green" bold>
-          ▶️  Press ENTER or SPACE to begin installation
+          ▶️ Press ENTER or SPACE to begin installation
         </Text>
       </Box>
     </Box>
@@ -487,7 +552,7 @@ const ApiKeyScreen: React.FC<{
     } catch (err) {
       const errorMessage = getDetailedErrorMessage(err);
       setError(errorMessage);
-      setRetryCount(prev => prev + 1);
+      setRetryCount((prev) => prev + 1);
     } finally {
       setIsValidating(false);
     }
@@ -495,7 +560,9 @@ const ApiKeyScreen: React.FC<{
 
   const handleSubmit = () => {
     if (!input || input.length < 10) {
-      setError('Invalid API key format. Please enter a valid key from SmartLead (minimum 10 characters).');
+      setError(
+        'Invalid API key format. Please enter a valid key from SmartLead (minimum 10 characters).'
+      );
     } else {
       validateApiKey(input.trim());
     }
@@ -523,9 +590,7 @@ const ApiKeyScreen: React.FC<{
             <Text color="red" bold>
               🔑 Step 1: Enter Your SmartLead API Key (REQUIRED)
             </Text>
-            <Text color="red">
-              ⚠️  API key validation is MANDATORY before proceeding!
-            </Text>
+            <Text color="red">⚠️ API key validation is MANDATORY before proceeding!</Text>
           </Box>
         </Box>
 
@@ -534,16 +599,25 @@ const ApiKeyScreen: React.FC<{
             <Text color="cyan" bold>
               📋 How to get your API key:
             </Text>
-            <Text>1. Visit: <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link></Text>
+            <Text>
+              1. Visit: <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link>
+            </Text>
             <Text>2. Go to Settings → API Keys</Text>
             <Text>3. Generate a new API key</Text>
             <Text>4. Copy and paste it below</Text>
           </Box>
         </Box>
 
-        <Box borderStyle="single" borderColor={input.length >= 10 ? 'green' : 'gray'} padding={1} marginBottom={1}>
+        <Box
+          borderStyle="single"
+          borderColor={input.length >= 10 ? 'green' : 'gray'}
+          padding={1}
+          marginBottom={1}
+        >
           <Box flexDirection="column">
-            <Text color="cyan" bold>Enter your SmartLead API Key:</Text>
+            <Text color="cyan" bold>
+              Enter your SmartLead API Key:
+            </Text>
             <TextInput
               value={input}
               onChange={(value) => {
@@ -579,11 +653,7 @@ const ApiKeyScreen: React.FC<{
                 ❌ Validation Failed
               </Text>
               <Text color="red">{error}</Text>
-              {retryCount > 0 && (
-                <Text dimColor>
-                  Retry attempt: {retryCount}
-                </Text>
-              )}
+              {retryCount > 0 && <Text dimColor>Retry attempt: {retryCount}</Text>}
               <Text></Text>
               <Text color="yellow" bold>
                 💡 Troubleshooting:
@@ -605,9 +675,7 @@ const ApiKeyScreen: React.FC<{
         )}
 
         <Box justifyContent="center" marginTop={1}>
-          <Text dimColor>
-            Press ENTER to validate • ESC to go back
-          </Text>
+          <Text dimColor>Press ENTER to validate • ESC to go back</Text>
         </Box>
 
         <Box borderStyle="single" borderColor="red" padding={1} marginTop={1}>
@@ -629,14 +697,44 @@ const ClientSelectionScreen: React.FC<{
   onBack: () => void;
 }> = ({ onNext, onBack }) => {
   const clients: MCPClient[] = [
-    { id: 'all', name: 'All Supported Clients', emoji: '🌟', description: 'Configure all detected clients automatically (Recommended)' },
-    { id: 'claude', name: 'Claude Desktop', emoji: '🤖', description: 'For the native Anthropic Claude app' },
-    { id: 'cursor', name: 'Cursor', emoji: '🎯', description: 'For the Cursor editor (with Cline extension)' },
-    { id: 'vscode', name: 'VS Code', emoji: '💻', description: 'For VS Code (with Cline or Continue.dev)' },
-    { id: 'continue', name: 'Continue.dev', emoji: '🔄', description: 'For the Continue.dev extension' },
+    {
+      id: 'all',
+      name: 'All Supported Clients',
+      emoji: '🌟',
+      description: 'Configure all detected clients automatically (Recommended)',
+    },
+    {
+      id: 'claude',
+      name: 'Claude Desktop',
+      emoji: '🤖',
+      description: 'For the native Anthropic Claude app',
+    },
+    {
+      id: 'cursor',
+      name: 'Cursor',
+      emoji: '🎯',
+      description: 'For the Cursor editor (with Cline extension)',
+    },
+    {
+      id: 'vscode',
+      name: 'VS Code',
+      emoji: '💻',
+      description: 'For VS Code (with Cline or Continue.dev)',
+    },
+    {
+      id: 'continue',
+      name: 'Continue.dev',
+      emoji: '🔄',
+      description: 'For the Continue.dev extension',
+    },
     { id: 'zed', name: 'Zed Editor', emoji: '⚡', description: 'For the Zed editor' },
     { id: 'windsurf', name: 'Windsurf', emoji: '🏄', description: 'For the Windsurf editor' },
-    { id: 'env', name: 'Local .env File Only', emoji: '📝', description: 'For local development or custom scripts' },
+    {
+      id: 'env',
+      name: 'Local .env File Only',
+      emoji: '📝',
+      description: 'For local development or custom scripts',
+    },
   ];
 
   const getClientStatus = (clientId: string): string => {
@@ -660,7 +758,7 @@ const ClientSelectionScreen: React.FC<{
   };
 
   const handleSelect = (item: any) => {
-    const selected = clients.find(c => c.id === item.value);
+    const selected = clients.find((c) => c.id === item.value);
     if (selected) {
       if (selected.id === 'env') {
         onNext(['env']);
@@ -692,9 +790,7 @@ const ClientSelectionScreen: React.FC<{
             <Text color="green" bold>
               🛠️ Step 2: Choose Your AI Environment
             </Text>
-            <Text>
-              Select where you want to use the SmartLead tools.
-            </Text>
+            <Text>Select where you want to use the SmartLead tools.</Text>
           </Box>
         </Box>
 
@@ -713,19 +809,17 @@ const ClientSelectionScreen: React.FC<{
 
         <Box marginBottom={2}>
           <SelectInput
-            items={clients.map(client => ({
+            items={clients.map((client) => ({
               label: `${client.emoji} ${client.name} ${client.id !== 'all' && client.id !== 'env' ? `(${getClientStatus(client.id)})` : ''}`,
               value: client.id,
-              key: client.id
+              key: client.id,
             }))}
             onSelect={handleSelect}
           />
         </Box>
 
         <Box justifyContent="center" marginTop={1}>
-          <Text dimColor>
-            Use ↑↓ arrows to navigate • ENTER to select • ESC to go back
-          </Text>
+          <Text dimColor>Use ↑↓ arrows to navigate • ENTER to select • ESC to go back</Text>
         </Box>
 
         <Box borderStyle="single" borderColor="yellow" padding={1} marginTop={1}>
@@ -778,7 +872,9 @@ const InstallationProgressScreen: React.FC<{
     (async () => {
       try {
         const allResults: InstallationResult[] = [];
-        const clientsToInstall = selectedClients.includes('env') ? ['env'] : [...selectedClients, 'env'];
+        const clientsToInstall = selectedClients.includes('env')
+          ? ['env']
+          : [...selectedClients, 'env'];
 
         for (let i = 0; i < clientsToInstall.length; i++) {
           const clientId = clientsToInstall[i];
@@ -786,7 +882,7 @@ const InstallationProgressScreen: React.FC<{
 
           setCurrentClient(getClientDisplayName(clientId));
 
-          await new Promise(resolve => setTimeout(resolve, 300)); // Slightly longer delay for better UX
+          await new Promise((resolve) => setTimeout(resolve, 300)); // Slightly longer delay for better UX
 
           const installFunction = installationMap[clientId];
           if (installFunction) {
@@ -798,7 +894,8 @@ const InstallationProgressScreen: React.FC<{
               const errorResult: InstallationResult = {
                 client: getClientDisplayName(clientId),
                 success: false,
-                message: clientError instanceof Error ? clientError.message : 'Unknown installation error',
+                message:
+                  clientError instanceof Error ? clientError.message : 'Unknown installation error',
                 configPath: undefined,
               };
               allResults.push(errorResult);
@@ -811,7 +908,7 @@ const InstallationProgressScreen: React.FC<{
         setCurrentClient('');
 
         // Small delay before completing to show final state
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         onComplete(allResults);
       } catch (e) {
         onError(e instanceof Error ? e.message : 'An unknown error occurred during installation');
@@ -819,9 +916,11 @@ const InstallationProgressScreen: React.FC<{
     })();
   }, [apiKey, selectedClients, onComplete, onError]);
 
-  const successCount = progress.filter(r => r.success).length;
-  const failureCount = progress.filter(r => !r.success).length;
-  const totalClients = selectedClients.includes('env') ? selectedClients.length : selectedClients.length + 1;
+  const successCount = progress.filter((r) => r.success).length;
+  const failureCount = progress.filter((r) => !r.success).length;
+  const totalClients = selectedClients.includes('env')
+    ? selectedClients.length
+    : selectedClients.length + 1;
 
   return (
     <Box flexDirection="column" padding={2} borderStyle="round" borderColor="blue">
@@ -840,16 +939,8 @@ const InstallationProgressScreen: React.FC<{
             <Text>
               Progress: {progress.length}/{totalClients} clients configured
             </Text>
-            {successCount > 0 && (
-              <Text color="green">
-                ✅ Successful: {successCount}
-              </Text>
-            )}
-            {failureCount > 0 && (
-              <Text color="red">
-                ❌ Failed: {failureCount}
-              </Text>
-            )}
+            {successCount > 0 && <Text color="green">✅ Successful: {successCount}</Text>}
+            {failureCount > 0 && <Text color="red">❌ Failed: {failureCount}</Text>}
           </Box>
         </Box>
 
@@ -864,19 +955,19 @@ const InstallationProgressScreen: React.FC<{
 
         <Box flexDirection="column" marginBottom={1}>
           {progress.map((result, i) => (
-            <Box key={i} borderStyle="single" borderColor={result.success ? 'green' : 'red'} padding={1} marginBottom={1}>
+            <Box
+              key={i}
+              borderStyle="single"
+              borderColor={result.success ? 'green' : 'red'}
+              padding={1}
+              marginBottom={1}
+            >
               <Box flexDirection="column">
                 <Text color={result.success ? 'green' : 'red'} bold>
-                  {result.success ? "✅" : "❌"} {result.client}
+                  {result.success ? '✅' : '❌'} {result.client}
                 </Text>
-                <Text dimColor>
-                  {result.message}
-                </Text>
-                {result.configPath && (
-                  <Text dimColor>
-                    Path: {result.configPath}
-                  </Text>
-                )}
+                <Text dimColor>{result.message}</Text>
+                {result.configPath && <Text dimColor>Path: {result.configPath}</Text>}
               </Box>
             </Box>
           ))}
@@ -914,8 +1005,8 @@ const InstallationCompleteScreen: React.FC<{
     if (input) onExit();
   });
 
-  const successes = results.filter(r => r.success);
-  const failures = results.filter(r => !r.success);
+  const successes = results.filter((r) => r.success);
+  const failures = results.filter((r) => !r.success);
 
   return (
     <Box flexDirection="column" padding={1}>
@@ -956,19 +1047,14 @@ const InstallationCompleteScreen: React.FC<{
       <Text color="cyan" bold>
         🚀 Next Steps
       </Text>
+      <Text>1. Restart your IDE/Client to load the new tools.</Text>
+      <Text>2. Use commands like: "Create a campaign called 'Product Launch'"</Text>
       <Text>
-        1. Restart your IDE/Client to load the new tools.
-      </Text>
-      <Text>
-        2. Use commands like: "Create a campaign called 'Product Launch'"
-      </Text>
-      <Text>
-        3. Check your SmartLead dashboard: <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link>
+        3. Check your SmartLead dashboard:{' '}
+        <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link>
       </Text>
       <Text></Text>
-      <Text dimColor>
-        Press ANY KEY to exit.
-      </Text>
+      <Text dimColor>Press ANY KEY to exit.</Text>
     </Box>
   );
 };
@@ -1042,29 +1128,17 @@ const InstallerApp: React.FC = () => {
               ❌ An Error Occurred
             </Text>
             <Text></Text>
-            <Text color="red">
-              {error}
-            </Text>
+            <Text color="red">{error}</Text>
             <Text></Text>
-            <Text color="yellow">
-              💡 Troubleshooting:
-            </Text>
-            <Text>
-              • Check your API key is valid.
-            </Text>
-            <Text>
-              • Ensure you have write permissions.
-            </Text>
-            <Text>
-              • Try running with administrator privileges.
-            </Text>
+            <Text color="yellow">💡 Troubleshooting:</Text>
+            <Text>• Check your API key is valid.</Text>
+            <Text>• Ensure you have write permissions.</Text>
+            <Text>• Try running with administrator privileges.</Text>
             <Text>
               • Visit: <Link url="https://github.com/LeadMagic/smartlead-mcp-server">GitHub</Link>
             </Text>
             <Text></Text>
-            <Text dimColor>
-              Press R to restart, or ESC to exit.
-            </Text>
+            <Text dimColor>Press R to restart, or ESC to exit.</Text>
           </Box>
         );
 

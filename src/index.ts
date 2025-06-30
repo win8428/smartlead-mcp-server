@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * SmartLead MCP Server - Main Entry Point
- * 
+ *
  * The primary entry point for the SmartLead Model Context Protocol server.
  * This script handles command-line arguments, environment setup, server initialization,
  * and graceful shutdown procedures.
- * 
+ *
  * Features:
  * - Command-line interface with help and version commands
  * - Interactive installer integration
@@ -13,20 +13,19 @@
  * - Graceful shutdown handling
  * - Production-ready error handling and logging
  * - Cross-platform compatibility
- * 
+ *
  * Usage:
  * - `smartlead-mcp-server` - Start the MCP server
  * - `smartlead-mcp-server install` - Run interactive installer
  * - `smartlead-mcp-server --help` - Show help information
  * - `smartlead-mcp-server --version` - Show version information
- * 
+ *
  * @author LeadMagic Team
  * @version 1.0.0
  */
 
 import dotenv from 'dotenv';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createSmartLeadServer } from './server.js';
+import { SmartLeadMCPServer } from './server.js';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -49,7 +48,7 @@ const SMARTLEAD_URL = 'https://app.smartlead.ai';
 
 /**
  * Handles the interactive installer command
- * 
+ *
  * Executes the TypeScript installer script that helps users configure
  * the MCP server with their preferred MCP client.
  */
@@ -66,7 +65,7 @@ async function handleInstallCommand(): Promise<void> {
     for (const path of possiblePaths) {
       try {
         // Check if file exists
-        await import('fs').then(fs => fs.promises.access(path));
+        await import('fs').then((fs) => fs.promises.access(path));
         installPath = path;
         break;
       } catch {
@@ -96,7 +95,7 @@ async function handleInstallCommand(): Promise<void> {
 
 /**
  * Displays comprehensive help information
- * 
+ *
  * Shows usage examples, command options, environment variables,
  * and helpful links for getting started.
  */
@@ -160,10 +159,10 @@ function showVersion(): void {
 
 /**
  * Validates and retrieves the SmartLead API key
- * 
+ *
  * Checks for the API key in environment variables and provides
  * helpful error messages if not found or invalid.
- * 
+ *
  * @returns The validated API key
  * @throws Exits process if API key is missing or invalid
  */
@@ -215,10 +214,10 @@ The API key must be a non-empty string.
 
 /**
  * Sets up graceful shutdown handlers
- * 
+ *
  * Handles SIGINT (Ctrl+C) and SIGTERM signals to ensure the server
  * shuts down gracefully and releases all resources properly.
- * 
+ *
  * @param server - The MCP server instance to shutdown
  */
 function setupShutdownHandlers(server: { close(): Promise<void> }): void {
@@ -263,7 +262,7 @@ function setupShutdownHandlers(server: { close(): Promise<void> }): void {
 
 /**
  * Main application function
- * 
+ *
  * Orchestrates the entire server startup process including argument parsing,
  * API key validation, server initialization, and connection establishment.
  */
@@ -290,10 +289,7 @@ async function main(): Promise<void> {
 
     // Create MCP server instance
     console.error('🚀 Initializing SmartLead MCP Server...');
-    const server = createSmartLeadServer(apiKey);
-
-    // Create transport for stdio communication
-    const transport = new StdioServerTransport();
+    const server = new SmartLeadMCPServer(apiKey);
 
     // Setup graceful shutdown handlers
     setupShutdownHandlers(server);
@@ -305,7 +301,7 @@ async function main(): Promise<void> {
     console.error('✅ Server ready - waiting for MCP client connection...');
 
     // Start the server and connect to transport
-    await server.connect(transport);
+    await server.connect();
 
     // This line should never be reached as the server runs indefinitely
     console.error('🛑 Server connection ended');
@@ -314,7 +310,7 @@ async function main(): Promise<void> {
     console.error('💥 Failed to start server:');
     if (error instanceof Error) {
       console.error(` Error: ${error.message}`);
-      
+
       // Provide specific guidance for common errors
       if (error.message.includes('API key')) {
         console.error(`\n🔧 Solution: Get your API key at ${SMARTLEAD_URL}`);
@@ -334,7 +330,7 @@ async function main(): Promise<void> {
 
 /**
  * Application entry point
- * 
+ *
  * Starts the main application and handles any uncaught errors
  * at the top level to ensure proper error reporting.
  */
