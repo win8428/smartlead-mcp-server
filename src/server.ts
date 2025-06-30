@@ -35,6 +35,24 @@ import {
   GetCampaignRequestSchema,
   ListCampaignsRequestSchema,
   SaveCampaignSequenceRequestSchema,
+  GetCampaignsWithAnalyticsRequestSchema,
+  FetchLeadCategoriesRequestSchema,
+  ListLeadsByCampaignRequestSchema,
+  FetchLeadByEmailRequestSchema,
+  AddLeadsToCampaignRequestSchema,
+  ResumeLeadByCampaignRequestSchema,
+  PauseLeadByCampaignRequestSchema,
+  DeleteLeadByCampaignRequestSchema,
+  UnsubscribeLeadFromCampaignRequestSchema,
+  UnsubscribeLeadFromAllCampaignsRequestSchema,
+  AddLeadToGlobalBlocklistRequestSchema,
+  UpdateLeadByIdRequestSchema,
+  UpdateLeadCategoryRequestSchema,
+  FetchLeadMessageHistoryRequestSchema,
+  ReplyToLeadFromMasterInboxRequestSchema,
+  ForwardReplyRequestSchema,
+  FetchAllLeadsFromAccountRequestSchema,
+  FetchLeadsFromGlobalBlocklistRequestSchema,
 } from './types.js';
 
 /**
@@ -114,6 +132,29 @@ export class SmartLeadMCPServer {
    * @private
    */
   private setupCampaignTools(): void {
+    // Comprehensive Campaign Analytics Tool - PRIORITY for large datasets
+    this.server.registerTool(
+      'smartlead_get_campaigns_with_analytics',
+      {
+        title: 'Get Campaigns with Analytics',
+        description: 'Get campaigns with their analytics data in one efficient call. Supports filtering by client, status, and date range to handle large datasets efficiently. Use this for comprehensive campaign reporting.',
+        inputSchema: GetCampaignsWithAnalyticsRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = GetCampaignsWithAnalyticsRequestSchema.parse(params);
+          const result = await this.client.getCampaignsWithAnalytics(validatedParams);
+          return this.formatSuccessResponse(
+            `Retrieved ${result.campaigns.length} campaigns with analytics`,
+            result,
+            `Total campaigns: ${result.summary.total_campaigns}, Active: ${result.summary.active_campaigns}, Paused: ${result.summary.paused_campaigns}`
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
     // Create Campaign Tool
     this.server.registerTool(
       'smartlead_create_campaign',
@@ -313,8 +354,368 @@ export class SmartLeadMCPServer {
    * @private
    */
   private setupLeadTools(): void {
-    // TODO: Implement lead management tools
-    // This will include tools for adding leads, managing lead data, etc.
+    // List leads by campaign
+    this.server.registerTool(
+      'smartlead_list_leads_by_campaign',
+      {
+        title: 'List Leads by Campaign',
+        description: 'List all leads for a specific campaign with optional filtering and pagination.',
+        inputSchema: ListLeadsByCampaignRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = ListLeadsByCampaignRequestSchema.parse(params);
+          const result = await this.client.listLeadsByCampaign(validatedParams.campaign_id, validatedParams);
+          return this.formatSuccessResponse(
+            `Retrieved ${Array.isArray(result) ? result.length : 'unknown'} leads for campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Fetch lead categories
+    this.server.registerTool(
+      'smartlead_fetch_lead_categories',
+      {
+        title: 'Fetch Lead Categories',
+        description: 'Get all available lead categories in the system.',
+        inputSchema: FetchLeadCategoriesRequestSchema.shape,
+      },
+      async () => {
+        try {
+          const result = await this.client.fetchLeadCategories();
+          return this.formatSuccessResponse('Retrieved lead categories', result);
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Fetch lead by email
+    this.server.registerTool(
+      'smartlead_fetch_lead_by_email',
+      {
+        title: 'Fetch Lead by Email',
+        description: 'Find a lead by their email address.',
+        inputSchema: FetchLeadByEmailRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = FetchLeadByEmailRequestSchema.parse(params);
+          const result = await this.client.fetchLeadByEmail(validatedParams.email);
+          return this.formatSuccessResponse(`Found lead with email ${validatedParams.email}`, result);
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Add leads to campaign
+    this.server.registerTool(
+      'smartlead_add_leads_to_campaign',
+      {
+        title: 'Add Leads to Campaign',
+        description: 'Add one or more leads to a campaign.',
+        inputSchema: AddLeadsToCampaignRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = AddLeadsToCampaignRequestSchema.parse(params);
+          const result = await this.client.addLeadsToCampaign(validatedParams.campaign_id, validatedParams.leads);
+          return this.formatSuccessResponse(
+            `Added ${validatedParams.leads.length} leads to campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Resume lead by campaign
+    this.server.registerTool(
+      'smartlead_resume_lead_by_campaign',
+      {
+        title: 'Resume Lead by Campaign',
+        description: 'Resume a paused lead in a specific campaign.',
+        inputSchema: ResumeLeadByCampaignRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = ResumeLeadByCampaignRequestSchema.parse(params);
+          const result = await this.client.resumeLeadByCampaign(validatedParams.campaign_id, validatedParams.lead_id);
+          return this.formatSuccessResponse(
+            `Resumed lead ${validatedParams.lead_id} in campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Pause lead by campaign
+    this.server.registerTool(
+      'smartlead_pause_lead_by_campaign',
+      {
+        title: 'Pause Lead by Campaign',
+        description: 'Pause an active lead in a specific campaign.',
+        inputSchema: PauseLeadByCampaignRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = PauseLeadByCampaignRequestSchema.parse(params);
+          const result = await this.client.pauseLeadByCampaign(validatedParams.campaign_id, validatedParams.lead_id);
+          return this.formatSuccessResponse(
+            `Paused lead ${validatedParams.lead_id} in campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Delete lead by campaign
+    this.server.registerTool(
+      'smartlead_delete_lead_by_campaign',
+      {
+        title: 'Delete Lead by Campaign',
+        description: 'Delete a lead from a specific campaign.',
+        inputSchema: DeleteLeadByCampaignRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = DeleteLeadByCampaignRequestSchema.parse(params);
+          const result = await this.client.deleteLeadByCampaign(validatedParams.campaign_id, validatedParams.lead_id);
+          return this.formatSuccessResponse(
+            `Deleted lead ${validatedParams.lead_id} from campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Unsubscribe lead from campaign
+    this.server.registerTool(
+      'smartlead_unsubscribe_lead_from_campaign',
+      {
+        title: 'Unsubscribe Lead from Campaign',
+        description: 'Unsubscribe a lead from a specific campaign.',
+        inputSchema: UnsubscribeLeadFromCampaignRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = UnsubscribeLeadFromCampaignRequestSchema.parse(params);
+          const result = await this.client.unsubscribeLeadFromCampaign(validatedParams.campaign_id, validatedParams.lead_id);
+          return this.formatSuccessResponse(
+            `Unsubscribed lead ${validatedParams.lead_id} from campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Unsubscribe lead from all campaigns
+    this.server.registerTool(
+      'smartlead_unsubscribe_lead_from_all_campaigns',
+      {
+        title: 'Unsubscribe Lead from All Campaigns',
+        description: 'Unsubscribe a lead from all campaigns globally.',
+        inputSchema: UnsubscribeLeadFromAllCampaignsRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = UnsubscribeLeadFromAllCampaignsRequestSchema.parse(params);
+          const result = await this.client.unsubscribeLeadFromAllCampaigns(validatedParams.lead_id);
+          return this.formatSuccessResponse(
+            `Unsubscribed lead ${validatedParams.lead_id} from all campaigns`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Add lead to global blocklist
+    this.server.registerTool(
+      'smartlead_add_lead_to_global_blocklist',
+      {
+        title: 'Add Lead to Global Blocklist',
+        description: 'Add a lead email to the global blocklist.',
+        inputSchema: AddLeadToGlobalBlocklistRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = AddLeadToGlobalBlocklistRequestSchema.parse(params);
+          const result = await this.client.addLeadToGlobalBlocklist(validatedParams.email);
+          return this.formatSuccessResponse(
+            `Added ${validatedParams.email} to global blocklist`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Fetch all leads from account
+    this.server.registerTool(
+      'smartlead_fetch_all_leads_from_account',
+      {
+        title: 'Fetch All Leads from Account',
+        description: 'Fetch all leads from the entire account with optional filtering.',
+        inputSchema: FetchAllLeadsFromAccountRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const result = await this.client.fetchAllLeadsFromAccount(params);
+          return this.formatSuccessResponse('Retrieved all leads from account', result);
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Fetch leads from global blocklist
+    this.server.registerTool(
+      'smartlead_fetch_leads_from_global_blocklist',
+      {
+        title: 'Fetch Leads from Global Blocklist',
+        description: 'Fetch all leads from the global blocklist.',
+        inputSchema: FetchLeadsFromGlobalBlocklistRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const result = await this.client.fetchLeadsFromGlobalBlocklist(params);
+          return this.formatSuccessResponse('Retrieved leads from global blocklist', result);
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Update lead by ID
+    this.server.registerTool(
+      'smartlead_update_lead_by_id',
+      {
+        title: 'Update Lead by ID',
+        description: 'Update lead information using the lead ID.',
+        inputSchema: UpdateLeadByIdRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = UpdateLeadByIdRequestSchema.parse(params);
+          const { lead_id, ...leadData } = validatedParams;
+          const result = await this.client.updateLeadById(lead_id, leadData);
+          return this.formatSuccessResponse(`Updated lead ${lead_id}`, result);
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Update lead category
+    this.server.registerTool(
+      'smartlead_update_lead_category',
+      {
+        title: 'Update Lead Category',
+        description: 'Update a lead\'s category based on their campaign.',
+        inputSchema: UpdateLeadCategoryRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = UpdateLeadCategoryRequestSchema.parse(params);
+          const result = await this.client.updateLeadCategory(
+            validatedParams.campaign_id,
+            validatedParams.lead_id,
+            validatedParams.category
+          );
+          return this.formatSuccessResponse(
+            `Updated category for lead ${validatedParams.lead_id} in campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Fetch lead message history
+    this.server.registerTool(
+      'smartlead_fetch_lead_message_history',
+      {
+        title: 'Fetch Lead Message History',
+        description: 'Fetch message history for a lead based on campaign.',
+        inputSchema: FetchLeadMessageHistoryRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = FetchLeadMessageHistoryRequestSchema.parse(params);
+          const result = await this.client.fetchLeadMessageHistory(validatedParams.campaign_id, validatedParams.lead_id);
+          return this.formatSuccessResponse(
+            `Retrieved message history for lead ${validatedParams.lead_id} in campaign ${validatedParams.campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Reply to lead from master inbox
+    this.server.registerTool(
+      'smartlead_reply_to_lead_from_master_inbox',
+      {
+        title: 'Reply to Lead from Master Inbox',
+        description: 'Reply to a lead from the master inbox via API.',
+        inputSchema: ReplyToLeadFromMasterInboxRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = ReplyToLeadFromMasterInboxRequestSchema.parse(params);
+          const { campaign_id, lead_id, ...replyData } = validatedParams;
+          const result = await this.client.replyToLeadFromMasterInbox(campaign_id, lead_id, replyData);
+          return this.formatSuccessResponse(
+            `Sent reply to lead ${lead_id} in campaign ${campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
+
+    // Forward reply
+    this.server.registerTool(
+      'smartlead_forward_reply',
+      {
+        title: 'Forward Reply',
+        description: 'Forward a reply to another email address.',
+        inputSchema: ForwardReplyRequestSchema.shape,
+      },
+      async (params) => {
+        try {
+          const validatedParams = ForwardReplyRequestSchema.parse(params);
+          const { campaign_id, lead_id, ...forwardData } = validatedParams;
+          const result = await this.client.forwardReply(campaign_id, lead_id, forwardData);
+          return this.formatSuccessResponse(
+            `Forwarded reply for lead ${lead_id} in campaign ${campaign_id}`,
+            result
+          );
+        } catch (error) {
+          return this.handleError(error);
+        }
+      }
+    );
   }
 
   /**

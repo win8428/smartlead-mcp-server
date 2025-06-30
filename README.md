@@ -6,13 +6,15 @@
 
 _Seamlessly integrate SmartLead's complete API suite with Claude, Cursor, Windsurf, and all MCP-compatible AI tools_
 
+> **🤝 Unofficial Partner Integration** - We are proud partners of [SmartLead](https://smartlead.ai) and absolutely love their product! This is an unofficial MCP server implementation that provides seamless access to SmartLead's powerful email marketing automation platform. SmartLead's API is incredibly well-designed, their deliverability is outstanding, and their feature set is unmatched.
+
 [![npm version](https://img.shields.io/npm/v/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/smartlead-mcp-server) [![Downloads](https://img.shields.io/npm/dm/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=brightgreen)](https://www.npmjs.com/package/smartlead-mcp-server) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=opensource&logoColor=white)](https://opensource.org/licenses/MIT) [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-brightgreen.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue?style=for-the-badge&logo=protocol&logoColor=white)](https://modelcontextprotocol.io) [![Production Ready](https://img.shields.io/badge/Production-Ready-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server) [![Security](https://img.shields.io/badge/Security-Verified-green?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server/security)
 
 ---
 
-**🎯 40+ Powerful Tools • 🔥 Zero Configuration • ⚡ One-Line Setup • 🛡️ Enterprise Security**
+**🎯 120+ Powerful Tools • 🔥 Zero Configuration • ⚡ One-Line Setup • 🛡️ Enterprise Security • 🤝 SmartLead Partner**
 
 ---
 
@@ -87,37 +89,138 @@ npx smartlead-mcp-server --help
 
 ## 🛠️ Available Tools
 
-### 📧 Campaign Management (8 tools)
+### 🚀 **PRIORITY: Combined Campaign Analytics**
+- 📊 `smartlead_get_campaigns_with_analytics` - **Efficient combined endpoint** that fetches campaigns with their analytics in one call. Supports client/status filtering for large datasets. **Use this for comprehensive campaign reporting!**
 
+### 📧 **Campaign Management (13+ tools)**
 - 🎯 `smartlead_create_campaign` - Create new email campaigns
 - ⏰ `smartlead_update_campaign_schedule` - Configure sending schedules
-- ⚙️ `smartlead_update_campaign_settings` - Update campaign settings
-- 🎮 `smartlead_update_campaign_status` - Control campaign execution
-- 📋 `smartlead_get_campaign` - Get campaign details
-- 📊 `smartlead_list_campaigns` - List all campaigns
-- 📝 `smartlead_save_campaign_sequence` - Configure email sequences
-- 🔍 `smartlead_get_campaign_sequence` - Retrieve sequence data
+- ⚙️ `smartlead_update_campaign_settings` - Update campaign configuration
+- 🔄 `smartlead_update_campaign_status` - Start, pause, or stop campaigns
+- 📋 `smartlead_list_campaigns` - List all campaigns with filtering
+- 🔍 `smartlead_get_campaign` - Get detailed campaign information
+- 📝 `smartlead_save_campaign_sequence` - Set up email sequences with A/B testing
+- 📊 `smartlead_get_campaign_sequence` - Retrieve sequence configuration
+- 🗑️ `smartlead_delete_campaign` - Delete campaigns
+- 📤 `smartlead_export_campaign_data` - Export campaign data
+- 🔗 `smartlead_fetch_campaigns_by_lead_id` - Get campaigns by lead ID
+- 📈 `smartlead_fetch_campaign_analytics_by_date` - Get campaign analytics by date range
+- 📊 `smartlead_get_campaign_sequence_analytics` - Get sequence analytics
 
-### 👥 Lead Management (Coming Soon)
+### 👥 **Lead Management (17+ tools)**
+- 📋 `smartlead_list_leads_by_campaign` - List all leads by campaign ID
+- 🔍 `smartlead_fetch_lead_categories` - Get lead categories
+- 📧 `smartlead_fetch_lead_by_email` - Find lead by email address
+- ➕ `smartlead_add_leads_to_campaign` - Add leads to campaigns
+- ▶️ `smartlead_resume_lead_by_campaign` - Resume paused leads
+- ⏸️ `smartlead_pause_lead_by_campaign` - Pause active leads
+- 🗑️ `smartlead_delete_lead_by_campaign` - Delete leads from campaigns
+- 🚫 `smartlead_unsubscribe_lead_from_campaign` - Unsubscribe leads
+- 🚫 `smartlead_unsubscribe_lead_from_all_campaigns` - Global unsubscribe
+- 🚫 `smartlead_add_lead_to_global_blocklist` - Add to global blocklist
+- 🌐 `smartlead_fetch_all_leads_from_account` - Get all account leads
+- 🚫 `smartlead_fetch_leads_from_global_blocklist` - Get blocklist leads
+- ✏️ `smartlead_update_lead_by_id` - Update lead information
+- 🏷️ `smartlead_update_lead_category` - Update lead categories
+- 💬 `smartlead_fetch_lead_message_history` - Get message history
+- 💬 `smartlead_reply_to_lead_from_master_inbox` - Reply to leads
+- 📧 `smartlead_forward_reply` - Forward replies
 
-- 📥 Lead import and management
-- 🎯 Lead segmentation and filtering
-- 📊 Lead tracking and analytics
-- 🔄 Lead status management
+### 📧 **Email Account Management (10+ tools)**
+- 📋 `smartlead_list_email_accounts_per_campaign` - List campaign email accounts
+- ➕ `smartlead_add_email_account_to_campaign` - Add email accounts to campaigns
+- ➖ `smartlead_remove_email_account_from_campaign` - Remove email accounts
+- 📧 `smartlead_fetch_all_email_accounts` - Get all user email accounts
+- 🆕 `smartlead_create_email_account` - Create new email accounts
+- ✏️ `smartlead_update_email_account` - Update email account settings
+- 🔍 `smartlead_fetch_email_account_by_id` - Get email account details
+- 🔥 `smartlead_add_update_warmup_to_email_account` - Configure email warmup
+- 🔄 `smartlead_reconnect_failed_email_accounts` - Reconnect failed accounts
+- 🏷️ `smartlead_update_email_account_tag` - Update account tags
 
-### 📈 Analytics & Statistics (Coming Soon)
+### 📊 **Campaign Statistics (9+ tools)**
+- 📈 `smartlead_fetch_campaign_statistics` - Get campaign statistics
+- 📅 `smartlead_fetch_campaign_statistics_by_date_range` - Get stats by date range
+- 🔥 `smartlead_fetch_warmup_stats_by_email_account` - Get warmup statistics
+- 📊 `smartlead_fetch_campaign_top_level_analytics` - Get top-level analytics
+- 📅 `smartlead_fetch_campaign_top_level_analytics_by_date` - Get analytics by date
+- 👥 `smartlead_fetch_campaign_lead_statistics` - Get lead statistics
+- 📧 `smartlead_fetch_campaign_mailbox_statistics` - Get mailbox statistics
+- 📥 `smartlead_download_campaign_data` - **Download data in CSV/JSON format**
+- 📊 `smartlead_view_download_statistics` - View download analytics
 
-- 📊 Campaign performance metrics
-- 📈 Open and click tracking
-- 💌 Reply rate analytics
-- 📉 Bounce rate monitoring
+### 🎯 **Smart Delivery (25+ tools)**
+- 🌍 `smartlead_get_region_wise_providers` - Get email providers by region
+- 🧪 `smartlead_create_manual_placement_test` - Create manual spam tests
+- 🤖 `smartlead_create_automated_placement_test` - Create automated spam tests
+- 🔍 `smartlead_get_spam_test_details` - Get spam test details
+- 🗑️ `smartlead_delete_smart_delivery_tests` - Delete tests in bulk
+- ⏹️ `smartlead_stop_automated_test` - Stop automated tests
+- 📋 `smartlead_list_all_tests` - List all tests
+- 📊 `smartlead_get_provider_wise_report` - Provider performance reports
+- 🌍 `smartlead_get_group_wise_report` - Geographic performance reports
+- 📧 `smartlead_get_sender_account_wise_report` - Sender account reports
+- 🛡️ `smartlead_get_spam_filter_details` - Spam filter analysis
+- 🔐 `smartlead_get_dkim_details` - DKIM authentication details
+- 🔐 `smartlead_get_spf_details` - SPF authentication details
+- 🔐 `smartlead_get_rdns_details` - rDNS verification details
+- 📧 `smartlead_get_sender_accounts` - Get sender accounts for tests
+- 🚫 `smartlead_get_blacklist` - Get blacklist information
+- 📧 `smartlead_get_email_content` - Get test email content
+- 📊 `smartlead_get_ip_analytics` - IP blacklist analytics
+- 📧 `smartlead_get_email_headers` - Email header analysis
+- 📅 `smartlead_get_schedule_history` - Automated test history
+- 🌐 `smartlead_get_ip_details` - IP blacklist details
+- 📧 `smartlead_get_mailbox_summary` - Mailbox performance summary
+- 📊 `smartlead_get_mailbox_count` - Mailbox count statistics
+- 📁 `smartlead_get_all_folders` - List all folders
+- 📁 `smartlead_create_folder` - Create organization folders
+- 📁 `smartlead_get_folder_by_id` - Get folder details
+- 🗑️ `smartlead_delete_folder` - Delete folders
 
-### 🚀 Smart Delivery (Coming Soon)
+### 🔗 **Webhooks (5 tools)**
+- 📋 `smartlead_fetch_webhooks_by_campaign` - List campaign webhooks
+- ➕ `smartlead_upsert_campaign_webhook` - Add/update webhooks
+- 🗑️ `smartlead_delete_campaign_webhook` - Delete webhooks
+- 📊 `smartlead_get_webhooks_publish_summary` - Webhook delivery stats
+- 🔄 `smartlead_retrigger_failed_events` - Retry failed webhook events
 
-- ⏰ Optimal send time detection
-- 🌍 Timezone optimization
-- 📧 Deliverability enhancement
-- 🎯 Engagement optimization
+### 👥 **Client Management (6 tools)**
+- ➕ `smartlead_add_client` - Add new clients (white-label)
+- 📋 `smartlead_fetch_all_clients` - List all clients
+- 🔑 `smartlead_create_new_client_api_key` - Create API keys
+- 📋 `smartlead_get_clients_api_keys` - List client API keys
+- 🗑️ `smartlead_delete_client_api_key` - Delete API keys
+- 🔄 `smartlead_reset_client_api_key` - Reset API keys
+
+### 🌐 **Smart Senders (5 tools)**
+- 🏪 `smartlead_get_vendors` - Get domain vendors
+- 🔍 `smartlead_search_domain` - Search available domains
+- 🤖 `smartlead_auto_generate_mailboxes` - Auto-generate mailboxes
+- 🛒 `smartlead_place_order_mailboxes` - Purchase domains/mailboxes
+- 📋 `smartlead_get_domain_list` - List purchased domains
+
+### 📊 **Global Analytics (20+ tools)**
+- 📋 `smartlead_get_analytics_campaign_list` - Campaign analytics list
+- 👥 `smartlead_get_analytics_client_list` - Client analytics list
+- 📅 `smartlead_get_analytics_client_month_wise_count` - Monthly client stats
+- 📊 `smartlead_get_analytics_overall_stats_v2` - Overall performance stats
+- 📅 `smartlead_get_analytics_day_wise_overall_stats` - Daily performance
+- 💬 `smartlead_get_analytics_day_wise_positive_reply_stats` - Daily reply stats
+- 📊 `smartlead_get_analytics_campaign_overall_stats` - Campaign performance
+- 👥 `smartlead_get_analytics_client_overall_stats` - Client performance
+- 📧 `smartlead_get_analytics_mailbox_name_wise_health_metrics` - Mailbox health
+- 🌐 `smartlead_get_analytics_mailbox_domain_wise_health_metrics` - Domain health
+- 🏪 `smartlead_get_analytics_mailbox_provider_wise_overall_performance` - Provider performance
+- 👥 `smartlead_get_analytics_team_board_overall_stats` - Team performance
+- 👤 `smartlead_get_analytics_lead_overall_stats` - Lead performance
+- 🏷️ `smartlead_get_analytics_lead_category_wise_response` - Category responses
+- ⏱️ `smartlead_get_analytics_campaign_leads_take_for_first_reply` - First reply timing
+- 🔄 `smartlead_get_analytics_campaign_follow_up_reply_rate` - Follow-up rates
+- ⏱️ `smartlead_get_analytics_campaign_lead_to_reply_time` - Response timing
+- 💬 `smartlead_get_analytics_campaign_response_stats` - Response statistics
+- 📊 `smartlead_get_analytics_campaign_status_stats` - Status statistics
+- 📧 `smartlead_get_analytics_mailbox_overall_stats` - Mailbox statistics
 
 ---
 

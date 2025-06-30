@@ -37,6 +37,8 @@ export interface SmartLeadConfig {
   maxRetries?: number;
   /** Initial retry delay in milliseconds (optional, defaults to 1000) */
   retryDelay?: number;
+  /** Rate limit in requests per minute (optional, defaults to 100) */
+  rateLimit?: number;
 }
 
 // ================================
@@ -734,3 +736,135 @@ export type GetFolderByIdRequest = z.infer<typeof GetFolderByIdRequestSchema>;
 /** Common response types */
 export type ErrorResponse = z.infer<typeof ErrorSchema>;
 export type SuccessResponse = z.infer<typeof SuccessResponseSchema>;
+
+/**
+ * Schema for getting campaigns with analytics - comprehensive endpoint
+ */
+export const GetCampaignsWithAnalyticsRequestSchema = z.object({
+  /** Filter campaigns by specific client ID to reduce dataset size */
+  client_id: z.string().optional(),
+  /** Filter campaigns by status (recommended for large accounts) */
+  status: z.enum(['ACTIVE', 'PAUSED', 'COMPLETED', 'DRAFT']).optional(),
+  /** Maximum number of campaigns to return */
+  limit: z.number().int().min(1).max(100).default(50),
+  /** Number of campaigns to skip for pagination */
+  offset: z.number().int().min(0).default(0),
+  /** Start date for analytics (YYYY-MM-DD format) */
+  start_date: z.string().default('2024-01-01'),
+  /** End date for analytics (YYYY-MM-DD format, defaults to today) */
+  end_date: z.string().optional(),
+});
+
+export type GetCampaignsWithAnalyticsRequest = z.infer<typeof GetCampaignsWithAnalyticsRequestSchema>;
+
+// ================================
+// LEAD MANAGEMENT SCHEMAS
+// ================================
+
+export const FetchLeadCategoriesRequestSchema = z.object({});
+
+export const ListLeadsByCampaignRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  limit: z.number().int().min(1).max(1000).optional(),
+  offset: z.number().int().min(0).optional(),
+  status: z.string().optional(),
+  search: z.string().optional(),
+});
+
+export const FetchLeadByEmailRequestSchema = z.object({
+  email: z.string().email(),
+});
+
+export const AddLeadsToCampaignRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  leads: z.array(z.object({
+    email: z.string().email(),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
+    company: z.string().optional(),
+    title: z.string().optional(),
+    phone: z.string().optional(),
+  })),
+});
+
+export const ResumeLeadByCampaignRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+});
+
+export const PauseLeadByCampaignRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+});
+
+export const DeleteLeadByCampaignRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+});
+
+export const UnsubscribeLeadFromCampaignRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+});
+
+export const UnsubscribeLeadFromAllCampaignsRequestSchema = z.object({
+  lead_id: z.number().int().positive(),
+});
+
+export const AddLeadToGlobalBlocklistRequestSchema = z.object({
+  email: z.string().email(),
+});
+
+export const UpdateLeadByIdRequestSchema = z.object({
+  lead_id: z.number().int().positive(),
+  email: z.string().email().optional(),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  company: z.string().optional(),
+  title: z.string().optional(),
+  phone: z.string().optional(),
+});
+
+export const UpdateLeadCategoryRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+  category: z.string(),
+});
+
+export const FetchLeadMessageHistoryRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+});
+
+export const ReplyToLeadFromMasterInboxRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+  message: z.string(),
+  subject: z.string().optional(),
+});
+
+export const ForwardReplyRequestSchema = z.object({
+  campaign_id: z.number().int().positive(),
+  lead_id: z.number().int().positive(),
+  forward_to: z.string().email(),
+  message: z.string().optional(),
+});
+
+export const FetchAllLeadsFromAccountRequestSchema = z.object({});
+export const FetchLeadsFromGlobalBlocklistRequestSchema = z.object({});
+
+// Lead management types
+export type ListLeadsByCampaignRequest = z.infer<typeof ListLeadsByCampaignRequestSchema>;
+export type FetchLeadByEmailRequest = z.infer<typeof FetchLeadByEmailRequestSchema>;
+export type AddLeadsToCampaignRequest = z.infer<typeof AddLeadsToCampaignRequestSchema>;
+export type ResumeLeadByCampaignRequest = z.infer<typeof ResumeLeadByCampaignRequestSchema>;
+export type PauseLeadByCampaignRequest = z.infer<typeof PauseLeadByCampaignRequestSchema>;
+export type DeleteLeadByCampaignRequest = z.infer<typeof DeleteLeadByCampaignRequestSchema>;
+export type UnsubscribeLeadFromCampaignRequest = z.infer<typeof UnsubscribeLeadFromCampaignRequestSchema>;
+export type UnsubscribeLeadFromAllCampaignsRequest = z.infer<typeof UnsubscribeLeadFromAllCampaignsRequestSchema>;
+export type AddLeadToGlobalBlocklistRequest = z.infer<typeof AddLeadToGlobalBlocklistRequestSchema>;
+export type UpdateLeadByIdRequest = z.infer<typeof UpdateLeadByIdRequestSchema>;
+export type UpdateLeadCategoryRequest = z.infer<typeof UpdateLeadCategoryRequestSchema>;
+export type FetchLeadMessageHistoryRequest = z.infer<typeof FetchLeadMessageHistoryRequestSchema>;
+export type ReplyToLeadFromMasterInboxRequest = z.infer<typeof ReplyToLeadFromMasterInboxRequestSchema>;
+export type ForwardReplyRequest = z.infer<typeof ForwardReplyRequestSchema>;
