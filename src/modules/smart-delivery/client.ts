@@ -8,9 +8,86 @@
  * @version 1.5.0
  */
 
+import axios, { AxiosInstance } from 'axios';
 import { BaseSmartLeadClient } from '../../client/base.js';
 import { SmartLeadConfig } from '../../types/config.js';
-import axios, { AxiosInstance } from 'axios';
+
+// Smart Delivery Types
+interface Provider {
+  provider_id: string;
+  provider_name: string;
+}
+
+interface ProviderGroup {
+  group_id: string;
+  group_name: string;
+  providers: Provider[];
+}
+
+interface RegionProvider {
+  region_id: string;
+  region_name: string;
+  groups: ProviderGroup[];
+}
+
+interface SpamTestParams {
+  test_name?: string;
+  sender_account_ids?: number[];
+  email_content?: string;
+  subject?: string;
+  limit?: number;
+  offset?: number;
+  status?: string;
+  test_type?: string;
+}
+
+interface SpamTestDetails {
+  spam_test_id: number;
+  test_name: string;
+  test_type: string;
+  status: string;
+  created_at: string;
+  test_end_date?: string;
+  inbox_count: number;
+  spam_count: number;
+  tab_count: number;
+  adjusted_total_email_count: number;
+}
+
+interface FolderParams {
+  name: string;
+  description?: string;
+}
+
+interface SmartDeliveryFolder {
+  id?: number;
+  folder_id?: number;
+  name: string;
+  description?: string;
+  created_at?: string;
+}
+
+interface BulkDeleteParams {
+  test_ids: number[];
+}
+
+interface ReportParams {
+  test_id?: number;
+  spam_test_id?: number;
+  limit?: number;
+  offset?: number;
+  status?: string;
+  date_range?: {
+    start_date: string;
+    end_date: string;
+  };
+}
+
+interface SmartDeliveryResponse<T = unknown> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
 
 /**
  * Smart Delivery Client
@@ -54,7 +131,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get region wise provider IDs
    * GET /spam-test/seed/providers
    */
-  async getRegionWiseProviderIds(): Promise<any> {
+  async getRegionWiseProviderIds(): Promise<RegionProvider[]> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get('/spam-test/seed/providers'),
       'get region wise provider IDs'
@@ -66,7 +143,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Create a manual placement test
    * POST /spam-test/manual
    */
-  async createManualPlacementTest(params: any): Promise<any> {
+  async createManualPlacementTest(params: SpamTestParams): Promise<SpamTestDetails> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/manual', params),
       'create manual placement test'
@@ -78,7 +155,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Create an automated placement test
    * POST /spam-test/automated
    */
-  async createAutomatedPlacementTest(params: any): Promise<any> {
+  async createAutomatedPlacementTest(params: SpamTestParams): Promise<SpamTestDetails> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/automated', params),
       'create automated placement test'
@@ -90,7 +167,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get spam test details
    * GET /spam-test/{test_id}
    */
-  async getSpamTestDetails(testId: number): Promise<any> {
+  async getSpamTestDetails(testId: number): Promise<SpamTestDetails> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}`),
       'get spam test details'
@@ -102,7 +179,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Delete smart delivery tests in bulk
    * POST /spam-test/bulk-delete
    */
-  async deleteTestsInBulk(params: any): Promise<any> {
+  async deleteTestsInBulk(params: BulkDeleteParams): Promise<SmartDeliveryResponse> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/bulk-delete', params),
       'delete tests in bulk'
@@ -114,7 +191,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Stop an automated smart delivery test
    * PUT /spam-test/{test_id}/stop
    */
-  async stopAutomatedTest(testId: number): Promise<any> {
+  async stopAutomatedTest(testId: number): Promise<SmartDeliveryResponse> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.put(`/spam-test/${testId}/stop`),
       'stop automated test'
@@ -126,7 +203,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * List all tests
    * POST /spam-test/report
    */
-  async listAllTests(params: any): Promise<any> {
+  async listAllTests(params: ReportParams): Promise<SpamTestDetails[]> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/report', params),
       'list all tests'
@@ -138,7 +215,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get provider wise report
    * POST /spam-test/provider-wise-results
    */
-  async getProviderWiseReport(params: any): Promise<any> {
+  async getProviderWiseReport(params: ReportParams): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/provider-wise-results', params),
       'get provider wise report'
@@ -150,7 +227,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get geo wise report
    * POST /spam-test/geo-wise-report
    */
-  async getGeoWiseReport(params: any): Promise<any> {
+  async getGeoWiseReport(params: ReportParams): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/geo-wise-report', params),
       'get geo wise report'
@@ -162,7 +239,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get sender account wise report
    * GET /spam-test/sender-account-wise-report
    */
-  async getSenderAccountWiseReport(testId: number): Promise<any> {
+  async getSenderAccountWiseReport(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/sender-account-wise-report?test_id=${testId}`),
       'get sender account wise report'
@@ -174,7 +251,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get spam filter report
    * GET /spam-test/{test_id}/spam-filter-report
    */
-  async getSpamFilterReport(testId: number): Promise<any> {
+  async getSpamFilterReport(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/spam-filter-report`),
       'get spam filter report'
@@ -186,7 +263,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get DKIM details
    * GET /spam-test/{test_id}/dkim-details
    */
-  async getDkimDetails(testId: number): Promise<any> {
+  async getDkimDetails(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/dkim-details`),
       'get DKIM details'
@@ -198,7 +275,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get SPF details
    * GET /spam-test/{test_id}/spf-details
    */
-  async getSpfDetails(testId: number): Promise<any> {
+  async getSpfDetails(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/spf-details`),
       'get SPF details'
@@ -210,7 +287,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get rDNS report
    * GET /spam-test/{test_id}/rdns-report
    */
-  async getRdnsReport(testId: number): Promise<any> {
+  async getRdnsReport(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/rdns-report`),
       'get rDNS report'
@@ -222,7 +299,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get sender account list
    * GET /spam-test/{test_id}/sender-account-list
    */
-  async getSenderAccountList(testId: number): Promise<any> {
+  async getSenderAccountList(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/sender-account-list`),
       'get sender account list'
@@ -234,7 +311,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get blacklists
    * GET /spam-test/{test_id}/blacklists
    */
-  async getBlacklists(testId: number): Promise<any> {
+  async getBlacklists(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/blacklists`),
       'get blacklists'
@@ -246,7 +323,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get domain blacklist
    * GET /spam-test/{test_id}/domain-blacklist
    */
-  async getDomainBlacklist(testId: number): Promise<any> {
+  async getDomainBlacklist(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/domain-blacklist`),
       'get domain blacklist'
@@ -258,7 +335,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get spam test email content
    * GET /spam-test/{test_id}/email-content
    */
-  async getSpamTestEmailContent(testId: number): Promise<any> {
+  async getSpamTestEmailContent(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/email-content`),
       'get spam test email content'
@@ -270,7 +347,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get IP blacklist count
    * GET /spam-test/{test_id}/ip-blacklist-count
    */
-  async getIpBlacklistCount(testId: number): Promise<any> {
+  async getIpBlacklistCount(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/ip-blacklist-count`),
       'get IP blacklist count'
@@ -282,7 +359,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get email reply headers
    * GET /spam-test/{test_id}/email-headers
    */
-  async getEmailReplyHeaders(testId: number): Promise<any> {
+  async getEmailReplyHeaders(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/email-headers`),
       'get email reply headers'
@@ -294,7 +371,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get schedule history for automated tests
    * GET /spam-test/{test_id}/schedule-history
    */
-  async getScheduleHistory(testId: number): Promise<any> {
+  async getScheduleHistory(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/schedule-history`),
       'get schedule history'
@@ -306,7 +383,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get IP details
    * GET /spam-test/{test_id}/ip-details
    */
-  async getIpDetails(testId: number): Promise<any> {
+  async getIpDetails(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/ip-details`),
       'get IP details'
@@ -318,7 +395,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get mailbox summary
    * GET /spam-test/{test_id}/mailbox-summary
    */
-  async getMailboxSummary(testId: number): Promise<any> {
+  async getMailboxSummary(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/mailbox-summary`),
       'get mailbox summary'
@@ -330,7 +407,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get mailbox count
    * GET /spam-test/{test_id}/mailbox-count
    */
-  async getMailboxCount(testId: number): Promise<any> {
+  async getMailboxCount(testId: number): Promise<unknown> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/${testId}/mailbox-count`),
       'get mailbox count'
@@ -342,7 +419,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get all folders
    * GET /spam-test/folder
    */
-  async getAllFolders(): Promise<any> {
+  async getAllFolders(): Promise<SmartDeliveryFolder[]> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get('/spam-test/folder'),
       'get all folders'
@@ -354,7 +431,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Create folder
    * POST /spam-test/folder
    */
-  async createFolder(params: any): Promise<any> {
+  async createFolder(params: FolderParams): Promise<SmartDeliveryFolder> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.post('/spam-test/folder', params),
       'create folder'
@@ -366,7 +443,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Get folder by ID
    * GET /spam-test/folder/{folder_id}
    */
-  async getFolderById(folderId: number): Promise<any> {
+  async getFolderById(folderId: number): Promise<SmartDeliveryFolder> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.get(`/spam-test/folder/${folderId}`),
       'get folder by ID'
@@ -378,7 +455,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
    * Delete folder
    * DELETE /spam-test/folder/{folder_id}
    */
-  async deleteFolder(folderId: number): Promise<any> {
+  async deleteFolder(folderId: number): Promise<SmartDeliveryResponse> {
     const response = await this.withRetry(
       () => this.smartDeliveryClient.delete(`/spam-test/folder/${folderId}`),
       'delete folder'
