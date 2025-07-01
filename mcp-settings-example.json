@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "smartlead": {
-      "command": "node",
-      "args": ["/path/to/smartlead-mcp-server/dist/index.js"],
+      "command": "npx",
+      "args": ["smartlead-mcp-server"],
       "env": {
         "SMARTLEAD_API_KEY": "your-api-key-here"
       }

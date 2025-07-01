@@ -403,6 +403,30 @@ Once installed, you can use natural language commands in your AI tool for comple
 | ⚡ **Zed Editor** | Settings | ✅ Fully Supported | Modern code editor |
 | 🔗 **Any MCP Client** | Manual configuration | ✅ Supported | Standard MCP protocol |
 
+### 📝 **Manual Configuration Example**
+
+If you prefer manual setup, add this to your MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "smartlead": {
+      "command": "npx",
+      "args": ["smartlead-mcp-server"],
+      "env": {
+        "SMARTLEAD_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+**📍 Configuration File Locations:**
+- **Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
+- **Claude Desktop**: `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
+- **Cursor**: VS Code settings or `.vscode/settings.json`
+- **Continue.dev**: `~/.continue/config.json`
+
 ---
 
 ## 🔧 Development Setup
