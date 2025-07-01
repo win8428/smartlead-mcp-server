@@ -1,12 +1,14 @@
 {
   "name": "smartlead-mcp-by-leadmagic",
   "version": "1.6.1",
-  "description": "🚀 Production-ready Model Context Protocol server for SmartLead API - Complete cold email marketing automation suite with powerful campaign management, lead tracking, and analytics tools. Zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
+  "description": "💜 Production-ready Model Context Protocol server for SmartLead's industry-leading cold email automation platform - Complete API coverage with 113+ tools for campaign management, lead tracking, smart delivery, and analytics. Beautiful purple-gradient installer, zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
   "type": "module",
   "keywords": [
     "mcp",
     "model-context-protocol",
     "smartlead",
+    "smartlead-api",
+    "smartlead-mcp",
     "cold-email",
     "email-marketing",
     "campaign-management",
@@ -30,7 +32,13 @@
     "email-sequences",
     "analytics",
     "webhooks",
-    "smart-delivery"
+    "smart-delivery",
+    "deliverability",
+    "purple-gradient",
+    "react-ink",
+    "interactive-installer",
+    "leadmagic",
+    "bun-optimized"
   ],
   "author": {
     "name": "LeadMagic Team",
