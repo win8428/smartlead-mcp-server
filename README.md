@@ -2,11 +2,11 @@
 
 [![SmartLead MCP Server](https://img.shields.io/badge/%F0%9F%9A%80-SmartLead%20MCP%20Server-blue?style=for-the-badge&labelColor=000000)](https://github.com/LeadMagic/smartlead-mcp-server)
 
-**⚡ The Premier Model Context Protocol Server for Email Marketing Automation**
+**⚡ The Premier Model Context Protocol Server for Cold Email Marketing Automation**
 
-_Seamlessly integrate SmartLead's complete API suite with Claude, Cursor, Windsurf, and all MCP-compatible AI tools_
+_Seamlessly integrate SmartLead's complete cold email API suite with Claude, Cursor, Windsurf, and all MCP-compatible AI tools_
 
-**🎨 Powered by React Ink • 🚀 Built with TypeScript • ⚡ Optimized with Bun**
+**🎨 Powered by React Ink • 🚀 Built with TypeScript • ⚡ Optimized with Bun • 📧 Cold Email Focused**
 
 > **🤝 Unofficial Partner Integration** - We are proud partners of [SmartLead](https://smartlead.ai) and absolutely love their product! This is an unofficial MCP server implementation that provides seamless access to SmartLead's powerful email marketing automation platform. SmartLead's API is incredibly well-designed, their deliverability is outstanding, and their feature set is unmatched.
 
@@ -18,7 +18,7 @@ _Seamlessly integrate SmartLead's complete API suite with Claude, Cursor, Windsu
 
 ---
 
-**🎯 113 Powerful Tools • 🔥 Zero Configuration • ⚡ One-Line Setup • 🛡️ Enterprise Security • 🤝 SmartLead Partner**
+**🎯 113 Cold Email Tools • 🔥 Zero Configuration • ⚡ One-Line Setup • 🛡️ Enterprise Security • 🤝 SmartLead Partner**
 
 ---
 
@@ -26,6 +26,7 @@ _Seamlessly integrate SmartLead's complete API suite with Claude, Cursor, Windsu
 
 - [🚀 Super Easy Installation](#-super-easy-installation)
 - [🏗️ Technology Stack](#️-technology-stack)
+- [📧 Cold Email Features](#-cold-email-features)
 - [🛠️ Available Tools](#️-available-tools)
 - [💡 Usage Examples](#-usage-examples)
 - [🌐 Supported MCP Clients](#-supported-mcp-clients)
@@ -139,44 +140,113 @@ Our beautiful command-line installer is built with **[React Ink](https://github.
 
 ---
 
+## 📧 Cold Email Features
+
+### **🎯 Complete Cold Email Automation Suite**
+
+SmartLead is the industry leader in cold email marketing, and our MCP server provides complete access to their powerful platform:
+
+#### **🚀 Campaign Management**
+- **Multi-sequence campaigns** with A/B testing
+- **Smart scheduling** across time zones
+- **Automated follow-ups** with customizable delays
+- **Campaign analytics** and performance tracking
+- **Lead scoring** and engagement metrics
+
+#### **📊 Advanced Analytics & Reporting**
+- **Real-time deliverability monitoring**
+- **Open and click tracking** with detailed insights
+- **Response rate optimization** suggestions
+- **Mailbox health monitoring** and reputation management
+- **ROI tracking** and conversion analytics
+
+#### **🛡️ Deliverability Optimization**
+- **Smart delivery** with placement testing
+- **Spam filter analysis** and optimization
+- **Domain reputation management**
+- **IP warming** and rotation strategies
+- **Blacklist monitoring** and recovery
+
+#### **👥 Lead Management**
+- **Bulk lead import** from CSV/Excel
+- **Lead categorization** and segmentation
+- **Unsubscribe handling** and compliance
+- **Lead enrichment** and data validation
+- **Custom field mapping** and personalization
+
+#### **📧 Email Account Management**
+- **Multi-mailbox setup** for scale
+- **Automated warmup** sequences
+- **Account health monitoring**
+- **Connection status tracking**
+- **Tag-based organization**
+
+#### **🔗 Integrations & Webhooks**
+- **Real-time webhook events** for all activities
+- **CRM integrations** (HubSpot, Salesforce, Pipedrive)
+- **Zapier connectivity** for workflow automation
+- **Custom API integrations** for enterprise needs
+
+### **🎯 Why SmartLead for Cold Email?**
+
+| Feature | SmartLead Advantage |
+|---------|-------------------|
+| **Deliverability** | Industry-leading inbox placement rates |
+| **Scale** | Send thousands of emails daily per mailbox |
+| **Compliance** | Built-in CAN-SPAM and GDPR compliance |
+| **Analytics** | Deep insights into campaign performance |
+| **Support** | 24/7 expert cold email support |
+| **Integrations** | Seamless workflow automation |
+
+### **📈 Cold Email Best Practices Built-In**
+
+- **Gradual volume ramping** to build sender reputation
+- **Natural sending patterns** to avoid spam filters
+- **Personalization at scale** with dynamic variables
+- **A/B testing** for subject lines and content
+- **Automated list cleaning** and bounce handling
+- **Compliance monitoring** for regulations
+
+---
+
 ## 🛠️ Available Tools
 
-### 🚀 **PRIORITY: Combined Campaign Analytics**
-- 📊 `smartlead_get_campaigns_with_analytics` - **Efficient combined endpoint** that fetches campaigns with their analytics in one call. Supports client/status filtering for large datasets. **Use this for comprehensive campaign reporting!**
+### 🚀 **PRIORITY: Cold Email Campaign Analytics**
+- 📊 `smartlead_get_campaigns_with_analytics` - **Efficient combined endpoint** that fetches cold email campaigns with their performance analytics in one call. Supports client/status filtering for large datasets. **Perfect for cold email performance reporting!**
 
-### 📧 **Campaign Management (13+ tools)**
-- 🎯 `smartlead_create_campaign` - Create new email campaigns
-- ⏰ `smartlead_update_campaign_schedule` - Configure sending schedules
-- ⚙️ `smartlead_update_campaign_settings` - Update campaign configuration
-- 🔄 `smartlead_update_campaign_status` - Start, pause, or stop campaigns
-- 📋 `smartlead_list_campaigns` - List all campaigns with filtering
-- 🔍 `smartlead_get_campaign` - Get detailed campaign information
-- 📝 `smartlead_save_campaign_sequence` - Set up email sequences with A/B testing
-- 📊 `smartlead_get_campaign_sequence` - Retrieve sequence configuration
-- 🗑️ `smartlead_delete_campaign` - Delete campaigns
-- 📤 `smartlead_export_campaign_data` - Export campaign data
-- 🔗 `smartlead_fetch_campaigns_by_lead_id` - Get campaigns by lead ID
+### 📧 **Cold Email Campaign Management (13+ tools)**
+- 🎯 `smartlead_create_campaign` - Create new cold email campaigns with sequences
+- ⏰ `smartlead_update_campaign_schedule` - Configure sending schedules across time zones
+- ⚙️ `smartlead_update_campaign_settings` - Update campaign configuration and personalization
+- 🔄 `smartlead_update_campaign_status` - Start, pause, or stop cold email campaigns
+- 📋 `smartlead_list_campaigns` - List all cold email campaigns with filtering
+- 🔍 `smartlead_get_campaign` - Get detailed campaign information and metrics
+- 📝 `smartlead_save_campaign_sequence` - Set up multi-step email sequences with A/B testing
+- 📊 `smartlead_get_campaign_sequence` - Retrieve sequence configuration and performance
+- 🗑️ `smartlead_delete_campaign` - Delete campaigns and associated data
+- 📤 `smartlead_export_campaign_data` - Export campaign data for analysis
+- 🔗 `smartlead_fetch_campaigns_by_lead_id` - Get campaigns associated with specific leads
 - 📈 `smartlead_fetch_campaign_analytics_by_date` - Get campaign analytics by date range
-- 📊 `smartlead_get_campaign_sequence_analytics` - Get sequence analytics
+- 📊 `smartlead_get_campaign_sequence_analytics` - Get detailed sequence performance analytics
 
-### 👥 **Lead Management (17+ tools)**
-- 📋 `smartlead_list_leads_by_campaign` - List all leads by campaign ID
-- 🔍 `smartlead_fetch_lead_categories` - Get lead categories
-- 📧 `smartlead_fetch_lead_by_email` - Find lead by email address
-- ➕ `smartlead_add_leads_to_campaign` - Add leads to campaigns
-- ▶️ `smartlead_resume_lead_by_campaign` - Resume paused leads
-- ⏸️ `smartlead_pause_lead_by_campaign` - Pause active leads
-- 🗑️ `smartlead_delete_lead_by_campaign` - Delete leads from campaigns
-- 🚫 `smartlead_unsubscribe_lead_from_campaign` - Unsubscribe leads
-- 🚫 `smartlead_unsubscribe_lead_from_all_campaigns` - Global unsubscribe
-- 🚫 `smartlead_add_lead_to_global_blocklist` - Add to global blocklist
-- 🌐 `smartlead_fetch_all_leads_from_account` - Get all account leads
-- 🚫 `smartlead_fetch_leads_from_global_blocklist` - Get blocklist leads
-- ✏️ `smartlead_update_lead_by_id` - Update lead information
-- 🏷️ `smartlead_update_lead_category` - Update lead categories
-- 💬 `smartlead_fetch_lead_message_history` - Get message history
-- 💬 `smartlead_reply_to_lead_from_master_inbox` - Reply to leads
-- 📧 `smartlead_forward_reply` - Forward replies
+### 👥 **Cold Email Lead Management (17+ tools)**
+- 📋 `smartlead_list_leads_by_campaign` - List all prospects by cold email campaign
+- 🔍 `smartlead_fetch_lead_categories` - Get lead categories and segmentation
+- 📧 `smartlead_fetch_lead_by_email` - Find prospects by email address
+- ➕ `smartlead_add_leads_to_campaign` - Import prospects to cold email campaigns
+- ▶️ `smartlead_resume_lead_by_campaign` - Resume paused prospects in sequences
+- ⏸️ `smartlead_pause_lead_by_campaign` - Pause active prospects temporarily
+- 🗑️ `smartlead_delete_lead_by_campaign` - Remove prospects from campaigns
+- 🚫 `smartlead_unsubscribe_lead_from_campaign` - Handle unsubscribe requests
+- 🚫 `smartlead_unsubscribe_lead_from_all_campaigns` - Global unsubscribe management
+- 🚫 `smartlead_add_lead_to_global_blocklist` - Add to global suppression list
+- 🌐 `smartlead_fetch_all_leads_from_account` - Get all prospects in account
+- 🚫 `smartlead_fetch_leads_from_global_blocklist` - View suppressed prospects
+- ✏️ `smartlead_update_lead_by_id` - Update prospect information and data
+- 🏷️ `smartlead_update_lead_category` - Change prospect categories and tags
+- 💬 `smartlead_fetch_lead_message_history` - Get complete conversation history
+- 💬 `smartlead_reply_to_lead_from_master_inbox` - Send personalized replies
+- 📧 `smartlead_forward_reply` - Forward prospect responses to team
 
 ### 📧 **Email Account Management (10+ tools)**
 - 📋 `smartlead_list_email_accounts_per_campaign` - List campaign email accounts
@@ -276,33 +346,47 @@ Our beautiful command-line installer is built with **[React Ink](https://github.
 
 ---
 
-## 💡 Usage Examples
+## 💡 Cold Email Usage Examples
 
-Once installed, you can use natural language commands in your AI tool:
+Once installed, you can use natural language commands in your AI tool for complete cold email automation:
 
-### 📧 Campaign Operations
-
-```
-"Create a new campaign called 'Product Launch 2025'"
-"Update the schedule for campaign 123 to send emails Monday-Friday 9-5 EST"
-"Pause campaign 456"
-"Show me all active campaigns"
-```
-
-### 📝 Email Sequences
+### 🚀 Cold Email Campaign Setup
 
 ```
-"Create a 3-email sequence for campaign 789 with 2-day delays"
-"Add A/B testing to the first email in campaign 123"
-"Show me the email sequence for campaign 456"
+"Create a new cold email campaign called 'SaaS Outreach Q4' targeting tech executives"
+"Set up a 5-step email sequence with 3-day delays between each email"
+"Configure the campaign to send between 9 AM and 5 PM in the prospect's timezone"
+"Add A/B testing for subject lines to optimize open rates"
 ```
 
-### 📊 Analytics
+### 📊 Cold Email Performance Analysis
 
 ```
-"Get campaign analytics for campaign 123 from last week"
-"Show me the performance metrics for all campaigns this month"
-"What's the open rate for campaign 456?"
+"Show me the performance metrics for my top 5 cold email campaigns"
+"Which email sequences have the highest reply rates?"
+"Generate a deliverability report for all campaigns this month"
+"What's my average open rate compared to industry benchmarks?"
+"Show me which prospects opened emails but didn't reply"
+```
+
+### 👥 Prospect Management
+
+```
+"Import 1000 prospects from my CSV file to the SaaS Outreach campaign"
+"Show me all prospects who replied positively to my cold emails"
+"Pause all prospects in the 'Not Interested' category"
+"Get the complete conversation history for prospect john@startup.com"
+"Move all engaged prospects to my 'Hot Leads' category"
+```
+
+### 🛡️ Deliverability Optimization
+
+```
+"Check the spam score for my latest email template"
+"Show me which email accounts need IP warming"
+"Run a placement test for my new cold email sequence"
+"Monitor my domain reputation across all major email providers"
+"Generate a blacklist report for all my sending domains"
 ```
 
 ---
@@ -429,14 +513,83 @@ Consistent error format across all endpoints:
 
 ---
 
-## 🔒 Security & Best Practices
+## 🔒 Security & Cold Email Best Practices
 
-✅ **No API keys in code** - Always use environment variables  
-✅ **Type-safe requests** - Full TypeScript coverage with Zod validation  
-✅ **Error handling** - Comprehensive error catching and user-friendly messages  
-✅ **Rate limiting** - Respects SmartLead API rate limits  
-✅ **Secure defaults** - Production-ready configuration out of the box  
+### **🛡️ Technical Security**
+✅ **No API keys in code** - Always use environment variables
+✅ **Type-safe requests** - Full TypeScript coverage with Zod validation
+✅ **Error handling** - Comprehensive error catching and user-friendly messages
+✅ **Rate limiting** - Respects SmartLead API rate limits
+✅ **Secure defaults** - Production-ready configuration out of the box
 ✅ **Interactive installer** - No manual config file editing required
+
+### **📧 Cold Email Compliance & Best Practices**
+
+#### **🏛️ Legal Compliance**
+✅ **CAN-SPAM Act** - Automatic unsubscribe handling and sender identification
+✅ **GDPR Compliance** - Proper consent management and data protection
+✅ **CCPA Compliance** - California privacy rights and data handling
+✅ **Opt-out Management** - Immediate unsubscribe processing
+✅ **Sender Identification** - Clear sender information in all emails
+
+#### **🎯 Deliverability Best Practices**
+✅ **Gradual Volume Ramping** - Start with low volumes and increase gradually
+✅ **IP Warming** - Proper warmup sequences for new email accounts
+✅ **Domain Reputation** - Monitor and maintain sender reputation
+✅ **List Hygiene** - Regular cleaning and validation of prospect lists
+✅ **Engagement Tracking** - Monitor opens, clicks, and replies
+✅ **Spam Testing** - Regular placement tests and spam score monitoring
+
+#### **📝 Content Best Practices**
+✅ **Personalization** - Use dynamic variables for relevant messaging
+✅ **Value-First Approach** - Focus on prospect benefits, not features
+✅ **Clear Call-to-Action** - Single, specific action per email
+✅ **Mobile Optimization** - Ensure emails render well on all devices
+✅ **A/B Testing** - Test subject lines, content, and send times
+✅ **Natural Language** - Avoid spam trigger words and phrases
+
+#### **⚡ Performance Optimization**
+✅ **Send Time Optimization** - Respect prospect time zones
+✅ **Frequency Management** - Appropriate delays between sequence emails
+✅ **Response Monitoring** - Track and analyze reply rates
+✅ **Bounce Handling** - Automatic removal of invalid email addresses
+✅ **Engagement Scoring** - Prioritize highly engaged prospects
+✅ **Campaign Analytics** - Regular performance review and optimization
+
+---
+
+## 📈 Cold Email Success Metrics
+
+### **🎯 Key Performance Indicators (KPIs)**
+
+Track these essential metrics to optimize your cold email campaigns:
+
+| Metric | Good Rate | Excellent Rate | How to Improve |
+|--------|-----------|----------------|-----------------|
+| **Open Rate** | 20-30% | 40%+ | Better subject lines, sender reputation |
+| **Reply Rate** | 1-3% | 5%+ | Personalization, value proposition |
+| **Click Rate** | 2-5% | 8%+ | Clear CTAs, relevant content |
+| **Bounce Rate** | <2% | <1% | List hygiene, email validation |
+| **Unsubscribe Rate** | <0.5% | <0.2% | Better targeting, value delivery |
+| **Spam Rate** | <0.1% | <0.05% | Reputation management, content quality |
+
+### **📊 SmartLead Analytics Features**
+
+- **Real-time Performance Tracking** - Monitor campaigns as they run
+- **Sequence Analytics** - See which emails in your sequence perform best
+- **A/B Testing Results** - Compare subject lines, content, and send times
+- **Deliverability Monitoring** - Track inbox placement across providers
+- **Engagement Scoring** - Identify your most interested prospects
+- **ROI Calculation** - Measure revenue generated per campaign
+
+### **🚀 Optimization Strategies**
+
+1. **Subject Line Testing** - A/B test different approaches
+2. **Send Time Optimization** - Find when your prospects are most active
+3. **Personalization Scaling** - Use dynamic variables effectively
+4. **Sequence Timing** - Optimize delays between emails
+5. **Content Iteration** - Continuously improve based on data
+6. **List Segmentation** - Target specific prospect groups
 
 ---
 
