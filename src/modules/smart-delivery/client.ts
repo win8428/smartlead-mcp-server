@@ -8,9 +8,9 @@
  * @version 1.5.0
  */
 
-import axios, { AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 import { BaseSmartLeadClient } from '../../client/base.js';
-import { SmartLeadConfig } from '../../types/config.js';
+import type { SmartLeadConfig } from '../../types/config.js';
 
 // Smart Delivery Types
 interface Provider {

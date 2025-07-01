@@ -7,29 +7,29 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 import {
-  AnalyticsCampaignListRequestSchema,
-  AnalyticsClientListRequestSchema,
-  AnalyticsClientMonthWiseCountRequestSchema,
-  AnalyticsOverallStatsV2RequestSchema,
-  AnalyticsDayWiseOverallStatsRequestSchema,
-  AnalyticsMailboxNameWiseHealthMetricsRequestSchema,
-  AnalyticsMailboxDomainWiseHealthMetricsRequestSchema,
-  AnalyticsMailboxProviderWiseOverallPerformanceRequestSchema,
-  AnalyticsCampaignOverallStatsRequestSchema,
-  AnalyticsClientOverallStatsRequestSchema,
-  AnalyticsTeamBoardOverallStatsRequestSchema,
-  AnalyticsLeadOverallStatsRequestSchema,
-  AnalyticsLeadCategoryWiseResponseRequestSchema,
-  AnalyticsCampaignLeadsTakeForFirstReplyRequestSchema,
   AnalyticsCampaignFollowUpReplyRateRequestSchema,
+  AnalyticsCampaignLeadsTakeForFirstReplyRequestSchema,
   AnalyticsCampaignLeadToReplyTimeRequestSchema,
+  AnalyticsCampaignListRequestSchema,
+  AnalyticsCampaignOverallStatsRequestSchema,
   AnalyticsCampaignResponseStatsRequestSchema,
   AnalyticsCampaignStatusStatsRequestSchema,
+  AnalyticsClientListRequestSchema,
+  AnalyticsClientMonthWiseCountRequestSchema,
+  AnalyticsClientOverallStatsRequestSchema,
+  AnalyticsDayWiseOverallStatsRequestSchema,
+  AnalyticsLeadCategoryWiseResponseRequestSchema,
+  AnalyticsLeadOverallStatsRequestSchema,
+  AnalyticsMailboxDomainWiseHealthMetricsRequestSchema,
+  AnalyticsMailboxNameWiseHealthMetricsRequestSchema,
   AnalyticsMailboxOverallStatsRequestSchema,
+  AnalyticsMailboxProviderWiseOverallPerformanceRequestSchema,
+  AnalyticsOverallStatsV2RequestSchema,
+  AnalyticsTeamBoardOverallStatsRequestSchema,
 } from '../types.js';
 
 /**
@@ -54,10 +54,18 @@ export function registerAnalyticsTools(
       try {
         const validatedParams = AnalyticsCampaignListRequestSchema.parse(params);
         const result = await client.getAnalyticsCampaignList(validatedParams);
+        if (result.success) {
+          const campaigns = (result.data as any)?.campaign_list || [];
+          return formatSuccessResponse(
+            'Campaign list fetched successfully for analytics',
+            result,
+            `Found ${campaigns.length} campaigns`
+          );
+        }
         return formatSuccessResponse(
-          'Campaign list fetched successfully for analytics',
+          'Failed to get analytics campaign list',
           result,
-          `Found ${result.data?.campaign_list?.length || 0} campaigns`
+          result.message
         );
       } catch (error) {
         return handleError(error);
@@ -77,11 +85,15 @@ export function registerAnalyticsTools(
       try {
         const validatedParams = AnalyticsClientListRequestSchema.parse(params);
         const result = await client.getAnalyticsClientList(validatedParams);
-        return formatSuccessResponse(
-          'Client list fetched successfully for analytics',
-          result,
-          `Found ${result.data?.client_list?.length || 0} clients`
-        );
+        if (result.success) {
+          const clients = (result.data as any)?.client_list || [];
+          return formatSuccessResponse(
+            'Client list fetched successfully for analytics',
+            result,
+            `Found ${clients.length} clients`
+          );
+        }
+        return formatSuccessResponse('Failed to get analytics client list', result, result.message);
       } catch (error) {
         return handleError(error);
       }
@@ -123,14 +135,15 @@ export function registerAnalyticsTools(
       try {
         const validatedParams = AnalyticsOverallStatsV2RequestSchema.parse(params);
         const result = await client.getAnalyticsOverallStatsV2(validatedParams);
-        const stats = result.data?.overall_stats;
-        return formatSuccessResponse(
-          'Overall analytics statistics fetched successfully',
-          result,
-          stats
-            ? `Sent: ${stats.sent}, Opened: ${stats.opened}, Replied: ${stats.replied}, Open Rate: ${stats.open_rate}, Reply Rate: ${stats.reply_rate}`
-            : undefined
-        );
+        const stats = (result.data as any)?.overall_stats;
+        if (stats) {
+          return formatSuccessResponse(
+            'Overall analytics statistics fetched successfully',
+            result,
+            `Sent: ${stats.sent}, Opened: ${stats.opened}, Replied: ${stats.replied}, Open Rate: ${stats.open_rate}, Reply Rate: ${stats.reply_rate}`
+          );
+        }
+        return formatSuccessResponse('Could not retrieve overall stats', result);
       } catch (error) {
         return handleError(error);
       }
@@ -260,10 +273,18 @@ export function registerAnalyticsTools(
       try {
         const validatedParams = AnalyticsCampaignOverallStatsRequestSchema.parse(params);
         const result = await client.getAnalyticsCampaignOverallStats(validatedParams);
+        if (result.success) {
+          const campaigns = (result.data as any)?.campaign_wise_performance || [];
+          return formatSuccessResponse(
+            'Campaign overall statistics fetched successfully',
+            result,
+            `Found ${campaigns.length} campaigns with performance data`
+          );
+        }
         return formatSuccessResponse(
-          'Campaign overall statistics fetched successfully',
+          'Failed to get campaign overall stats',
           result,
-          `Found ${result.data?.campaign_wise_performance?.length || 0} campaigns with performance data`
+          result.message
         );
       } catch (error) {
         return handleError(error);

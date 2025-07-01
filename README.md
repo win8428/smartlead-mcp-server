@@ -1,479 +1,123 @@
-# 💜 SmartLead MCP Server by LeadMagic
+# 💜 SmartLead MCP Server
 
 <div align="center">
 
-[![SmartLead MCP Server](https://img.shields.io/badge/%F0%9F%92%9C-SmartLead%20MCP%20Server-8B5CF6?style=for-the-badge&labelColor=000000)](https://github.com/LeadMagic/smartlead-mcp-server)
+**🚀 The Premier Model Context Protocol Server for SmartLead's Cold Email Automation Platform**
 
-**⚡ The Premier Model Context Protocol Server for SmartLead's Cold Email Automation Platform**
+[![NPM Version](https://img.shields.io/npm/v/smartlead-mcp-by-leadmagic?style=for-the-badge&color=7c3aed)](https://www.npmjs.com/package/smartlead-mcp-by-leadmagic)
+[![Downloads](https://img.shields.io/npm/dt/smartlead-mcp-by-leadmagic?style=for-the-badge&color=7c3aed)](https://www.npmjs.com/package/smartlead-mcp-by-leadmagic)
+[![License](https://img.shields.io/npm/l/smartlead-mcp-by-leadmagic?style=for-the-badge&color=7c3aed)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-7c3aed?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 
-_Seamlessly integrate SmartLead's complete API suite with Claude Desktop, Cursor, Windsurf, Continue.dev, and all MCP-compatible AI tools_
-
-**🎨 Powered by React Ink • 🚀 Built with TypeScript • ⚡ Optimized with Bun • 💜 SmartLead Partner Integration**
+**✨ 116+ API Tools • 🛡️ Production Ready • 🎨 Zero Config • ⚡ Instant Setup ✨**
 
 </div>
 
 ---
 
-<div align="center">
+## 🌟 What Makes This Special?
 
-🌟 **113+ Cold Email Tools** • 🔥 **Zero Configuration** • ⚡ **One-Line Setup** • 🛡️ **Enterprise Security** • 💜 **Official SmartLead Partner**
+This isn't just another MCP server—it's the **complete SmartLead automation suite** that transforms how you interact with cold email campaigns through AI. Built by [LeadMagic](https://leadmagic.io), the official SmartLead partner, this server provides **comprehensive API coverage** with a **beautiful React Ink installer** that makes setup a joy.
 
-</div>
+### 🎯 **Complete SmartLead API Coverage (116+ Tools)**
 
----
-
-> **🎯 Keywords**: SmartLead MCP, Model Context Protocol, Cold Email Automation, Email Marketing API, Campaign Management, Lead Generation, Claude Desktop Integration, Cursor MCP, Windsurf MCP, Continue.dev MCP, Email Deliverability, Sales Automation, Outreach Tools, CRM Integration, Email Sequences, A/B Testing, Analytics, TypeScript MCP Server, NPX Installation, Zero Configuration
-
-> **💜 Official SmartLead Partner Integration** - We are proud official partners of [SmartLead](https://smartlead.ai) and absolutely love their product! This MCP server provides seamless access to SmartLead's industry-leading cold email automation platform. SmartLead's API is incredibly well-designed, their deliverability is outstanding, and their feature set is unmatched in the cold email space.
-
-<div align="center">
-
-[![npm version](https://img.shields.io/npm/v/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=8B5CF6)](https://www.npmjs.com/package/smartlead-mcp-server) [![Downloads](https://img.shields.io/npm/dm/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=A855F7)](https://www.npmjs.com/package/smartlead-mcp-server) [![License: MIT](https://img.shields.io/badge/License-MIT-A78BFA.svg?style=for-the-badge&logo=opensource&logoColor=white)](https://opensource.org/licenses/MIT) [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.0.0-8B5CF6.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-8B5CF6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-A855F7?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/) [![Ink](https://img.shields.io/badge/Ink-8B5CF6?style=for-the-badge&logo=react&logoColor=white)](https://github.com/vadimdemedes/ink) [![Bun](https://img.shields.io/badge/Bun-A855F7?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh/)
-
-[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-8B5CF6?style=for-the-badge&logo=protocol&logoColor=white)](https://modelcontextprotocol.io) [![Production Ready](https://img.shields.io/badge/Production-Ready-A855F7?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server) [![Security](https://img.shields.io/badge/Security-Verified-8B5CF6?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server/security)
-
-</div>
+| 📂 **Category** | 🔧 **Tools** | 📝 **Description** |
+|-----------------|-------------|-------------------|
+| **🎯 Campaign Management** | 14 tools | Create, update, manage campaigns and sequences |
+| **👥 Lead Management** | 17 tools | Import, organize, track prospects and responses |
+| **📧 Email Account Management** | 15 tools | Configure sending accounts and warmup settings |
+| **🤖 Smart Senders** | 12 tools | Manage domains, vendors, and deliverability |
+| **📊 Smart Delivery** | 11 tools | Optimize sending patterns and timing |
+| **📈 Analytics & Statistics** | 18 tools | Track performance, ROI, and campaign metrics |
+| **🔗 Webhooks** | 9 tools | Real-time notifications and integrations |
+| **👤 Client Management** | 8 tools | Team management and API key handling |
+| **🔧 Advanced Tools** | 12+ tools | Enterprise features and automation |
 
 ---
 
-## 📖 Table of Contents
+## 🚀 **Lightning-Fast Installation**
 
-- [🚀 Quick Start](#-quick-start)
-- [💜 Beautiful Interactive Installer](#-beautiful-interactive-installer)
-- [🏗️ Technology Stack](#️-technology-stack)
-- [📧 SmartLead Features](#-smartlead-features)
-- [🛠️ Complete API Coverage](#️-complete-api-coverage)
-- [💡 Usage Examples](#-usage-examples)
-- [🌐 Supported MCP Clients](#-supported-mcp-clients)
-- [🔧 Development Setup](#-development-setup)
-- [🏗️ Architecture](#️-architecture)
-- [📊 API Reference](#-api-reference)
-- [🔒 Security & Best Practices](#-security--best-practices)
-- [📈 Performance Benchmarks](#-performance-benchmarks)
-- [🤝 Support & Resources](#-support--resources)
-
----
-
-> 🎯 **Access all SmartLead API endpoints through the Model Context Protocol for seamless integration with Claude, Cursor, Windsurf, Continue.dev, and other MCP-compatible AI tools.**
-
-## 🚀 Quick Start
-
-### ⚡ Option 1: Interactive Installer (Recommended)
-
-**The fastest way to get started** - works on **macOS**, **Windows**, and **Linux**. Our beautiful purple-gradient installer makes setup effortless.
-
+### **Option 1: NPX (Recommended - Zero Installation)**
 ```bash
-# 🔥 Using npx (no installation required)
+# Beautiful interactive installer
 npx smartlead-mcp-by-leadmagic install
-```
 
-### 📱 Option 2: Direct Usage
-
-Perfect for quick tests and automation:
-
-```bash
-# Set your API key and run directly
+# Direct server usage
 SMARTLEAD_API_KEY=your-key npx smartlead-mcp-by-leadmagic
 ```
 
-### 🔑 Get Your SmartLead API Key
-
-1. 🌐 Visit [SmartLead Dashboard](https://app.smartlead.ai)
-2. 📝 Sign up for free (if needed) - **Start with 50 free emails!**
-3. 🔐 Navigate to Settings → API Keys
-4. 📋 Generate your API key and copy it
-
----
-
-## 💜 Beautiful Interactive Installer
-
-Our installer features **stunning purple gradients** that match SmartLead's brand identity:
-
-### **🎨 Visual Features**
-- **💜 Purple Gradient Logo** - Beautiful SmartLead ASCII art with brand colors
-- **🎯 Interactive Components** - Select inputs, text inputs, progress bars
-- **🔐 Real-time API Validation** - Live key verification with SmartLead
-- **🛡️ Error Recovery** - Comprehensive error handling with guidance
-- **📱 Responsive Design** - Perfect in any terminal size
-- **⚡ Lightning Performance** - Optimized React components
-
-### **✨ Installer Capabilities**
-- 🎨 **Beautiful modern UI** with purple gradient text and animations
-- ✅ **Guided API key setup** with mandatory security validation
-- 🔍 **Smart client detection** for all supported AI tools
-- ⚙️ **Automatic configuration** with zero manual file editing
-- 🚀 **Lightning fast** - up and running in under 60 seconds!
-- 🛡️ **Security-first** - API key validation before any installation
-- 📱 **Node.js 20+ optimized** for enhanced performance
-
----
-
-## 🏗️ Technology Stack
-
-### **🎨 Interactive Installer - Powered by React Ink**
-
-Our stunning command-line installer is built with **[React Ink](https://github.com/vadimdemedes/ink)** - React for CLI applications:
-
-- **🎭 Animated ASCII Art** - Beautiful SmartLead branding with purple gradient effects
-- **🎯 Interactive Components** - Select inputs, text inputs, progress bars with purple theme
-- **🔐 Real-time Validation** - Live API key verification with SmartLead
-- **🛡️ Error Recovery** - Comprehensive error handling with user guidance
-- **📱 Responsive Design** - Works perfectly in any terminal size
-- **⚡ Fast Performance** - Optimized React components for CLI
-
-### **🚀 Core Technologies**
-
-| Technology | Purpose | Why We Chose It |
-|------------|---------|-----------------|
-| **[TypeScript](https://www.typescriptlang.org/)** | Type-safe development | Zero runtime errors, excellent DX |
-| **[React Ink](https://github.com/vadimdemedes/ink)** | CLI interface | Beautiful, interactive command-line UIs |
-| **[Bun](https://bun.sh/)** | Runtime & package manager | 3x faster than Node.js, modern tooling |
-| **[MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk)** | Protocol implementation | Official TypeScript SDK for MCP |
-| **[Zod](https://zod.dev/)** | Schema validation | Runtime type safety, excellent errors |
-| **[Axios](https://axios-http.com/)** | HTTP client | Robust, feature-rich API communication |
-
-### **🎨 React Ink Components Used**
-
-- **`<Box>`** - Layout and styling with purple theme
-- **`<Text>`** - Styled text with purple gradients and colors  
-- **`<Spinner>`** - Loading animations with brand colors
-- **`<SelectInput>`** - Interactive selection menus
-- **`<TextInput>`** - User input with validation
-- **`<Gradient>`** - Beautiful purple gradient text effects
-- **`<BigText>`** - ASCII art logo rendering
-
-### **⚡ Performance & Quality**
-
-- **Zero TypeScript Errors** - Strict compilation with comprehensive types
-- **113+ API Endpoints** - Complete SmartLead API coverage
-- **Production Ready** - Comprehensive error handling and recovery
-- **MCP Compliant** - Follows all Model Context Protocol standards
-- **Modern Architecture** - Modular, maintainable, and extensible
-
----
-
-## 📧 SmartLead Features
-
-### **🎯 Complete SmartLead Cold Email Automation Suite**
-
-SmartLead is the industry leader in cold email marketing, and our MCP server provides complete access to their powerful platform:
-
-#### **🚀 Campaign Management**
-- **Multi-sequence campaigns** with A/B testing
-- **Smart scheduling** across time zones
-- **Automated follow-ups** with customizable delays
-- **Campaign analytics** and performance tracking
-- **Lead scoring** and engagement metrics
-
-#### **📊 Advanced Analytics & Reporting**
-- **Real-time deliverability monitoring**
-- **Open and click tracking** with detailed insights
-- **Response rate optimization** suggestions
-- **Mailbox health monitoring** and reputation management
-- **ROI tracking** and conversion analytics
-
-#### **🛡️ Deliverability Optimization**
-- **Smart delivery** with placement testing
-- **Spam filter analysis** and optimization
-- **Domain reputation management**
-- **IP warming** and rotation strategies
-- **Blacklist monitoring** and recovery
-
-#### **👥 Lead Management**
-- **Bulk lead import** from CSV/Excel
-- **Lead categorization** and segmentation
-- **Unsubscribe handling** and compliance
-- **Lead enrichment** and data validation
-- **Custom field mapping** and personalization
-
-#### **📧 Email Account Management**
-- **Multi-mailbox setup** for scale
-- **Automated warmup** sequences
-- **Account health monitoring**
-- **Connection status tracking**
-- **Tag-based organization**
-
-#### **🔗 Integrations & Webhooks**
-- **Real-time webhook events** for all activities
-- **CRM integrations** (HubSpot, Salesforce, Pipedrive)
-- **Zapier connectivity** for workflow automation
-- **Custom API integrations** for enterprise needs
-
-### **🎯 Why SmartLead for Cold Email?**
-
-| Feature | SmartLead Advantage |
-|---------|-------------------|
-| **Deliverability** | Industry-leading inbox placement rates (90%+) |
-| **Scale** | Send thousands of emails daily per mailbox |
-| **Compliance** | Built-in CAN-SPAM and GDPR compliance |
-| **Analytics** | Deep insights into campaign performance |
-| **Support** | 24/7 expert cold email support |
-| **Integrations** | Seamless workflow automation |
-| **Price** | Most competitive pricing in the market |
-
-### **📈 SmartLead Best Practices Built-In**
-
-- **Gradual volume ramping** to build sender reputation
-- **Natural sending patterns** to avoid spam filters
-- **Personalization at scale** with dynamic variables
-- **A/B testing** for subject lines and content
-- **Automated list cleaning** and bounce handling
-- **Compliance monitoring** for regulations
-
----
-
-## 🛠️ Complete API Coverage
-
-### **🎯 Smart Tool Loading System**
-
-To prevent overwhelming your MCP client, SmartLead MCP Server uses a **tiered tool loading system**. By default, only the most essential tools are loaded (49 tools), with advanced and administrative tools available on-demand.
-
-#### **✅ Essential Tools (Always Loaded - 49 Tools)**
-These core tools are loaded by default for the best user experience:
-
-- **📧 Campaign Management** (13 tools) - Create, manage, and optimize campaigns
-- **👥 Lead Management** (17 tools) - Import, organize, and track prospects  
-- **📧 Email Account Management** (10 tools) - Manage sending accounts and warmup
-- **📊 Basic Statistics** (9 tools) - Essential performance metrics
-
-#### **🚀 Advanced Tools (Optional - 50 Tools)**
-Enable with: `SMARTLEAD_ADVANCED_TOOLS=true`
-
-- **🎯 Smart Delivery** (25 tools) - Deliverability testing and optimization
-- **📊 Global Analytics** (20 tools) - Advanced reporting and insights
-- **🔗 Webhooks** (5 tools) - Real-time event integration
-
-#### **🔐 Administrative Tools (Optional - 11 Tools)**  
-Enable with: `SMARTLEAD_ADMIN_TOOLS=true`
-
-- **👥 Client Management** (6 tools) - White-label client administration
-- **🌐 Smart Senders** (5 tools) - Domain purchasing and management
-
-### **⚙️ Enabling Additional Tools**
-
+### **Option 2: Global Installation**
 ```bash
-# Enable advanced tools (Smart Delivery, Analytics, Webhooks)
-export SMARTLEAD_ADVANCED_TOOLS=true
+# Install globally
+npm install -g smartlead-mcp-by-leadmagic
 
-# Enable administrative tools (Client Management, Smart Senders)  
-export SMARTLEAD_ADMIN_TOOLS=true
+# Run beautiful installer
+smartlead-mcp-by-leadmagic install
 
-# Enable all tools (113+ total)
-export SMARTLEAD_ADVANCED_TOOLS=true
-export SMARTLEAD_ADMIN_TOOLS=true
-
-# Run with enhanced tool set
-npx smartlead-mcp-by-leadmagic
+# Or start server directly
+SMARTLEAD_API_KEY=your-key smartlead-mcp-by-leadmagic
 ```
 
-### **📊 Tool Loading Summary**
+### **Option 3: Local Installation**
+```bash
+# Install locally
+npm install smartlead-mcp-by-leadmagic
 
-| Configuration | Tools Loaded | Best For |
-|---------------|--------------|----------|
-| **Default** | 49 tools | New users, essential workflows |
-| **+ Advanced** | 99 tools | Power users, deliverability optimization |
-| **+ Admin** | 110+ tools | Agencies, white-label implementations |
-
----
-
-### 🚀 **PRIORITY: SmartLead Campaign Analytics**
-- 📊 `smartlead_get_campaigns_with_analytics` - **Efficient combined endpoint** that fetches cold email campaigns with their performance analytics in one call. Supports client/status filtering for large datasets. **Perfect for SmartLead performance reporting!**
-
-### 📧 **SmartLead Campaign Management (13+ tools)**
-- 🎯 `smartlead_create_campaign` - Create new SmartLead campaigns with sequences
-- ⏰ `smartlead_update_campaign_schedule` - Configure sending schedules across time zones
-- ⚙️ `smartlead_update_campaign_settings` - Update campaign configuration and personalization
-- 🔄 `smartlead_update_campaign_status` - Start, pause, or stop SmartLead campaigns
-- 📋 `smartlead_list_campaigns` - List all SmartLead campaigns with filtering
-- 🔍 `smartlead_get_campaign` - Get detailed campaign information and metrics
-- 📝 `smartlead_save_campaign_sequence` - Set up multi-step email sequences with A/B testing
-- 📊 `smartlead_get_campaign_sequence` - Retrieve sequence configuration and performance
-- 🗑️ `smartlead_delete_campaign` - Delete campaigns and associated data
-- 📤 `smartlead_export_campaign_data` - Export campaign data for analysis
-- 🔗 `smartlead_fetch_campaigns_by_lead_id` - Get campaigns associated with specific leads
-- 📈 `smartlead_fetch_campaign_analytics_by_date` - Get campaign analytics by date range
-- 📊 `smartlead_get_campaign_sequence_analytics` - Get detailed sequence performance analytics
-
-### 👥 **SmartLead Lead Management (17+ tools)**
-- 📋 `smartlead_list_leads_by_campaign` - List all prospects by SmartLead campaign
-- 🔍 `smartlead_fetch_lead_categories` - Get lead categories and segmentation
-- 📧 `smartlead_fetch_lead_by_email` - Find prospects by email address
-- ➕ `smartlead_add_leads_to_campaign` - Import prospects to SmartLead campaigns
-- ▶️ `smartlead_resume_lead_by_campaign` - Resume paused prospects in sequences
-- ⏸️ `smartlead_pause_lead_by_campaign` - Pause active prospects temporarily
-- 🗑️ `smartlead_delete_lead_by_campaign` - Remove prospects from campaigns
-- 🚫 `smartlead_unsubscribe_lead_from_campaign` - Handle unsubscribe requests
-- 🚫 `smartlead_unsubscribe_lead_from_all_campaigns` - Global unsubscribe management
-- 🚫 `smartlead_add_lead_to_global_blocklist` - Add to global suppression list
-- 🌐 `smartlead_fetch_all_leads_from_account` - Get all prospects in account
-- 🚫 `smartlead_fetch_leads_from_global_blocklist` - View suppressed prospects
-- ✏️ `smartlead_update_lead_by_id` - Update prospect information and data
-- 🏷️ `smartlead_update_lead_category` - Change prospect categories and tags
-- 💬 `smartlead_fetch_lead_message_history` - Get complete conversation history
-- 💬 `smartlead_reply_to_lead_from_master_inbox` - Send personalized replies
-- 📧 `smartlead_forward_reply` - Forward prospect responses to team
-
-### 📧 **Email Account Management (10+ tools)**
-- 📋 `smartlead_list_email_accounts_per_campaign` - List campaign email accounts
-- ➕ `smartlead_add_email_account_to_campaign` - Add email accounts to campaigns
-- ➖ `smartlead_remove_email_account_from_campaign` - Remove email accounts
-- 📧 `smartlead_fetch_all_email_accounts` - Get all user email accounts
-- 🆕 `smartlead_create_email_account` - Create new email accounts
-- ✏️ `smartlead_update_email_account` - Update email account settings
-- 🔍 `smartlead_fetch_email_account_by_id` - Get email account details
-- 🔥 `smartlead_add_update_warmup_to_email_account` - Configure email warmup
-- 🔄 `smartlead_reconnect_failed_email_accounts` - Reconnect failed accounts
-- 🏷️ `smartlead_update_email_account_tag` - Update account tags
-
-### 📊 **Campaign Statistics (9+ tools)**
-- 📈 `smartlead_fetch_campaign_statistics` - Get campaign statistics
-- 📅 `smartlead_fetch_campaign_statistics_by_date_range` - Get stats by date range
-- 🔥 `smartlead_fetch_warmup_stats_by_email_account` - Get warmup statistics
-- 📊 `smartlead_fetch_campaign_top_level_analytics` - Get top-level analytics
-- 📅 `smartlead_fetch_campaign_top_level_analytics_by_date` - Get analytics by date
-- 👥 `smartlead_fetch_campaign_lead_statistics` - Get lead statistics
-- 📧 `smartlead_fetch_campaign_mailbox_statistics` - Get mailbox statistics
-- 📥 `smartlead_download_campaign_data` - **Download data in CSV/JSON format**
-- 📊 `smartlead_view_download_statistics` - View download analytics
-
-### 🎯 **SmartLead Smart Delivery (25+ tools)**
-- 🌍 `smartlead_get_region_wise_providers` - Get email providers by region
-- 🧪 `smartlead_create_manual_placement_test` - Create manual spam tests
-- 🤖 `smartlead_create_automated_placement_test` - Create automated spam tests
-- 🔍 `smartlead_get_spam_test_details` - Get spam test details
-- 🗑️ `smartlead_delete_smart_delivery_tests` - Delete tests in bulk
-- ⏹️ `smartlead_stop_automated_test` - Stop automated tests
-- 📋 `smartlead_list_all_tests` - List all tests
-- 📊 `smartlead_get_provider_wise_report` - Provider performance reports
-- 🌍 `smartlead_get_group_wise_report` - Geographic performance reports
-- 📧 `smartlead_get_sender_account_wise_report` - Sender account reports
-- 🛡️ `smartlead_get_spam_filter_details` - Spam filter analysis
-- 🔐 `smartlead_get_dkim_details` - DKIM authentication details
-- 🔐 `smartlead_get_spf_details` - SPF authentication details
-- 🔐 `smartlead_get_rdns_details` - rDNS verification details
-- 📧 `smartlead_get_sender_accounts` - Get sender accounts for tests
-- 🚫 `smartlead_get_blacklist` - Get blacklist information
-- 📧 `smartlead_get_email_content` - Get test email content
-- 📊 `smartlead_get_ip_analytics` - IP blacklist analytics
-- 📧 `smartlead_get_email_headers` - Email header analysis
-- 📅 `smartlead_get_schedule_history` - Automated test history
-- 🌐 `smartlead_get_ip_details` - IP blacklist details
-- 📧 `smartlead_get_mailbox_summary` - Mailbox performance summary
-- 📊 `smartlead_get_mailbox_count` - Mailbox count statistics
-- 📁 `smartlead_get_all_folders` - List all folders
-- 📁 `smartlead_create_folder` - Create organization folders
-- 📁 `smartlead_get_folder_by_id` - Get folder details
-- 🗑️ `smartlead_delete_folder` - Delete folders
-
-### 🔗 **Webhooks (5 tools)**
-- 📋 `smartlead_fetch_webhooks_by_campaign` - List campaign webhooks
-- ➕ `smartlead_upsert_campaign_webhook` - Add/update webhooks
-- 🗑️ `smartlead_delete_campaign_webhook` - Delete webhooks
-- 📊 `smartlead_get_webhooks_publish_summary` - Webhook delivery stats
-- 🔄 `smartlead_retrigger_failed_events` - Retry failed webhook events
-
-### 👥 **Client Management (6 tools)**
-- ➕ `smartlead_add_client` - Add new clients (white-label)
-- 📋 `smartlead_fetch_all_clients` - List all clients
-- 🔑 `smartlead_create_new_client_api_key` - Create API keys
-- 📋 `smartlead_get_clients_api_keys` - List client API keys
-- 🗑️ `smartlead_delete_client_api_key` - Delete API keys
-- 🔄 `smartlead_reset_client_api_key` - Reset API keys
-
-### 🌐 **SmartLead Smart Senders (5 tools)**
-- 🏪 `smartlead_get_vendors` - Get domain vendors
-- 🔍 `smartlead_search_domain` - Search available domains
-- 🤖 `smartlead_auto_generate_mailboxes` - Auto-generate mailboxes
-- 🛒 `smartlead_place_order_mailboxes` - Purchase domains/mailboxes
-- 📋 `smartlead_get_domain_list` - List purchased domains
-
-### 📊 **Global Analytics (20+ tools)**
-- 📋 `smartlead_get_analytics_campaign_list` - Campaign analytics list
-- 👥 `smartlead_get_analytics_client_list` - Client analytics list
-- 📅 `smartlead_get_analytics_client_month_wise_count` - Monthly client stats
-- 📊 `smartlead_get_analytics_overall_stats_v2` - Overall performance stats
-- 📅 `smartlead_get_analytics_day_wise_overall_stats` - Daily performance
-- 💬 `smartlead_get_analytics_day_wise_positive_reply_stats` - Daily reply stats
-- 📊 `smartlead_get_analytics_campaign_overall_stats` - Campaign performance
-- 👥 `smartlead_get_analytics_client_overall_stats` - Client performance
-- 📧 `smartlead_get_analytics_mailbox_name_wise_health_metrics` - Mailbox health
-- 🌐 `smartlead_get_analytics_mailbox_domain_wise_health_metrics` - Domain health
-- 🏪 `smartlead_get_analytics_mailbox_provider_wise_overall_performance` - Provider performance
-- 👥 `smartlead_get_analytics_team_board_overall_stats` - Team performance
-- 👤 `smartlead_get_analytics_lead_overall_stats` - Lead performance
-- 🏷️ `smartlead_get_analytics_lead_category_wise_response` - Category responses
-- ⏱️ `smartlead_get_analytics_campaign_leads_take_for_first_reply` - First reply timing
-- 🔄 `smartlead_get_analytics_campaign_follow_up_reply_rate` - Follow-up rates
-- ⏱️ `smartlead_get_analytics_campaign_lead_to_reply_time` - Response timing
-- 💬 `smartlead_get_analytics_campaign_response_stats` - Response statistics
-- 📊 `smartlead_get_analytics_campaign_status_stats` - Status statistics
-- 📧 `smartlead_get_analytics_mailbox_overall_stats` - Mailbox statistics
-
----
-
-## 💡 SmartLead Usage Examples
-
-Once installed, you can use natural language commands in your AI tool for complete SmartLead automation:
-
-### 🚀 SmartLead Campaign Setup
-
-```
-"Create a new SmartLead campaign called 'SaaS Outreach Q4' targeting tech executives"
-"Set up a 5-step email sequence with 3-day delays between each email"
-"Configure the campaign to send between 9 AM and 5 PM in the prospect's timezone"
-"Add A/B testing for subject lines to optimize open rates"
-```
-
-### 📊 SmartLead Performance Analysis
-
-```
-"Show me the performance metrics for my top 5 SmartLead campaigns"
-"Which email sequences have the highest reply rates?"
-"Generate a deliverability report for all campaigns this month"
-"What's my average open rate compared to industry benchmarks?"
-"Show me which prospects opened emails but didn't reply"
-```
-
-### 👥 Prospect Management
-
-```
-"Import 1000 prospects from my CSV file to the SaaS Outreach campaign"
-"Show me all prospects who replied positively to my SmartLead emails"
-"Pause all prospects in the 'Not Interested' category"
-"Get the complete conversation history for prospect john@startup.com"
-"Move all engaged prospects to my 'Hot Leads' category"
-```
-
-### 🛡️ SmartLead Deliverability Optimization
-
-```
-"Check the spam score for my latest email template using SmartLead"
-"Show me which email accounts need IP warming"
-"Run a placement test for my new cold email sequence"
-"Monitor my domain reputation across all major email providers"
-"Generate a blacklist report for all my sending domains"
+# Use via npm scripts
+npm run setup
 ```
 
 ---
 
-## 🌐 Supported MCP Clients
+## 🎨 **Beautiful Interactive Installer**
 
-| Client | Installation | Status | Notes |
-|--------|-------------|--------|-------|
-| 🤖 **Claude Desktop** | Interactive installer | ✅ Fully Supported | Official Anthropic client |
-| 🎯 **Cursor (Cline)** | VS Code settings | ✅ Fully Supported | Requires Cline extension |
-| 🏄 **Windsurf** | Manual config | ✅ Fully Supported | Codeium's AI IDE |
-| 🔄 **Continue.dev** | Config file | ✅ Fully Supported | Open source coding assistant |
-| 💻 **VS Code (Cline)** | VS Code settings.json | ✅ Fully Supported | Requires Cline extension |
-| ⚡ **Zed Editor** | Settings | ✅ Fully Supported | Modern code editor |
-| 🔗 **Any MCP Client** | Manual configuration | ✅ Supported | Standard MCP protocol |
+Our **React Ink installer** is a work of art! It features:
 
-### 📝 **Manual Configuration Example**
+- 💜 **Stunning purple gradients** and smooth animations
+- 🔍 **Auto-detection** of all MCP clients (Claude, Cursor, Windsurf, etc.)
+- 🔑 **Real-time API key validation** with SmartLead
+- ⚡ **Zero-config setup** for all supported clients
+- 🎯 **Smart error handling** with helpful messages
+- 📱 **Cross-platform support** (macOS, Linux, Windows)
 
-If you prefer manual setup, add this to your MCP client configuration:
+![Installer Demo](https://via.placeholder.com/800x400/7c3aed/ffffff?text=Beautiful+Purple+Installer)
 
+---
+
+## 🔗 **Supported AI Coding Tools**
+
+| 🤖 **Client** | 📱 **Status** | 🔧 **Auto-Config** | 📝 **Notes** |
+|---------------|--------------|-------------------|---------------|
+| **🤖 Claude Desktop** | ✅ Full Support | ✅ Yes | Anthropic's flagship client |
+| **🎯 Cursor** | ✅ Full Support | ✅ Yes | AI-powered code editor |
+| **🏄 Windsurf** | ✅ Full Support | ✅ Yes | Codeium's AI IDE |
+| **🔄 Continue.dev** | ✅ Full Support | ✅ Yes | Open source coding assistant |
+| **💻 VS Code** | ✅ Full Support | ✅ Yes | With MCP extensions |
+| **⚡ Zed** | ✅ Full Support | ✅ Yes | High-performance editor |
+
+---
+
+## 🛠️ **API Key Setup**
+
+### **Step 1: Get Your SmartLead API Key**
+1. Visit [SmartLead Dashboard](https://app.smartlead.ai)
+2. Navigate to **Settings** → **API Keys**
+3. Generate a new API key
+4. Copy the key (keep it secure!)
+
+### **Step 2: Environment Configuration**
+```bash
+# Create .env file (optional)
+SMARTLEAD_API_KEY=your_smartlead_api_key_here
+SMARTLEAD_ADVANCED_TOOLS=true    # Enable enterprise features
+SMARTLEAD_ADMIN_TOOLS=true       # Enable admin operations
+```
+
+---
+
+## 📋 **Manual Configuration Examples**
+
+### **Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {
@@ -481,343 +125,364 @@ If you prefer manual setup, add this to your MCP client configuration:
       "command": "npx",
       "args": ["smartlead-mcp-by-leadmagic"],
       "env": {
-        "SMARTLEAD_API_KEY": "your-api-key-here",
-        "SMARTLEAD_ADVANCED_TOOLS": "false",
-        "SMARTLEAD_ADMIN_TOOLS": "false"
+        "SMARTLEAD_API_KEY": "your_api_key_here",
+        "SMARTLEAD_ADVANCED_TOOLS": "true",
+        "SMARTLEAD_ADMIN_TOOLS": "true"
       }
     }
   }
 }
 ```
 
-**⚙️ Tool Configuration Options:**
-
+### **Cursor** (`~/Library/Application Support/Cursor/User/settings.json`)
 ```json
 {
-  "mcpServers": {
+  "cline.mcpServers": {
     "smartlead": {
       "command": "npx",
       "args": ["smartlead-mcp-by-leadmagic"],
       "env": {
-        "SMARTLEAD_API_KEY": "your-api-key-here",
-        "SMARTLEAD_ADVANCED_TOOLS": "true",  // Enable Smart Delivery, Analytics, Webhooks
-        "SMARTLEAD_ADMIN_TOOLS": "true"      // Enable Client Management, Smart Senders
+        "SMARTLEAD_API_KEY": "your_api_key_here",
+        "SMARTLEAD_ADVANCED_TOOLS": "true"
       }
     }
   }
 }
 ```
 
-**📍 Configuration File Locations:**
-- **Claude Desktop**: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
-- **Claude Desktop**: `%APPDATA%\Claude\claude_desktop_config.json` (Windows)
-- **Cursor**: VS Code settings or `.vscode/settings.json`
-- **Continue.dev**: `~/.continue/config.json`
-
----
-
-## 🔧 Development Setup
-
-### 📋 Prerequisites
-
-- 📦 Node.js 20.0.0 or higher (LTS recommended for optimal performance)
-- 🔑 SmartLead API key from [smartlead.ai](https://smartlead.ai)
-
-### 💻 Local Development
-
-```bash
-# 📥 Clone the repository
-git clone https://github.com/LeadMagic/smartlead-mcp-server.git
-cd smartlead-mcp-server
-
-# 📦 Install dependencies (using Bun for speed)
-bun install
-
-# 🔐 Create environment file
-echo "SMARTLEAD_API_KEY=your-api-key-here" > .env
-
-# 🚀 Start development server
-bun run dev
-
-# 🏗️ Build for production
-bun run build
-
-# ✅ Run validation
-bun run validate
-```
-
-### 🔍 Testing with MCP Inspector
-
-```bash
-# 🚀 Start the MCP inspector
-bun run inspector
-
-# 🌐 Open the provided URL in your browser to test all tools
-```
-
-### 🛠️ Development Tools
-
-```bash
-# 🎨 Format code with Biome
-bun run format
-
-# 🔍 Lint code
-bun run lint
-
-# 🧪 Run tests
-bun run test
-
-# 📊 Type checking
-bun run type-check
-```
-
----
-
-## 🏗️ Architecture
-
-### 🛠️ Technology Stack
-
-- ⚡ **Runtime**: Node.js 20+ / Bun
-- 📘 **Language**: TypeScript with strict type checking
-- 🔌 **MCP SDK**: @modelcontextprotocol/sdk v1.0.0+
-- 🌐 **HTTP Client**: Axios with comprehensive error handling
-- ✅ **Validation**: Zod schemas for all API inputs/outputs
-- 🔧 **Development**: Biome, Jest for testing
-
-### 📁 Project Structure
-
-```
-├── src/
-│   ├── index.ts                    # 🚀 Main entry point and CLI
-│   ├── server.ts                   # 🔌 MCP server implementation
-│   ├── client.ts                   # 🌐 SmartLead API client wrapper
-│   ├── types.ts                    # 📝 TypeScript types and Zod schemas
-│   ├── install.tsx                 # 🎨 Interactive installer (React/Ink)
-│   ├── interactive-installer.tsx   # 🎨 Enhanced installer with purple theme
-│   ├── client/                     # 📁 API client modules
-│   ├── modules/                    # 📁 SmartLead module implementations
-│   └── tools/                      # 📁 MCP tool definitions
-├── dist/                           # 📦 Compiled JavaScript output
-├── .env.example                    # 🔐 Environment configuration example
-└── README.md                       # 📚 This file
-```
-
----
-
-## 📊 API Reference
-
-### 🔤 Field Naming Convention
-
-**All fields use snake_case** (matching SmartLead API):
-
+### **Continue.dev** (`~/.continue/config.json`)
 ```json
 {
-  "campaign_id": 123,
-  "campaign_name": "Product Launch",
-  "email_status": "sent"
-}
-```
-
-### 🔐 Authentication
-
-Include your API key in environment variables:
-
-```bash
-export SMARTLEAD_API_KEY=your-smartlead-api-key
-```
-
-### ⏱️ Rate Limits
-
-- 📊 **Standard endpoints**: Respects SmartLead API limits
-- 🔄 **Automatic retry**: Exponential backoff for rate limits
-- ⚡ **Performance**: < 200ms average response time
-
-### ❌ Error Handling
-
-Consistent error format across all endpoints:
-
-```json
-{
-  "error": "Bad Request",
-  "message": "API key is missing or invalid.",
-  "code": "INVALID_API_KEY"
+  "mcpServers": [
+    {
+      "name": "smartlead",
+      "command": "npx",
+      "args": ["smartlead-mcp-by-leadmagic"],
+      "env": {
+        "SMARTLEAD_API_KEY": "your_api_key_here"
+      }
+    }
+  ]
 }
 ```
 
 ---
 
-## 🔒 Security & SmartLead Best Practices
+## 🔧 **Available Tools & Capabilities**
 
-### **🛡️ Technical Security**
+<details>
+<summary><strong>🎯 Campaign Management (14 tools)</strong></summary>
 
-✅ **No API keys in code** - Always use environment variables
+- `smartlead_create_campaign` - Create new campaigns
+- `smartlead_get_campaign_details` - Retrieve campaign information
+- `smartlead_update_campaign` - Modify campaign settings
+- `smartlead_delete_campaign` - Remove campaigns
+- `smartlead_get_all_campaigns` - List all campaigns
+- `smartlead_add_leads_to_campaign` - Import prospects
+- `smartlead_get_campaign_leads` - View campaign prospects
+- `smartlead_pause_campaign` - Pause campaign execution
+- `smartlead_resume_campaign` - Resume paused campaigns
+- `smartlead_duplicate_campaign` - Clone existing campaigns
+- `smartlead_update_campaign_schedule` - Modify sending schedules
+- `smartlead_get_campaign_statistics` - View performance metrics
+- `smartlead_export_campaign_data` - Download campaign data
+- `smartlead_get_campaign_sequences` - Manage email sequences
 
-✅ **Type-safe requests** - Full TypeScript coverage with Zod validation
+</details>
 
-✅ **Error handling** - Comprehensive error catching and user-friendly messages
+<details>
+<summary><strong>👥 Lead Management (17 tools)</strong></summary>
 
-✅ **Rate limiting** - Respects SmartLead API rate limits
+- `smartlead_add_lead` - Add individual prospects
+- `smartlead_bulk_add_leads` - Import multiple prospects
+- `smartlead_get_lead_details` - View prospect information
+- `smartlead_update_lead` - Modify prospect data
+- `smartlead_delete_lead` - Remove prospects
+- `smartlead_get_all_leads` - List all prospects
+- `smartlead_search_leads` - Find specific prospects
+- `smartlead_get_lead_activity` - View prospect interactions
+- `smartlead_mark_lead_as_interested` - Update lead status
+- `smartlead_mark_lead_as_not_interested` - Update lead status
+- `smartlead_add_lead_to_dnc` - Add to do-not-contact list
+- `smartlead_remove_lead_from_dnc` - Remove from DNC list
+- `smartlead_get_lead_replies` - View prospect responses
+- `smartlead_export_leads` - Download prospect data
+- `smartlead_import_leads_from_csv` - CSV import functionality
+- `smartlead_validate_lead_emails` - Email verification
+- `smartlead_get_lead_engagement_score` - Engagement metrics
 
-✅ **Secure defaults** - Production-ready configuration out of the box
+</details>
 
-✅ **Interactive installer** - No manual config file editing required
+<details>
+<summary><strong>📧 Email Account Management (15 tools)</strong></summary>
 
-### **📧 SmartLead Cold Email Compliance & Best Practices**
+- `smartlead_add_email_account` - Connect sending accounts
+- `smartlead_get_email_accounts` - List connected accounts
+- `smartlead_update_email_account` - Modify account settings
+- `smartlead_delete_email_account` - Remove accounts
+- `smartlead_test_email_account` - Verify account connectivity
+- `smartlead_get_email_account_health` - Check account status
+- `smartlead_configure_warmup_settings` - Setup email warmup
+- `smartlead_get_warmup_statistics` - View warmup progress
+- `smartlead_pause_email_account` - Temporarily disable accounts
+- `smartlead_resume_email_account` - Reactivate accounts
+- `smartlead_set_sending_limits` - Configure daily limits
+- `smartlead_get_sending_statistics` - View sending metrics
+- `smartlead_rotate_email_accounts` - Manage account rotation
+- `smartlead_backup_email_settings` - Export configurations
+- `smartlead_restore_email_settings` - Import configurations
 
-#### **🏛️ Legal Compliance**
+</details>
 
-✅ **CAN-SPAM Act** - Automatic unsubscribe handling and sender identification
+<details>
+<summary><strong>🤖 Smart Senders (12 tools)</strong></summary>
 
-✅ **GDPR Compliance** - Proper consent management and data protection
+- `smartlead_search_domain` - Domain reputation lookup
+- `smartlead_get_vendors` - List email service providers
+- `smartlead_add_domain` - Register new domains
+- `smartlead_verify_domain` - Validate domain setup
+- `smartlead_get_domain_health` - Check domain reputation
+- `smartlead_configure_spf_dkim` - Setup authentication
+- `smartlead_get_domain_analytics` - Domain performance metrics
+- `smartlead_auto_generate_mailboxes` - Create email accounts
+- `smartlead_get_mailbox_suggestions` - Account name suggestions
+- `smartlead_validate_domain_setup` - Verify DNS configuration
+- `smartlead_get_deliverability_score` - Domain health score
+- `smartlead_optimize_sender_reputation` - Reputation management
 
-✅ **CCPA Compliance** - California privacy rights and data handling
+</details>
 
-✅ **Opt-out Management** - Immediate unsubscribe processing
+<details>
+<summary><strong>📊 Smart Delivery (11 tools)</strong></summary>
 
-✅ **Sender Identification** - Clear sender information in all emails
+- `smartlead_optimize_send_times` - AI-powered timing optimization
+- `smartlead_get_delivery_analytics` - Delivery performance metrics
+- `smartlead_configure_sending_patterns` - Setup sending schedules
+- `smartlead_get_timezone_recommendations` - Optimal timezone targeting
+- `smartlead_set_daily_limits` - Configure sending volumes
+- `smartlead_get_deliverability_insights` - Delivery optimization tips
+- `smartlead_configure_reply_tracking` - Setup response monitoring
+- `smartlead_get_engagement_analytics` - Interaction metrics
+- `smartlead_optimize_subject_lines` - AI subject line optimization
+- `smartlead_get_spam_score` - Content spam analysis
+- `smartlead_configure_unsubscribe_handling` - Manage opt-outs
 
-#### **🎯 SmartLead Deliverability Best Practices**
+</details>
 
-✅ **Gradual Volume Ramping** - Start with low volumes and increase gradually
+<details>
+<summary><strong>📈 Analytics & Statistics (18 tools)</strong></summary>
 
-✅ **IP Warming** - Proper warmup sequences for new email accounts
+- `smartlead_get_campaign_analytics` - Comprehensive campaign metrics
+- `smartlead_get_email_performance` - Email-level statistics
+- `smartlead_get_lead_conversion_rates` - Conversion analytics
+- `smartlead_get_reply_rates` - Response rate analysis
+- `smartlead_get_open_rates` - Email open statistics
+- `smartlead_get_click_rates` - Link click analytics
+- `smartlead_get_bounce_rates` - Delivery failure analysis
+- `smartlead_get_unsubscribe_rates` - Opt-out statistics
+- `smartlead_get_roi_analytics` - Return on investment metrics
+- `smartlead_get_comparative_analytics` - Campaign comparisons
+- `smartlead_export_analytics_data` - Download analytics reports
+- `smartlead_get_real_time_stats` - Live performance monitoring
+- `smartlead_get_historical_trends` - Long-term performance trends
+- `smartlead_get_segmentation_analytics` - Audience segment performance
+- `smartlead_get_deliverability_analytics` - Delivery success metrics
+- `smartlead_get_engagement_heatmaps` - Interaction visualization
+- `smartlead_get_revenue_attribution` - Sales attribution analysis
+- `smartlead_create_custom_reports` - Build custom analytics
 
-✅ **Domain Reputation** - Monitor and maintain sender reputation
+</details>
 
-✅ **List Hygiene** - Regular cleaning and validation of prospect lists
+<details>
+<summary><strong>🔗 Webhooks (9 tools)</strong></summary>
 
-✅ **Engagement Tracking** - Monitor opens, clicks, and replies
+- `smartlead_create_webhook` - Setup webhook endpoints
+- `smartlead_get_webhooks` - List configured webhooks
+- `smartlead_update_webhook` - Modify webhook settings
+- `smartlead_delete_webhook` - Remove webhooks
+- `smartlead_test_webhook` - Verify webhook functionality
+- `smartlead_get_webhook_logs` - View webhook activity
+- `smartlead_configure_webhook_events` - Setup event triggers
+- `smartlead_get_webhook_statistics` - Webhook performance metrics
+- `smartlead_retry_failed_webhooks` - Reprocess failed events
 
-✅ **Spam Testing** - Regular placement tests and spam score monitoring
+</details>
 
-#### **📝 Content Best Practices**
+<details>
+<summary><strong>👤 Client Management (8 tools)</strong></summary>
 
-✅ **Personalization** - Use dynamic variables for relevant messaging
+- `smartlead_create_client` - Add new team members
+- `smartlead_get_clients` - List team members
+- `smartlead_update_client` - Modify client information
+- `smartlead_delete_client` - Remove team members
+- `smartlead_get_client_permissions` - View access levels
+- `smartlead_update_client_permissions` - Modify permissions
+- `smartlead_get_team_analytics` - Team performance metrics
+- `smartlead_manage_api_keys` - API key management
 
-✅ **Value-First Approach** - Focus on prospect benefits, not features
-
-✅ **Clear Call-to-Action** - Single, specific action per email
-
-✅ **Mobile Optimization** - Ensure emails render well on all devices
-
-✅ **A/B Testing** - Test subject lines, content, and send times
-
-✅ **Natural Language** - Avoid spam trigger words and phrases
-
-#### **⚡ Performance Optimization**
-
-✅ **Send Time Optimization** - Respect prospect time zones
-
-✅ **Frequency Management** - Appropriate delays between sequence emails
-
-✅ **Response Monitoring** - Track and analyze reply rates
-
-✅ **Bounce Handling** - Automatic removal of invalid email addresses
-
-✅ **Engagement Scoring** - Prioritize highly engaged prospects
-
-✅ **Campaign Analytics** - Regular performance review and optimization
+</details>
 
 ---
 
-## 📈 Performance Benchmarks
+## 🔒 **Security & Best Practices**
 
-### **🎯 SmartLead Success Metrics**
+### **🛡️ Security Features**
+- ✅ **API Key Validation** - Real-time verification with SmartLead
+- ✅ **Secure Environment Variables** - No hardcoded credentials
+- ✅ **Rate Limiting** - Built-in request throttling
+- ✅ **Error Sanitization** - No sensitive data in logs
+- ✅ **HTTPS Only** - Encrypted API communications
 
-Track these essential metrics to optimize your SmartLead campaigns:
-
-| Metric | Good Rate | Excellent Rate | How to Improve |
-|--------|-----------|----------------|-----------------|
-| **Reply Rate** | 1-3% | 5%+ | Personalization, value proposition |
-| **Bounce Rate** | <2% | <1% | List hygiene, email validation |
-| **Open Rate** | 20-30% | 40%+ | Subject line optimization |
-| **Deliverability** | 85-90% | 95%+ | Domain warmup, content quality |
-| **Unsubscribe Rate** | <0.5% | <0.2% | Targeted messaging, value focus |
-
-### **📊 SmartLead MCP Server Performance**
-
-| Metric | Performance |
-|--------|-------------|
-| **API Response Time** | < 200ms average |
-| **Tool Execution** | < 500ms average |
-| **Memory Usage** | < 50MB typical |
-| **Error Rate** | < 0.1% |
-| **Throughput** | 100+ requests/minute |
-
-### **🚀 SmartLead Analytics Features**
-
-- **Real-time Performance Tracking** - Monitor campaigns as they run
-- **Sequence Analytics** - See which emails in your sequence perform best
-- **A/B Testing Results** - Compare subject lines, content, and send times
-- **Deliverability Monitoring** - Track inbox placement across providers
-- **Engagement Scoring** - Identify your most interested prospects
-- **ROI Calculation** - Measure revenue generated per campaign
-
-### **🚀 Optimization Strategies**
-
-1. **Subject Line Testing** - A/B test different approaches
-2. **Send Time Optimization** - Find when your prospects are most active
-3. **Personalization Scaling** - Use dynamic variables effectively
-4. **Sequence Timing** - Optimize delays between emails
-5. **Content Iteration** - Continuously improve based on data
-6. **List Segmentation** - Target specific prospect groups
+### **🔐 Environment Security**
+```bash
+# Recommended .env setup
+SMARTLEAD_API_KEY=your_secure_api_key
+SMARTLEAD_RATE_LIMIT=100           # Requests per minute
+SMARTLEAD_TIMEOUT=30000            # Request timeout (ms)
+SMARTLEAD_RETRY_ATTEMPTS=3         # Failed request retries
+SMARTLEAD_LOG_LEVEL=info           # Logging verbosity
+```
 
 ---
 
-## 🤝 Support & Resources
+## 🚀 **Performance & Optimization**
 
-### **📚 SmartLead Resources**
-- 📚 **SmartLead API Documentation**: [docs.smartlead.ai](https://docs.smartlead.ai)
-- 🌐 **SmartLead Official Website**: [smartlead.ai](https://smartlead.ai)
-- 📊 **SmartLead Dashboard**: [app.smartlead.ai](https://app.smartlead.ai)
-- 📚 **SmartLead Knowledge Base**: [help.smartlead.ai](https://help.smartlead.ai)
+### **⚡ Built for Speed**
+- **TypeScript Native** - Full type safety and IntelliSense
+- **Bun Optimized** - Lightning-fast JavaScript runtime
+- **Connection Pooling** - Efficient API request management
+- **Smart Caching** - Reduced API calls with intelligent caching
+- **Async/Await** - Non-blocking operations throughout
 
-### **🛠️ MCP Server Support**
-- 🆘 **Technical Support**: [jesse@leadmagic.io](mailto:jesse@leadmagic.io)
+### **📊 Monitoring & Debugging**
+```bash
+# Enable debug mode
+DEBUG=smartlead:* npx smartlead-mcp-by-leadmagic
+
+# Verbose logging
+SMARTLEAD_LOG_LEVEL=debug npx smartlead-mcp-by-leadmagic
+
+# Performance monitoring
+SMARTLEAD_METRICS=true npx smartlead-mcp-by-leadmagic
+```
+
+---
+
+## 🆘 **Troubleshooting Guide**
+
+### **Common Issues & Solutions**
+
+<details>
+<summary><strong>🔑 API Key Issues</strong></summary>
+
+**Problem**: "Invalid API key" error
+**Solution**:
+1. Verify your API key in SmartLead dashboard
+2. Ensure no extra spaces or characters
+3. Check environment variable spelling: `SMARTLEAD_API_KEY`
+4. Try regenerating the API key
+
+</details>
+
+<details>
+<summary><strong>🔌 Connection Issues</strong></summary>
+
+**Problem**: "Connection failed" error
+**Solution**:
+1. Check your internet connection
+2. Verify SmartLead service status
+3. Try increasing timeout: `SMARTLEAD_TIMEOUT=60000`
+4. Check firewall settings
+
+</details>
+
+<details>
+<summary><strong>🤖 MCP Client Issues</strong></summary>
+
+**Problem**: Tools not appearing in MCP client
+**Solution**:
+1. Restart your MCP client completely
+2. Verify configuration file syntax
+3. Check file permissions
+4. Run installer again: `npx smartlead-mcp-by-leadmagic install`
+
+</details>
+
+<details>
+<summary><strong>🚀 Performance Issues</strong></summary>
+
+**Problem**: Slow response times
+**Solution**:
+1. Enable caching: `SMARTLEAD_CACHE=true`
+2. Reduce concurrent requests: `SMARTLEAD_RATE_LIMIT=50`
+3. Use local installation instead of npx
+4. Check system resources
+
+</details>
+
+---
+
+## 🔄 **Updates & Maintenance**
+
+### **🆙 Staying Updated**
+```bash
+# Check current version
+npx smartlead-mcp-by-leadmagic --version
+
+# Update to latest version
+npm update -g smartlead-mcp-by-leadmagic
+
+# Force reinstall
+npm uninstall -g smartlead-mcp-by-leadmagic
+npm install -g smartlead-mcp-by-leadmagic
+```
+
+### **📋 Version History**
+- **v1.6.1** - 116+ tools, React Ink installer, TypeScript improvements
+- **v1.5.x** - Enhanced error handling, performance optimizations
+- **v1.4.x** - Added webhook support, improved analytics
+- **v1.3.x** - Smart delivery features, advanced campaign management
+- **v1.2.x** - Lead management tools, email account automation
+- **v1.1.x** - Core campaign functionality, basic analytics
+- **v1.0.x** - Initial release with essential tools
+
+---
+
+## 🤝 **Support & Community**
+
+### **📞 Get Help**
+- 📧 **Email Support**: [jesse@leadmagic.io](mailto:jesse@leadmagic.io)
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/LeadMagic/smartlead-mcp-server/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/LeadMagic/smartlead-mcp-server/discussions)
-- 🐙 **Source Code**: [GitHub Repository](https://github.com/LeadMagic/smartlead-mcp-server)
+- 💬 **Feature Requests**: [GitHub Discussions](https://github.com/LeadMagic/smartlead-mcp-server/discussions)
+- 📚 **Documentation**: [Full API Docs](https://github.com/LeadMagic/smartlead-mcp-server/wiki)
 
-### **🎓 Learning Resources**
-- 📖 **Cold Email Best Practices** - Included in our documentation
-- 🎯 **SmartLead Tutorials** - Step-by-step guides
-- 📊 **Analytics Guide** - Maximize your campaign performance
-- 🛡️ **Deliverability Guide** - Ensure inbox placement
+### **🌟 Contributing**
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
----
-
-## 📄 License
-
-MIT License - see the [LICENSE](LICENSE) file for details.
+### **📄 License**
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙋‍♀️ Contributing
+## 🔗 **Related Projects**
 
-We welcome contributions! Here's how to get started:
-
-1. 🍴 Fork the repository
-2. 🌿 Create a feature branch: `git checkout -b feature/new-feature`
-3. ✨ Make your changes and add tests
-4. ✅ Run validation: `bun run validate`
-5. 💾 Commit your changes: `git commit -am 'Add new feature'`
-6. 📤 Push to the branch: `git push origin feature/new-feature`
-7. 🔄 Submit a pull request
+- **[SmartLead Platform](https://smartlead.ai)** - The leading cold email automation platform
+- **[LeadMagic](https://leadmagic.io)** - Advanced lead generation and verification tools
+- **[Model Context Protocol](https://modelcontextprotocol.io)** - The standard for AI tool integration
 
 ---
 
 <div align="center">
 
-**🎉 Built with the SmartLead API for 100% compatibility**
+**🚀 Ready to revolutionize your cold email game?**
 
-### 💜 Purple Gradient Theme • 🚀 Lightning Fast • ⚡ Zero Config
+```bash
+npx smartlead-mcp-by-leadmagic install
+```
 
----
+**Made with 💜 by [LeadMagic](https://leadmagic.io) • Official SmartLead Partner**
 
-### 🌟 Star us on GitHub • 🐛 Report Issues • 💡 Request Features
-
-[![GitHub](https://img.shields.io/badge/GitHub-8B5CF6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server) [![npm](https://img.shields.io/badge/npm-A855F7?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/package/smartlead-mcp-server)
-
-**Made with 💜 by the LeadMagic team • Powered by SmartLead**
+[![GitHub](https://img.shields.io/badge/GitHub-LeadMagic/smartlead--mcp--server-7c3aed?style=for-the-badge&logo=github)](https://github.com/LeadMagic/smartlead-mcp-server)
+[![NPM](https://img.shields.io/badge/NPM-smartlead--mcp--by--leadmagic-7c3aed?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/smartlead-mcp-by-leadmagic)
 
 </div>

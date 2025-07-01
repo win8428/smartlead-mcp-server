@@ -7,24 +7,24 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 import {
   CreateCampaignRequestSchema,
+  DeleteCampaignRequestSchema,
+  ExportCampaignDataRequestSchema,
+  FetchAllCampaignsUsingLeadIdRequestSchema,
+  FetchCampaignAnalyticsByDateRangeRequestSchema,
+  GetCampaignRequestSchema,
+  GetCampaignSequenceAnalyticsRequestSchema,
+  GetCampaignSequenceRequestSchema,
+  GetCampaignsWithAnalyticsRequestSchema,
+  ListCampaignsRequestSchema,
+  SaveCampaignSequenceRequestSchema,
   UpdateCampaignScheduleRequestSchema,
   UpdateCampaignSettingsRequestSchema,
   UpdateCampaignStatusRequestSchema,
-  GetCampaignRequestSchema,
-  ListCampaignsRequestSchema,
-  SaveCampaignSequenceRequestSchema,
-  GetCampaignSequenceRequestSchema,
-  GetCampaignsWithAnalyticsRequestSchema,
-  DeleteCampaignRequestSchema,
-  ExportCampaignDataRequestSchema,
-  FetchCampaignAnalyticsByDateRangeRequestSchema,
-  GetCampaignSequenceAnalyticsRequestSchema,
-  FetchAllCampaignsUsingLeadIdRequestSchema,
 } from '../types.js';
 
 /**
@@ -50,9 +50,9 @@ export function registerCampaignTools(
         const validatedParams = CreateCampaignRequestSchema.parse(params);
         const result = await client.createCampaign(validatedParams);
         return formatSuccessResponse(
-          'Campaign created successfully',
+          `Campaign created successfully`,
           result,
-          `Campaign "${validatedParams.name}" created with ID: ${result.data?.id || 'N/A'}`
+          `Campaign "${validatedParams.name}" created with ID: ${(result.data as any)?.id || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -72,13 +72,10 @@ export function registerCampaignTools(
     async (params) => {
       try {
         const validatedParams = UpdateCampaignScheduleRequestSchema.parse(params);
-        const { campaign_id, ...scheduleData } = validatedParams;
-        const result = await client.updateCampaignSchedule(campaign_id, scheduleData);
-        return formatSuccessResponse(
-          'Campaign schedule updated successfully',
-          result,
-          `Schedule updated for campaign ID: ${campaign_id}`
-        );
+        const result = await client.updateCampaignSchedule(validatedParams.campaign_id, {
+          ...validatedParams,
+        });
+        return formatSuccessResponse('Campaign schedule updated successfully', result);
       } catch (error) {
         return handleError(error);
       }
@@ -97,13 +94,10 @@ export function registerCampaignTools(
     async (params) => {
       try {
         const validatedParams = UpdateCampaignSettingsRequestSchema.parse(params);
-        const { campaign_id, ...settingsData } = validatedParams;
-        const result = await client.updateCampaignSettings(campaign_id, settingsData);
-        return formatSuccessResponse(
-          'Campaign settings updated successfully',
-          result,
-          `Settings updated for campaign ID: ${campaign_id}`
-        );
+        const result = await client.updateCampaignSettings(validatedParams.campaign_id, {
+          ...validatedParams,
+        });
+        return formatSuccessResponse('Campaign settings updated successfully', result);
       } catch (error) {
         return handleError(error);
       }
@@ -152,7 +146,7 @@ export function registerCampaignTools(
         return formatSuccessResponse(
           'Campaign details retrieved successfully',
           result,
-          `Retrieved details for campaign: ${result.data?.name || `ID ${validatedParams.campaign_id}`}`
+          `Retrieved details for campaign: ${(result.data as any)?.name || `ID ${validatedParams.campaign_id}`}`
         );
       } catch (error) {
         return handleError(error);
@@ -174,9 +168,9 @@ export function registerCampaignTools(
         const validatedParams = ListCampaignsRequestSchema.parse(params);
         const result = await client.listCampaigns(validatedParams);
         return formatSuccessResponse(
-          'Campaigns list retrieved successfully',
+          'Campaigns listed successfully',
           result,
-          `Found ${result.data?.campaigns?.length || 0} campaigns`
+          `Found ${(result.data as any)?.campaigns?.length || 0} campaigns`
         );
       } catch (error) {
         return handleError(error);
@@ -196,13 +190,14 @@ export function registerCampaignTools(
     async (params) => {
       try {
         const validatedParams = SaveCampaignSequenceRequestSchema.parse(params);
-        const { campaign_id, ...sequenceData } = validatedParams;
-        const result = await client.saveCampaignSequence(campaign_id, sequenceData);
-        return formatSuccessResponse(
-          'Campaign sequence saved successfully',
-          result,
-          `Sequence saved for campaign ID: ${campaign_id}`
-        );
+        if (validatedParams.sequence && validatedParams.sequence.length > 0) {
+          const result = await client.saveCampaignSequence(
+            validatedParams.campaign_id,
+            validatedParams.sequence[0]!
+          );
+          return formatSuccessResponse('Campaign sequence saved successfully', result);
+        }
+        return handleError(new Error('Sequence data is missing'));
       } catch (error) {
         return handleError(error);
       }
@@ -247,7 +242,7 @@ export function registerCampaignTools(
         return formatSuccessResponse(
           'Campaigns with analytics retrieved successfully',
           result,
-          `Retrieved ${result.data?.campaigns?.length || 0} campaigns with analytics data`
+          `Retrieved ${(result.data as any)?.campaigns?.length || 0} campaigns with analytics data`
         );
       } catch (error) {
         return handleError(error);
@@ -291,13 +286,10 @@ export function registerCampaignTools(
     async (params) => {
       try {
         const validatedParams = ExportCampaignDataRequestSchema.parse(params);
-        const { campaign_id, ...exportParams } = validatedParams;
-        const result = await client.exportCampaignData(campaign_id, exportParams);
-        return formatSuccessResponse(
-          'Campaign data export initiated successfully',
-          result,
-          `Export started for campaign ID: ${campaign_id}`
-        );
+        const result = await client.exportCampaignData(validatedParams.campaign_id, {
+          ...validatedParams,
+        });
+        return formatSuccessResponse('Campaign data exported successfully', result);
       } catch (error) {
         return handleError(error);
       }
@@ -315,13 +307,10 @@ export function registerCampaignTools(
     async (params) => {
       try {
         const validatedParams = FetchCampaignAnalyticsByDateRangeRequestSchema.parse(params);
-        const { campaign_id, ...analyticsParams } = validatedParams;
-        const result = await client.fetchCampaignAnalyticsByDateRange(campaign_id, analyticsParams);
-        return formatSuccessResponse(
-          'Campaign analytics retrieved successfully',
-          result,
-          `Analytics retrieved for campaign ID: ${campaign_id} from ${analyticsParams.start_date} to ${analyticsParams.end_date}`
-        );
+        const result = await client.fetchCampaignAnalyticsByDateRange(validatedParams.campaign_id, {
+          ...validatedParams,
+        });
+        return formatSuccessResponse('Campaign analytics fetched successfully', result);
       } catch (error) {
         return handleError(error);
       }
@@ -340,13 +329,10 @@ export function registerCampaignTools(
     async (params) => {
       try {
         const validatedParams = GetCampaignSequenceAnalyticsRequestSchema.parse(params);
-        const { campaign_id, ...analyticsParams } = validatedParams;
-        const result = await client.getCampaignSequenceAnalytics(campaign_id, analyticsParams);
-        return formatSuccessResponse(
-          'Campaign sequence analytics retrieved successfully',
-          result,
-          `Sequence analytics retrieved for campaign ID: ${campaign_id}`
-        );
+        const result = await client.getCampaignSequenceAnalytics(validatedParams.campaign_id, {
+          ...validatedParams,
+        });
+        return formatSuccessResponse('Campaign sequence analytics fetched successfully', result);
       } catch (error) {
         return handleError(error);
       }
@@ -367,9 +353,9 @@ export function registerCampaignTools(
         const validatedParams = FetchAllCampaignsUsingLeadIdRequestSchema.parse(params);
         const result = await client.fetchAllCampaignsUsingLeadId(validatedParams.lead_id);
         return formatSuccessResponse(
-          'Campaigns retrieved successfully by lead ID',
+          'Campaigns fetched successfully',
           result,
-          `Found ${result.data?.campaigns?.length || 0} campaigns containing lead ID: ${validatedParams.lead_id}`
+          `Found ${(result.data as any)?.campaigns?.length || 0} campaigns containing lead ID: ${validatedParams.lead_id}`
         );
       } catch (error) {
         return handleError(error);

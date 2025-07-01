@@ -8,10 +8,10 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 
 // ================================
 // SCHEMAS
@@ -67,7 +67,7 @@ export function registerSmartSendersTools(
         return formatSuccessResponse(
           `Searched domain: ${validatedParams.domain}`,
           result,
-          `Domain status: ${result.status || 'N/A'}`
+          `Domain status: ${(result.data as any)?.status || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -89,7 +89,7 @@ export function registerSmartSendersTools(
         return formatSuccessResponse(
           'Retrieved available vendors',
           result,
-          `Found ${result.length || 0} vendors`
+          `Found ${(result.data as any)?.length || 0} vendors`
         );
       } catch (error) {
         return handleError(error);
@@ -158,7 +158,7 @@ export function registerSmartSendersTools(
         return formatSuccessResponse(
           'Retrieved domain list',
           result,
-          `Found ${result.length || 0} domains`
+          `Found ${(result.data as any)?.length || 0} domains`
         );
       } catch (error) {
         return handleError(error);

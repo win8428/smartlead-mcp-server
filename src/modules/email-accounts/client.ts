@@ -2,32 +2,78 @@
  * SmartLead MCP Server - Email Account Management Client
  *
  * Client module for email account management API endpoints.
- * Handles all email account operations including setup, configuration, and health monitoring.
+ * Handles all email account-related operations including creation, updates, warmup settings, and health metrics.
  *
  * @author LeadMagic Team
  * @version 1.5.0
  */
 
 import { BaseSmartLeadClient } from '../../client/base.js';
+import type { SuccessResponse } from '../../types.js';
+
+// Email Account Type Definitions
+export interface EmailAccountRequest {
+  email: string;
+  password: string;
+  smtp_host: string;
+  smtp_port: number;
+  imap_host: string;
+  imap_port: number;
+  name?: string;
+}
+
+export interface UpdateEmailAccountRequest {
+  name?: string;
+  settings?: Record<string, unknown>;
+  status?: 'active' | 'inactive' | 'warmup';
+}
+
+export interface WarmupSettings {
+  email_account_id: number;
+  emails_per_day?: number;
+  warmup_reputation?: boolean;
+  ramp_up_increment?: number;
+  reply_rate_percentage?: number;
+}
+
+export interface EmailAccountHealthParams {
+  start_date?: string;
+  end_date?: string;
+  metrics?: string[];
+}
+
+export interface BulkUpdateEmailAccountRequest {
+  email_account_ids: number[];
+  settings?: Record<string, unknown>;
+  status?: 'active' | 'inactive' | 'warmup';
+}
+
+export interface SendingLimitsRequest {
+  daily_limit?: number;
+  monthly_limit?: number;
+  per_hour_limit?: number;
+  warmup_limit?: number;
+}
+
 /**
  * Email Account Management Client
  *
  * Provides methods for managing SmartLead email accounts including:
- * - Adding and configuring email accounts
- * - Managing email account settings and warmup
- * - Monitoring email account health and deliverability
- * - Managing email account assignments to campaigns
+ * - Creating and updating email accounts
+ * - Managing warmup settings and status
+ * - Health metrics and monitoring
+ * - Campaign assignment and management
  */
-export class EmailAccountClient extends BaseSmartLeadClient {
+export class EmailAccountManagementClient extends BaseSmartLeadClient {
   // ================================
   // EMAIL ACCOUNT MANAGEMENT METHODS
   // ================================
 
   /**
-   * List all email accounts per campaign
+   * List Email Accounts Per Campaign
    * GET /campaigns/{campaign_id}/email-accounts
    */
-  async listEmailAccountsPerCampaign(campaignId: number): Promise<any> {
+  async listEmailAccountsPerCampaign(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/email-accounts`),
       'list email accounts per campaign'
@@ -36,13 +82,13 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Add Email Account to a Campaign
+   * Add Email Account To Campaign
    * POST /campaigns/{campaign_id}/email-accounts
    */
   async addEmailAccountToCampaign(
     campaignId: number,
     params: { email_account_id: number }
-  ): Promise<any> {
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/campaigns/${campaignId}/email-accounts`, params),
       'add email account to campaign'
@@ -51,10 +97,13 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Remove Email Account from a Campaign
+   * Remove Email Account From Campaign
    * DELETE /campaigns/{campaign_id}/email-accounts/{email_account_id}
    */
-  async removeEmailAccountFromCampaign(campaignId: number, emailAccountId: number): Promise<any> {
+  async removeEmailAccountFromCampaign(
+    campaignId: number,
+    emailAccountId: number
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.delete(`/campaigns/${campaignId}/email-accounts/${emailAccountId}`),
       'remove email account from campaign'
@@ -63,10 +112,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Fetch all email accounts associated to a user
+   * Get All Email Accounts
    * GET /email-accounts
    */
-  async getAllEmailAccounts(): Promise<any> {
+  async getAllEmailAccounts(): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/email-accounts'),
       'get all email accounts'
@@ -75,18 +124,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Create an Email Account
+   * Create Email Account
    * POST /email-accounts
    */
-  async createEmailAccount(params: {
-    email: string;
-    password: string;
-    smtp_host: string;
-    smtp_port: number;
-    imap_host: string;
-    imap_port: number;
-    name?: string;
-  }): Promise<any> {
+  async createEmailAccount(params: EmailAccountRequest): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/email-accounts', params),
       'create email account'
@@ -98,7 +139,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
    * Update Email Account
    * POST /email-accounts/{email_account_id}
    */
-  async updateEmailAccount(emailAccountId: number, params: any): Promise<any> {
+  async updateEmailAccount(
+    emailAccountId: number,
+    params: UpdateEmailAccountRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/email-accounts/${emailAccountId}`, params),
       'update email account'
@@ -107,10 +151,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Fetch Email Account By ID
+   * Get Email Account By ID
    * GET /email-accounts/{email_account_id}
    */
-  async getEmailAccountById(emailAccountId: number): Promise<any> {
+  async getEmailAccountById(emailAccountId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/email-accounts/${emailAccountId}`),
       'get email account by ID'
@@ -119,30 +163,27 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Add/Update Warmup To Email Account
+   * Start Email Account Warmup
    * POST /email-accounts/{email_account_id}/warmup
    */
-  async updateEmailAccountWarmup(
+  async startEmailAccountWarmup(
     emailAccountId: number,
-    params: {
-      warmup_enabled: boolean;
-      warmup_reputation?: number;
-      daily_ramp_up?: number;
-      reply_rate_percentage?: number;
-    }
-  ): Promise<any> {
+    params: WarmupSettings
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/email-accounts/${emailAccountId}/warmup`, params),
-      'update email account warmup'
+      'start email account warmup'
     );
     return response.data;
   }
 
   /**
-   * Reconnect failed email accounts
+   * Reconnect Failed Email Accounts
    * POST /email-accounts/reconnect
    */
-  async reconnectFailedEmailAccounts(params: { email_account_ids: number[] }): Promise<any> {
+  async reconnectFailedEmailAccounts(params: {
+    email_account_ids: number[];
+  }): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/email-accounts/reconnect', params),
       'reconnect failed email accounts'
@@ -154,7 +195,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
    * Update Email Account Tag
    * POST /email-accounts/{email_account_id}/tag
    */
-  async updateEmailAccountTag(emailAccountId: number, params: { tag: string }): Promise<any> {
+  async updateEmailAccountTag(
+    emailAccountId: number,
+    params: { tag: string }
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/email-accounts/${emailAccountId}/tag`, params),
       'update email account tag'
@@ -165,7 +209,7 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Test email account connection
    */
-  async testEmailAccountConnection(accountId: number): Promise<any> {
+  async testEmailAccountConnection(accountId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/email-accounts/${accountId}/test-connection`),
       'test email account connection'
@@ -176,7 +220,7 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Get email account warmup status
    */
-  async getEmailAccountWarmupStatus(accountId: number): Promise<any> {
+  async getEmailAccountWarmupStatus(accountId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/email-accounts/${accountId}/warmup-status`),
       'get email account warmup status'
@@ -187,7 +231,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Update email account warmup settings
    */
-  async updateEmailAccountWarmupSettings(accountId: number, params: any): Promise<any> {
+  async updateEmailAccountWarmupSettings(
+    accountId: number,
+    params: WarmupSettings
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.put(`/email-accounts/${accountId}/warmup-settings`, params),
       'update email account warmup settings'
@@ -198,7 +245,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Get email account health metrics
    */
-  async getEmailAccountHealthMetrics(accountId: number, params?: any): Promise<any> {
+  async getEmailAccountHealthMetrics(
+    accountId: number,
+    params?: EmailAccountHealthParams
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/email-accounts/${accountId}/health-metrics`, { params }),
       'get email account health metrics'
@@ -209,10 +259,15 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Assign email accounts to campaign
    */
-  async assignEmailAccountsToCampaign(campaignId: number, accountIds: number[]): Promise<any> {
+  async assignEmailAccountsToCampaign(
+    campaignId: number,
+    accountIds: number[]
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () =>
-        this.apiClient.post(`/campaigns/${campaignId}/email-accounts`, { account_ids: accountIds }),
+        this.apiClient.post(`/campaigns/${campaignId}/email-accounts/bulk`, {
+          email_account_ids: accountIds,
+        }),
       'assign email accounts to campaign'
     );
     return response.data;
@@ -221,11 +276,14 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Remove email accounts from campaign
    */
-  async removeEmailAccountsFromCampaign(campaignId: number, accountIds: number[]): Promise<any> {
+  async removeEmailAccountsFromCampaign(
+    campaignId: number,
+    accountIds: number[]
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () =>
-        this.apiClient.delete(`/campaigns/${campaignId}/email-accounts`, {
-          data: { account_ids: accountIds },
+        this.apiClient.delete(`/campaigns/${campaignId}/email-accounts/bulk`, {
+          data: { email_account_ids: accountIds },
         }),
       'remove email accounts from campaign'
     );
@@ -233,9 +291,28 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   }
 
   /**
+   * Update email account warmup
+   */
+  async updateEmailAccountWarmup(
+    emailAccountId: number,
+    params: {
+      warmup_enabled: boolean;
+      warmup_reputation?: number;
+      daily_ramp_up?: number;
+      reply_rate_percentage?: number;
+    }
+  ): Promise<SuccessResponse> {
+    const response = await this.withRetry(
+      () => this.apiClient.post(`/email-accounts/${emailAccountId}/warmup`, params),
+      'update email account warmup'
+    );
+    return response.data;
+  }
+
+  /**
    * Get campaign email accounts
    */
-  async getCampaignEmailAccounts(campaignId: number): Promise<any> {
+  async getCampaignEmailAccounts(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/email-accounts`),
       'get campaign email accounts'
@@ -246,7 +323,9 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Bulk update email account settings
    */
-  async bulkUpdateEmailAccountSettings(params: any): Promise<any> {
+  async bulkUpdateEmailAccountSettings(
+    params: BulkUpdateEmailAccountRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.put('/email-accounts/bulk-update', params),
       'bulk update email account settings'
@@ -257,7 +336,7 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Get email account sending limits
    */
-  async getEmailAccountSendingLimits(accountId: number): Promise<any> {
+  async getEmailAccountSendingLimits(accountId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/email-accounts/${accountId}/sending-limits`),
       'get email account sending limits'
@@ -268,7 +347,10 @@ export class EmailAccountClient extends BaseSmartLeadClient {
   /**
    * Update email account sending limits
    */
-  async updateEmailAccountSendingLimits(accountId: number, params: any): Promise<any> {
+  async updateEmailAccountSendingLimits(
+    accountId: number,
+    params: SendingLimitsRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.put(`/email-accounts/${accountId}/sending-limits`, params),
       'update email account sending limits'

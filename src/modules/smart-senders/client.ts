@@ -9,6 +9,76 @@
  */
 
 import { BaseSmartLeadClient } from '../../client/base.js';
+import type { SuccessResponse } from '../../types.js';
+
+// Smart Senders Type Definitions
+export interface DomainSearchRequest {
+  domain: string;
+}
+
+export interface AutoGenerateMailboxesRequest {
+  domain: string;
+  count: number;
+  vendor_id: number;
+  naming_pattern?: string;
+}
+
+export interface PlaceOrderRequest {
+  domain: string;
+  mailboxes: Array<{
+    email: string;
+    password: string;
+  }>;
+  vendor_id: number;
+}
+
+export interface SenderReputationParams {
+  start_date?: string;
+  end_date?: string;
+  sender_id?: number;
+}
+
+export interface SenderRotationSettings {
+  rotation_enabled?: boolean;
+  rotation_strategy?: 'round_robin' | 'weighted' | 'random';
+  rotation_interval?: number;
+  sender_weights?: Record<string, number>;
+}
+
+export interface SenderPerformanceParams {
+  start_date?: string;
+  end_date?: string;
+  sender_id?: number;
+  metrics?: string[];
+}
+
+export interface LoadBalancingSettings {
+  load_balancing_enabled?: boolean;
+  strategy?: 'even_distribution' | 'performance_based' | 'custom';
+  custom_weights?: Record<string, number>;
+}
+
+export interface SenderHealthParams {
+  sender_id?: number;
+  health_score_threshold?: number;
+  include_inactive?: boolean;
+}
+
+export interface OptimizationRecommendations {
+  recommendations: Array<{
+    type: string;
+    description: string;
+    impact: 'high' | 'medium' | 'low';
+    action_required: boolean;
+  }>;
+}
+
+export interface AnalyticsDashboardParams {
+  start_date?: string;
+  end_date?: string;
+  group_by?: 'sender' | 'domain' | 'campaign';
+}
+
 /**
  * Smart Senders Client
  *
@@ -27,7 +97,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
    * Search Domain
    * GET /smart-senders/search-domain
    */
-  async searchDomain(params: { domain: string }): Promise<any> {
+  async searchDomain(params: DomainSearchRequest): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/search-domain', { params }),
       'search domain'
@@ -39,7 +109,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
    * Get Vendors
    * GET /smart-senders/vendors
    */
-  async getVendors(): Promise<any> {
+  async getVendors(): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/vendors'),
       'get vendors'
@@ -51,12 +121,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
    * Auto-generate-mailboxes
    * POST /smart-senders/auto-generate-mailboxes
    */
-  async autoGenerateMailboxes(params: {
-    domain: string;
-    count: number;
-    vendor_id: number;
-    naming_pattern?: string;
-  }): Promise<any> {
+  async autoGenerateMailboxes(params: AutoGenerateMailboxesRequest): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/smart-senders/auto-generate-mailboxes', params),
       'auto generate mailboxes'
@@ -68,14 +133,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
    * Place order for mailboxes
    * POST /smart-senders/place-order
    */
-  async placeOrderForMailboxes(params: {
-    domain: string;
-    mailboxes: Array<{
-      email: string;
-      password: string;
-    }>;
-    vendor_id: number;
-  }): Promise<any> {
+  async placeOrderForMailboxes(params: PlaceOrderRequest): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/smart-senders/place-order', params),
       'place order for mailboxes'
@@ -87,7 +145,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
    * Get Domain List
    * GET /smart-senders/domains
    */
-  async getDomainList(): Promise<any> {
+  async getDomainList(): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/domains'),
       'get domain list'
@@ -98,7 +156,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender reputation scores
    */
-  async getSenderReputationScores(params?: any): Promise<any> {
+  async getSenderReputationScores(params?: SenderReputationParams): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/reputation-scores', { params }),
       'get sender reputation scores'
@@ -109,7 +167,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender rotation settings
    */
-  async getSenderRotationSettings(campaignId: number): Promise<any> {
+  async getSenderRotationSettings(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/smart-senders/rotation-settings`),
       'get sender rotation settings'
@@ -120,7 +178,10 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Update sender rotation settings
    */
-  async updateSenderRotationSettings(campaignId: number, params: any): Promise<any> {
+  async updateSenderRotationSettings(
+    campaignId: number,
+    params: SenderRotationSettings
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.put(`/campaigns/${campaignId}/smart-senders/rotation-settings`, params),
       'update sender rotation settings'
@@ -131,7 +192,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender performance metrics
    */
-  async getSenderPerformanceMetrics(params?: any): Promise<any> {
+  async getSenderPerformanceMetrics(params?: SenderPerformanceParams): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/performance-metrics', { params }),
       'get sender performance metrics'
@@ -142,7 +203,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender load balancing status
    */
-  async getSenderLoadBalancingStatus(campaignId: number): Promise<any> {
+  async getSenderLoadBalancingStatus(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/smart-senders/load-balancing-status`),
       'get sender load balancing status'
@@ -153,7 +214,10 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Update sender load balancing settings
    */
-  async updateSenderLoadBalancingSettings(campaignId: number, params: any): Promise<any> {
+  async updateSenderLoadBalancingSettings(
+    campaignId: number,
+    params: LoadBalancingSettings
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () =>
         this.apiClient.put(
@@ -168,7 +232,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender health monitoring
    */
-  async getSenderHealthMonitoring(params?: any): Promise<any> {
+  async getSenderHealthMonitoring(params?: SenderHealthParams): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/health-monitoring', { params }),
       'get sender health monitoring'
@@ -179,7 +243,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender optimization recommendations
    */
-  async getSenderOptimizationRecommendations(campaignId?: number): Promise<any> {
+  async getSenderOptimizationRecommendations(campaignId?: number): Promise<SuccessResponse> {
     const endpoint = campaignId
       ? `/campaigns/${campaignId}/smart-senders/optimization-recommendations`
       : '/smart-senders/optimization-recommendations';
@@ -193,7 +257,10 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Apply sender optimization recommendations
    */
-  async applySenderOptimizationRecommendations(campaignId: number, params: any): Promise<any> {
+  async applySenderOptimizationRecommendations(
+    campaignId: number,
+    params: OptimizationRecommendations
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () =>
         this.apiClient.post(`/campaigns/${campaignId}/smart-senders/apply-optimization`, params),
@@ -205,7 +272,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Get sender analytics dashboard
    */
-  async getSenderAnalyticsDashboard(params?: any): Promise<any> {
+  async getSenderAnalyticsDashboard(params?: AnalyticsDashboardParams): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/smart-senders/analytics-dashboard', { params }),
       'get sender analytics dashboard'
@@ -216,7 +283,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Reset sender reputation
    */
-  async resetSenderReputation(senderId: number): Promise<any> {
+  async resetSenderReputation(senderId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/smart-senders/${senderId}/reset-reputation`),
       'reset sender reputation'
@@ -227,7 +294,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Pause smart sender
    */
-  async pauseSmartSender(senderId: number): Promise<any> {
+  async pauseSmartSender(senderId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/smart-senders/${senderId}/pause`),
       'pause smart sender'
@@ -238,7 +305,7 @@ export class SmartSendersClient extends BaseSmartLeadClient {
   /**
    * Resume smart sender
    */
-  async resumeSmartSender(senderId: number): Promise<any> {
+  async resumeSmartSender(senderId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/smart-senders/${senderId}/resume`),
       'resume smart sender'

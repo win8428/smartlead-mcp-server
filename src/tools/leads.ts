@@ -7,27 +7,27 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 import {
-  ListLeadsByCampaignRequestSchema,
-  FetchLeadCategoriesRequestSchema,
-  FetchLeadByEmailRequestSchema,
   AddLeadsToCampaignRequestSchema,
-  ResumeLeadByCampaignRequestSchema,
-  PauseLeadByCampaignRequestSchema,
-  DeleteLeadByCampaignRequestSchema,
-  UnsubscribeLeadFromCampaignRequestSchema,
-  UnsubscribeLeadFromAllCampaignsRequestSchema,
   AddLeadToGlobalBlocklistRequestSchema,
+  DeleteLeadByCampaignRequestSchema,
+  FetchAllLeadsFromAccountRequestSchema,
+  FetchLeadByEmailRequestSchema,
+  FetchLeadCategoriesRequestSchema,
+  FetchLeadMessageHistoryRequestSchema,
+  FetchLeadsFromGlobalBlocklistRequestSchema,
+  ForwardReplyRequestSchema,
+  ListLeadsByCampaignRequestSchema,
+  PauseLeadByCampaignRequestSchema,
+  ReplyToLeadFromMasterInboxRequestSchema,
+  ResumeLeadByCampaignRequestSchema,
+  UnsubscribeLeadFromAllCampaignsRequestSchema,
+  UnsubscribeLeadFromCampaignRequestSchema,
   UpdateLeadByIdRequestSchema,
   UpdateLeadCategoryRequestSchema,
-  FetchLeadMessageHistoryRequestSchema,
-  ReplyToLeadFromMasterInboxRequestSchema,
-  ForwardReplyRequestSchema,
-  FetchAllLeadsFromAccountRequestSchema,
-  FetchLeadsFromGlobalBlocklistRequestSchema,
 } from '../types.js';
 
 /**
@@ -56,7 +56,7 @@ export function registerLeadTools(
         return formatSuccessResponse(
           'Leads retrieved successfully',
           result,
-          `Found ${result.data?.leads?.length || 0} leads in campaign ID: ${campaign_id}`
+          `Found ${(result.data as any)?.leads?.length || 0} leads in campaign ID: ${campaign_id}`
         );
       } catch (error) {
         return handleError(error);
@@ -80,7 +80,7 @@ export function registerLeadTools(
         return formatSuccessResponse(
           'Lead categories retrieved successfully',
           result,
-          `Found ${result.data?.categories?.length || 0} lead categories`
+          `Found ${(result.data as any)?.categories?.length || 0} lead categories`
         );
       } catch (error) {
         return handleError(error);
@@ -303,7 +303,7 @@ export function registerLeadTools(
         return formatSuccessResponse(
           'All leads retrieved successfully',
           result,
-          `Found ${result.data?.leads?.length || 0} leads in account`
+          `Found ${(result.data as any)?.leads?.length || 0} leads in account`
         );
       } catch (error) {
         return handleError(error);
@@ -326,7 +326,7 @@ export function registerLeadTools(
         return formatSuccessResponse(
           'Global blocklist retrieved successfully',
           result,
-          `Found ${result.data?.blocked_leads?.length || 0} entries in global blocklist`
+          `Found ${(result.data as any)?.blocked_leads?.length || 0} entries in global blocklist`
         );
       } catch (error) {
         return handleError(error);
@@ -346,13 +346,8 @@ export function registerLeadTools(
     async (params) => {
       try {
         const validatedParams = UpdateLeadByIdRequestSchema.parse(params);
-        const { lead_id, ...leadData } = validatedParams;
-        const result = await client.updateLeadById(lead_id, leadData);
-        return formatSuccessResponse(
-          'Lead updated successfully',
-          result,
-          `Lead ID ${lead_id} updated successfully`
-        );
+        const result = await client.updateLeadById(validatedParams.lead_id, validatedParams);
+        return formatSuccessResponse('Lead updated successfully', result);
       } catch (error) {
         return handleError(error);
       }
@@ -424,13 +419,15 @@ export function registerLeadTools(
     async (params) => {
       try {
         const validatedParams = ReplyToLeadFromMasterInboxRequestSchema.parse(params);
-        const { campaign_id, lead_id, ...messageData } = validatedParams;
-        const result = await client.replyToLeadFromMasterInbox(campaign_id, lead_id, messageData);
-        return formatSuccessResponse(
-          'Reply sent successfully from master inbox',
-          result,
-          `Reply sent to lead ID ${lead_id} in campaign ID: ${campaign_id}`
+        const result = await client.replyToLeadFromMasterInbox(
+          validatedParams.campaign_id,
+          validatedParams.lead_id,
+          {
+            subject: validatedParams.subject || '',
+            message: validatedParams.message,
+          }
         );
+        return formatSuccessResponse('Successfully replied to lead', result);
       } catch (error) {
         return handleError(error);
       }

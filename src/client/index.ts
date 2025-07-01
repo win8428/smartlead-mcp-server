@@ -8,17 +8,78 @@
  * @version 1.5.0
  */
 
-import { BaseSmartLeadClient } from './base.js';
-import { SmartLeadConfig } from '../types/config.js';
-import { CampaignClient } from '../modules/campaigns/client.js';
-import { LeadClient } from '../modules/leads/client.js';
 import { AnalyticsClient } from '../modules/analytics/client.js';
-import { EmailAccountClient } from '../modules/email-accounts/client.js';
+import { CampaignManagementClient } from '../modules/campaigns/client.js';
 import { ClientManagementClient } from '../modules/client-management/client.js';
-import { WebhooksClient } from '../modules/webhooks/client.js';
+import { EmailAccountManagementClient } from '../modules/email-accounts/client.js';
+import { LeadClient } from '../modules/leads/client.js';
 import { SmartDeliveryClient } from '../modules/smart-delivery/client.js';
-import { StatisticsClient } from '../modules/statistics/client.js';
 import { SmartSendersClient } from '../modules/smart-senders/client.js';
+import { StatisticsClient } from '../modules/statistics/client.js';
+import { WebhooksClient } from '../modules/webhooks/client.js';
+import type { SmartLeadConfig } from '../types/config.js';
+import type {
+  AnalyticsCampaignFollowUpReplyRateRequest,
+  AnalyticsCampaignLeadsTakeForFirstReplyRequest,
+  AnalyticsCampaignLeadToReplyTimeRequest,
+  AnalyticsCampaignListRequest,
+  AnalyticsCampaignOverallStatsRequest,
+  AnalyticsCampaignResponseStatsRequest,
+  AnalyticsCampaignStatusStatsRequest,
+  AnalyticsClientListRequest,
+  AnalyticsClientMonthWiseCountRequest,
+  AnalyticsClientOverallStatsRequest,
+  AnalyticsDayWiseOverallStatsRequest,
+  AnalyticsLeadCategoryWiseResponseRequest,
+  AnalyticsLeadOverallStatsRequest,
+  AnalyticsMailboxDomainWiseHealthMetricsRequest,
+  AnalyticsMailboxNameWiseHealthMetricsRequest,
+  AnalyticsMailboxOverallStatsRequest,
+  AnalyticsMailboxProviderWiseOverallPerformanceRequest,
+  AnalyticsOverallStatsV2Request,
+  AnalyticsTeamBoardOverallStatsRequest,
+  CreateCampaignRequest,
+  EmailSequence,
+  ExportCampaignDataRequest,
+  FetchCampaignAnalyticsByDateRangeRequest,
+  GetCampaignSequenceAnalyticsRequest,
+  GetCampaignsWithAnalyticsRequest,
+  Lead,
+  ListCampaignsRequest,
+  ListLeadsRequest,
+  UpdateCampaignScheduleRequest,
+  UpdateCampaignSettingsRequest,
+  UpdateLeadRequest,
+} from '../types.js';
+import { BaseSmartLeadClient } from './base.js';
+
+// These are not in types.ts, so defining them here
+interface EmailAccountRequest {
+  email: string;
+  password: string;
+  smtp_host: string;
+  smtp_port: number;
+  imap_host: string;
+  imap_port: number;
+  name?: string;
+}
+interface UpdateEmailAccountRequest {
+  name?: string;
+  settings?: Record<string, unknown>;
+  status?: 'active' | 'inactive' | 'warmup';
+}
+interface WarmupSettings {
+  email_account_id: number;
+  emails_per_day?: number;
+  warmup_reputation?: boolean;
+  ramp_up_increment?: number;
+  reply_rate_percentage?: number;
+}
+interface EmailAccountHealthParams {
+  start_date?: string;
+  end_date?: string;
+  metrics?: string[];
+}
 
 /**
  * Main SmartLead API Client
@@ -27,10 +88,10 @@ import { SmartSendersClient } from '../modules/smart-senders/client.js';
  * through modular sub-clients for different API categories.
  */
 export class SmartLeadClient extends BaseSmartLeadClient {
-  public readonly campaigns: CampaignClient;
+  public readonly campaigns: CampaignManagementClient;
   public readonly leads: LeadClient;
   public readonly analytics: AnalyticsClient;
-  public readonly emailAccounts: EmailAccountClient;
+  public readonly emailAccounts: EmailAccountManagementClient;
   public readonly clientManagement: ClientManagementClient;
   public readonly webhooks: WebhooksClient;
   public readonly smartDelivery: SmartDeliveryClient;
@@ -41,10 +102,10 @@ export class SmartLeadClient extends BaseSmartLeadClient {
     super(config);
 
     // Initialize all module clients
-    this.campaigns = new CampaignClient(config);
+    this.campaigns = new CampaignManagementClient(config);
     this.leads = new LeadClient(config);
     this.analytics = new AnalyticsClient(config);
-    this.emailAccounts = new EmailAccountClient(config);
+    this.emailAccounts = new EmailAccountManagementClient(config);
     this.clientManagement = new ClientManagementClient(config);
     this.webhooks = new WebhooksClient(config);
     this.smartDelivery = new SmartDeliveryClient(config);
@@ -59,13 +120,13 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   // while the server is being refactored to use the new modular structure
 
   // Campaign methods (delegate to campaigns module)
-  async createCampaign(params: any) {
+  async createCampaign(params: CreateCampaignRequest) {
     return this.campaigns.createCampaign(params);
   }
-  async updateCampaignSchedule(campaignId: number, params: any) {
+  async updateCampaignSchedule(campaignId: number, params: UpdateCampaignScheduleRequest) {
     return this.campaigns.updateCampaignSchedule(campaignId, params);
   }
-  async updateCampaignSettings(campaignId: number, params: any) {
+  async updateCampaignSettings(campaignId: number, params: UpdateCampaignSettingsRequest) {
     return this.campaigns.updateCampaignSettings(campaignId, params);
   }
   async updateCampaignStatus(campaignId: number, status: string) {
@@ -74,37 +135,52 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   async getCampaign(campaignId: number) {
     return this.campaigns.getCampaign(campaignId);
   }
-  async listCampaigns(params?: any) {
+  async listCampaigns(params?: ListCampaignsRequest) {
     return this.campaigns.listCampaigns(params);
   }
-  async saveCampaignSequence(campaignId: number, sequence: any) {
+  async saveCampaignSequence(campaignId: number, sequence: EmailSequence) {
     return this.campaigns.saveCampaignSequence(campaignId, sequence);
   }
   async getCampaignSequence(campaignId: number) {
     return this.campaigns.getCampaignSequence(campaignId);
   }
-  async getCampaignsWithAnalytics(params?: any) {
+  async getCampaignsWithAnalytics(params?: GetCampaignsWithAnalyticsRequest) {
     return this.campaigns.getCampaignsWithAnalytics(params);
   }
   async deleteCampaign(campaignId: number) {
     return this.campaigns.deleteCampaign(campaignId);
   }
-  async exportCampaignData(campaignId: number, params?: any) {
+  async exportCampaignData(campaignId: number, params?: ExportCampaignDataRequest) {
     return this.campaigns.exportCampaignData(campaignId, params);
   }
-  async fetchCampaignAnalyticsByDateRange(campaignId: number, params: any) {
+  async fetchCampaignAnalyticsByDateRange(
+    campaignId: number,
+    params: FetchCampaignAnalyticsByDateRangeRequest
+  ) {
     return this.campaigns.fetchCampaignAnalyticsByDateRange(campaignId, params);
   }
-  async getCampaignSequenceAnalytics(campaignId: number, params?: any) {
+  async getCampaignSequenceAnalytics(
+    campaignId: number,
+    params?: GetCampaignSequenceAnalyticsRequest
+  ) {
     return this.campaigns.getCampaignSequenceAnalytics(campaignId, params);
   }
   async fetchAllCampaignsUsingLeadId(leadId: number) {
-    return this.campaigns.fetchAllCampaignsUsingLeadId(leadId);
+    return this.campaigns.fetchAllCampaignsUsingLeadId({ lead_id: leadId });
   }
 
   // Lead methods (delegate to leads module)
-  async listLeadsByCampaign(campaignId: number, params?: any) {
-    return this.leads.listLeadsByCampaign(campaignId, params);
+  async listLeadsByCampaign(
+    campaignId: number,
+    params?: { limit?: number; offset?: number; search?: string; status?: string }
+  ) {
+    const leadsParams = params
+      ? {
+          campaign_id: campaignId,
+          ...params,
+        }
+      : { campaign_id: campaignId };
+    return this.leads.listLeadsByCampaign(campaignId, leadsParams);
   }
   async fetchLeadCategories() {
     return this.leads.fetchLeadCategories();
@@ -112,7 +188,7 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   async fetchLeadByEmail(email: string) {
     return this.leads.fetchLeadByEmail(email);
   }
-  async addLeadsToCampaign(campaignId: number, leads: any[]) {
+  async addLeadsToCampaign(campaignId: number, leads: Lead[]) {
     return this.leads.addLeadsToCampaign(campaignId, leads);
   }
   async resumeLeadByCampaign(campaignId: number, leadId: number) {
@@ -133,13 +209,13 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   async addLeadToGlobalBlocklist(email: string) {
     return this.leads.addLeadToGlobalBlocklist(email);
   }
-  async fetchAllLeadsFromAccount(params?: any) {
+  async fetchAllLeadsFromAccount(params?: ListLeadsRequest) {
     return this.leads.fetchAllLeadsFromAccount(params);
   }
-  async fetchLeadsFromGlobalBlocklist(params?: any) {
+  async fetchLeadsFromGlobalBlocklist(params?: ListLeadsRequest) {
     return this.leads.fetchLeadsFromGlobalBlocklist(params);
   }
-  async updateLeadById(leadId: number, leadData: any) {
+  async updateLeadById(leadId: number, leadData: UpdateLeadRequest) {
     return this.leads.updateLeadById(leadId, leadData);
   }
   async updateLeadCategory(campaignId: number, leadId: number, category: string) {
@@ -148,89 +224,116 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   async fetchLeadMessageHistory(campaignId: number, leadId: number) {
     return this.leads.fetchLeadMessageHistory(campaignId, leadId);
   }
-  async replyToLeadFromMasterInbox(campaignId: number, leadId: number, message: any) {
-    return this.leads.replyToLeadFromMasterInbox(campaignId, leadId, message);
+  async replyToLeadFromMasterInbox(
+    campaignId: number,
+    leadId: number,
+    message: { subject: string; message: string }
+  ) {
+    const replyMessage = {
+      campaign_id: campaignId,
+      lead_id: leadId,
+      message: message.message,
+      subject: message.subject,
+    };
+    return this.leads.replyToLeadFromMasterInbox(campaignId, leadId, replyMessage);
   }
-  async forwardReply(campaignId: number, leadId: number, forwardData: any) {
-    return this.leads.forwardReply(campaignId, leadId, forwardData);
+  async forwardReply(
+    campaignId: number,
+    leadId: number,
+    forwardData: { forward_to: string; message?: string }
+  ) {
+    const forwardRequest = {
+      forward_to_email: forwardData.forward_to,
+      message: forwardData.message,
+      include_original: true,
+    };
+    return this.leads.forwardReply(campaignId, leadId, forwardRequest);
   }
 
   // Analytics methods (delegate to analytics module)
-  async getAnalyticsCampaignList(params?: any) {
+  async getAnalyticsCampaignList(params?: AnalyticsCampaignListRequest) {
     return this.analytics.getCampaignList(params);
   }
-  async getAnalyticsClientList(params?: any) {
+  async getAnalyticsClientList(params?: AnalyticsClientListRequest) {
     return this.analytics.getClientList(params);
   }
-  async getAnalyticsClientMonthWiseCount(params?: any) {
+  async getAnalyticsClientMonthWiseCount(params?: AnalyticsClientMonthWiseCountRequest) {
     return this.analytics.getClientMonthWiseCount(params);
   }
-  async getAnalyticsOverallStatsV2(params?: any) {
+  async getAnalyticsOverallStatsV2(params?: AnalyticsOverallStatsV2Request) {
     return this.analytics.getOverallStatsV2(params);
   }
-  async getAnalyticsDayWiseOverallStats(params?: any) {
+  async getAnalyticsDayWiseOverallStats(params?: AnalyticsDayWiseOverallStatsRequest) {
     return this.analytics.getDayWiseOverallStats(params);
   }
-  async getAnalyticsDayWisePositiveReplyStats(params?: any) {
+  async getAnalyticsDayWisePositiveReplyStats(params?: AnalyticsDayWiseOverallStatsRequest) {
     return this.analytics.getDayWisePositiveReplyStats(params);
   }
-  async getAnalyticsCampaignOverallStats(params?: any) {
+  async getAnalyticsCampaignOverallStats(params?: AnalyticsCampaignOverallStatsRequest) {
     return this.analytics.getCampaignOverallStats(params);
   }
-  async getAnalyticsClientOverallStats(params?: any) {
+  async getAnalyticsClientOverallStats(params?: AnalyticsClientOverallStatsRequest) {
     return this.analytics.getClientOverallStats(params);
   }
-  async getAnalyticsMailboxNameWiseHealthMetrics(params?: any) {
+  async getAnalyticsMailboxNameWiseHealthMetrics(
+    params?: AnalyticsMailboxNameWiseHealthMetricsRequest
+  ) {
     return this.analytics.getMailboxNameWiseHealthMetrics(params);
   }
-  async getAnalyticsMailboxDomainWiseHealthMetrics(params?: any) {
+  async getAnalyticsMailboxDomainWiseHealthMetrics(
+    params?: AnalyticsMailboxDomainWiseHealthMetricsRequest
+  ) {
     return this.analytics.getMailboxDomainWiseHealthMetrics(params);
   }
-  async getAnalyticsMailboxProviderWiseOverallPerformance(params?: any) {
+  async getAnalyticsMailboxProviderWiseOverallPerformance(
+    params?: AnalyticsMailboxProviderWiseOverallPerformanceRequest
+  ) {
     return this.analytics.getMailboxProviderWiseOverallPerformance(params);
   }
-  async getAnalyticsTeamBoardOverallStats(params?: any) {
+  async getAnalyticsTeamBoardOverallStats(params?: AnalyticsTeamBoardOverallStatsRequest) {
     return this.analytics.getTeamBoardOverallStats(params);
   }
-  async getAnalyticsLeadOverallStats(params?: any) {
+  async getAnalyticsLeadOverallStats(params?: AnalyticsLeadOverallStatsRequest) {
     return this.analytics.getLeadOverallStats(params);
   }
-  async getAnalyticsLeadCategoryWiseResponse(params?: any) {
+  async getAnalyticsLeadCategoryWiseResponse(params?: AnalyticsLeadCategoryWiseResponseRequest) {
     return this.analytics.getLeadCategoryWiseResponse(params);
   }
-  async getAnalyticsCampaignLeadsTakeForFirstReply(params?: any) {
+  async getAnalyticsCampaignLeadsTakeForFirstReply(
+    params?: AnalyticsCampaignLeadsTakeForFirstReplyRequest
+  ) {
     return this.analytics.getCampaignLeadsTakeForFirstReply(params);
   }
-  async getAnalyticsCampaignFollowUpReplyRate(params?: any) {
+  async getAnalyticsCampaignFollowUpReplyRate(params?: AnalyticsCampaignFollowUpReplyRateRequest) {
     return this.analytics.getCampaignFollowUpReplyRate(params);
   }
-  async getAnalyticsCampaignLeadToReplyTime(params?: any) {
+  async getAnalyticsCampaignLeadToReplyTime(params?: AnalyticsCampaignLeadToReplyTimeRequest) {
     return this.analytics.getCampaignLeadToReplyTime(params);
   }
-  async getAnalyticsCampaignResponseStats(params?: any) {
+  async getAnalyticsCampaignResponseStats(params?: AnalyticsCampaignResponseStatsRequest) {
     return this.analytics.getCampaignResponseStats(params);
   }
-  async getAnalyticsCampaignStatusStats(params?: any) {
+  async getAnalyticsCampaignStatusStats(params?: AnalyticsCampaignStatusStatsRequest) {
     return this.analytics.getCampaignStatusStats(params);
   }
-  async getAnalyticsMailboxOverallStats(params?: any) {
+  async getAnalyticsMailboxOverallStats(params?: AnalyticsMailboxOverallStatsRequest) {
     return this.analytics.getMailboxOverallStats(params);
   }
 
   // Email Account methods (delegate to email accounts module)
-  async addEmailAccount(params: any) {
+  async addEmailAccount(params: EmailAccountRequest) {
     return this.emailAccounts.createEmailAccount(params);
   }
-  async getAllEmailAccounts(params?: any) {
+  async getAllEmailAccounts() {
     return this.emailAccounts.getAllEmailAccounts();
   }
   async getEmailAccountById(accountId: number) {
     return this.emailAccounts.getEmailAccountById(accountId);
   }
-  async updateEmailAccount(accountId: number, params: any) {
+  async updateEmailAccount(accountId: number, params: UpdateEmailAccountRequest) {
     return this.emailAccounts.updateEmailAccount(accountId, params);
   }
-  async deleteEmailAccount(accountId: number) {
+  async deleteEmailAccount(_accountId: number) {
     // Note: Delete functionality not available in current API
     throw new Error('Delete email account functionality not available in current SmartLead API');
   }
@@ -240,10 +343,10 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   async getEmailAccountWarmupStatus(accountId: number) {
     return this.emailAccounts.getEmailAccountWarmupStatus(accountId);
   }
-  async updateEmailAccountWarmupSettings(accountId: number, params: any) {
+  async updateEmailAccountWarmupSettings(accountId: number, params: WarmupSettings) {
     return this.emailAccounts.updateEmailAccountWarmupSettings(accountId, params);
   }
-  async getEmailAccountHealthMetrics(accountId: number, params?: any) {
+  async getEmailAccountHealthMetrics(accountId: number, params?: EmailAccountHealthParams) {
     return this.emailAccounts.getEmailAccountHealthMetrics(accountId, params);
   }
   async assignEmailAccountsToCampaign(campaignId: number, accountIds: number[]) {
@@ -252,29 +355,20 @@ export class SmartLeadClient extends BaseSmartLeadClient {
   async removeEmailAccountsFromCampaign(campaignId: number, accountIds: number[]) {
     return this.emailAccounts.removeEmailAccountsFromCampaign(campaignId, accountIds);
   }
-  async getCampaignEmailAccounts(campaignId: number) {
-    return this.emailAccounts.getCampaignEmailAccounts(campaignId);
-  }
-  async bulkUpdateEmailAccountSettings(params: any) {
-    return this.emailAccounts.bulkUpdateEmailAccountSettings(params);
-  }
-  async getEmailAccountSendingLimits(accountId: number) {
-    return this.emailAccounts.getEmailAccountSendingLimits(accountId);
-  }
-  async updateEmailAccountSendingLimits(accountId: number, params: any) {
-    return this.emailAccounts.updateEmailAccountSendingLimits(accountId, params);
+  async listEmailAccountsPerCampaign(campaignId: number) {
+    return this.emailAccounts.listEmailAccountsPerCampaign(campaignId);
   }
 }
 
+export { AnalyticsClient } from '../modules/analytics/client.js';
+export { CampaignManagementClient } from '../modules/campaigns/client.js';
+export { ClientManagementClient } from '../modules/client-management/client.js';
+export { EmailAccountManagementClient } from '../modules/email-accounts/client.js';
+export { LeadClient } from '../modules/leads/client.js';
+export { SmartDeliveryClient } from '../modules/smart-delivery/client.js';
+export { SmartSendersClient } from '../modules/smart-senders/client.js';
+export { StatisticsClient } from '../modules/statistics/client.js';
+export { WebhooksClient } from '../modules/webhooks/client.js';
+export { SmartLeadConfig } from '../types/config.js';
 // Export the main client and all modules
 export { BaseSmartLeadClient, SmartLeadError } from './base.js';
-export { CampaignClient } from '../modules/campaigns/client.js';
-export { LeadClient } from '../modules/leads/client.js';
-export { AnalyticsClient } from '../modules/analytics/client.js';
-export { EmailAccountClient } from '../modules/email-accounts/client.js';
-export { ClientManagementClient } from '../modules/client-management/client.js';
-export { WebhooksClient } from '../modules/webhooks/client.js';
-export { SmartDeliveryClient } from '../modules/smart-delivery/client.js';
-export { StatisticsClient } from '../modules/statistics/client.js';
-export { SmartSendersClient } from '../modules/smart-senders/client.js';
-export { SmartLeadConfig } from '../types/config.js';

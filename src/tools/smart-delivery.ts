@@ -8,9 +8,9 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 import { z } from 'zod';
 
 // ================================

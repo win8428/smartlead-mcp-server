@@ -16,8 +16,8 @@
  * @version 1.5.0
  */
 
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
-import { SmartLeadConfig } from '../types/config.js';
+import axios, { type AxiosError, type AxiosInstance, type AxiosResponse } from 'axios';
+import type { SmartLeadConfig } from '../types/config.js';
 
 /**
  * Custom error class for SmartLead API errors
@@ -235,8 +235,11 @@ export class BaseSmartLeadClient {
     if (error.response) {
       // Server responded with error status
       const status = error.response.status;
-      const data = error.response.data as any;
-      const message = data?.message || data?.error || error.message || 'API request failed';
+      const data = error.response.data as { message?: string; error?: string } | unknown;
+      const errorData =
+        data && typeof data === 'object' ? (data as { message?: string; error?: string }) : {};
+      const message =
+        errorData?.message || errorData?.error || error.message || 'API request failed';
 
       // Determine if error is retryable
       const isRetryable = status === 429 || status >= 500;
@@ -298,7 +301,7 @@ export class BaseSmartLeadClient {
         attempt < this.config.maxRetries
       ) {
         const delayMs = Math.min(
-          this.config.retryDelay * Math.pow(2, attempt - 1),
+          this.config.retryDelay * 2 ** (attempt - 1),
           10000 // Max 10 second delay
         );
 
@@ -320,10 +323,7 @@ export class BaseSmartLeadClient {
   async testConnection(): Promise<{ success: boolean; message?: string; error?: string }> {
     try {
       // Try a simple API call to test connectivity - use campaigns endpoint without limit parameter
-      const response = await this.withRetry(
-        () => this.apiClient.get('/campaigns'),
-        'connection test'
-      );
+      await this.withRetry(() => this.apiClient.get('/campaigns'), 'connection test');
       return {
         success: true,
         message: 'Successfully connected to SmartLead API',

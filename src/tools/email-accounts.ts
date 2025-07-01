@@ -8,10 +8,10 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 
 // ================================
 // SCHEMAS
@@ -101,9 +101,9 @@ export function registerEmailAccountTools(
           validatedParams.campaign_id
         );
         return formatSuccessResponse(
-          `Retrieved email accounts for campaign ${validatedParams.campaign_id}`,
+          'Email accounts retrieved successfully',
           result,
-          `Found ${result.length || 0} email accounts`
+          `Found ${(result.data as any)?.length || 0} email accounts`
         );
       } catch (error) {
         return handleError(error);
@@ -173,9 +173,9 @@ export function registerEmailAccountTools(
       try {
         const result = await client.emailAccounts.getAllEmailAccounts();
         return formatSuccessResponse(
-          'Retrieved all email accounts',
+          'All email accounts retrieved successfully',
           result,
-          `Found ${result.length || 0} email accounts`
+          `Found ${(result.data as any)?.length || 0} email accounts`
         );
       } catch (error) {
         return handleError(error);
@@ -198,7 +198,7 @@ export function registerEmailAccountTools(
         return formatSuccessResponse(
           `Created email account for ${validatedParams.email}`,
           result,
-          `Email account ID: ${result.id || 'N/A'}`
+          `Email account ID: ${(result.data as any)?.id || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -222,7 +222,11 @@ export function registerEmailAccountTools(
           email_account_id,
           updateParams
         );
-        return formatSuccessResponse(`Updated email account ${email_account_id}`, result);
+        return formatSuccessResponse(
+          'Email account updated successfully',
+          result,
+          `Email: ${(result.data as any)?.email || 'N/A'}`
+        );
       } catch (error) {
         return handleError(error);
       }
@@ -240,13 +244,13 @@ export function registerEmailAccountTools(
     async (params) => {
       try {
         const validatedParams = GetEmailAccountByIdSchema.parse(params);
-        const result = await client.emailAccounts.getEmailAccountById(
+        const result = (await client.emailAccounts.getEmailAccountById(
           validatedParams.email_account_id
-        );
+        )) as any;
         return formatSuccessResponse(
-          `Retrieved email account ${validatedParams.email_account_id}`,
+          'Email account details retrieved successfully',
           result,
-          `Email: ${result.email || 'N/A'}`
+          `Email account ID: ${(result.data as any)?.id || result.id || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);

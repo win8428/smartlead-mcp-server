@@ -1,7 +1,7 @@
 {
   "name": "smartlead-mcp-by-leadmagic",
   "version": "1.6.1",
-  "description": "💜 Production-ready Model Context Protocol server for SmartLead's industry-leading cold email automation platform - Complete API coverage with 113+ tools for campaign management, lead tracking, smart delivery, and analytics. Beautiful purple-gradient installer, zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
+  "description": "💜 The Premier Model Context Protocol Server for SmartLead's Cold Email Automation Platform - Complete API coverage with 116+ tools for campaign management, lead tracking, smart delivery, and analytics. Beautiful purple-gradient installer, zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
   "type": "module",
   "keywords": [
     "mcp",
@@ -55,10 +55,10 @@
     "url": "https://github.com/LeadMagic/smartlead-mcp-server/issues",
     "email": "jesse@leadmagic.io"
   },
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "bin": {
-    "smartlead-mcp-server": "dist/index.js",
-    "smartlead-mcp-by-leadmagic": "dist/index.js"
+    "smartlead-mcp-server": "dist/src/index.js",
+    "smartlead-mcp-by-leadmagic": "dist/src/index.js"
   },
   "files": [
     "dist/",
@@ -66,14 +66,15 @@
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
-    "SECURITY.md"
+    "SECURITY.md",
+    "INSTALLATION.md"
   ],
   "scripts": {
     "build": "bun run clean && bun run compile && bun run postbuild",
     "compile": "tsc",
-    "postbuild": "chmod +x dist/index.js",
+    "postbuild": "chmod +x dist/src/index.js",
     "dev": "bun --watch src/index.ts",
-    "start": "bun run dist/index.js",
+    "start": "bun run dist/src/index.js",
     "watch": "bun --watch src/index.ts",
     "test": "bun test",
     "lint": "biome lint src/",
@@ -88,35 +89,29 @@
     "prepublishOnly": "bun run validate",
     "inspector": "bunx @modelcontextprotocol/inspector",
     "validate": "bun run type-check && bun run build && echo '✅ Validation passed'",
-    "install-interactive": "bun run src/install.tsx",
-    "test-api": "bun run build && bun run dist/test-api.js",
-    "quick-setup": "bun install -g smartlead-mcp-server && smartlead-mcp-install",
-    "install:deps": "bun install"
+    "add-mcp-annotations": "bun run scripts/add-mcp-annotations.ts",
+    "setup": "node dist/src/index.js install",
+    "quick-setup": "npm install -g smartlead-mcp-by-leadmagic && smartlead-mcp-by-leadmagic install"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": ">=1.0.0",
     "axios": "^1.6.0",
     "dotenv": "^17.0.0",
-    "ink": "^6.0.0",
+    "ink": "^5.0.0",
     "ink-big-text": "^2.0.0",
     "ink-gradient": "^3.0.0",
     "ink-link": "^4.1.0",
     "ink-select-input": "^6.0.0",
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^6.0.0",
-    "react": "^19.0.0",
+    "react": "^18.0.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
-    "@types/react": "^19.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^9.0.0",
-    "jest": "^30.0.0",
-    "prettier": "^3.1.0",
+    "@types/react": "^18.0.0",
     "ts-jest": "^29.1.0",
     "tsx": "^4.6.0",
     "typescript": "^5.3.0"
@@ -126,5 +121,15 @@
   },
   "peerDependencies": {
     "@modelcontextprotocol/sdk": ">=1.0.0"
+  },
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowJs": false,
+    "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx"
   }
 }

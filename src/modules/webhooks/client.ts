@@ -1,22 +1,21 @@
 /**
- * SmartLead MCP Server - Webhooks Client
+ * SmartLead Webhooks API Client
  *
- * Client module for webhook management API endpoints.
- * Handles all webhook-related operations including creation, updates, and event management.
- *
- * @author LeadMagic Team
- * @version 1.5.0
+ * Handles webhook management operations including:
+ * - Webhook CRUD operations
+ * - Event management and retry logic
+ * - Campaign webhook integration
+ * - Webhook analytics and monitoring
  */
 
 import { BaseSmartLeadClient } from '../../client/base.js';
+import type { SuccessResponse } from '../../types.js';
+
 /**
  * Webhooks Client
  *
- * Provides methods for managing SmartLead webhooks including:
- * - Creating and configuring webhooks
- * - Managing webhook events and triggers
- * - Testing webhook endpoints
- * - Webhook analytics and monitoring
+ * Provides methods for managing webhooks and webhook events
+ * including creation, updates, testing, and analytics.
  */
 export class WebhooksClient extends BaseSmartLeadClient {
   // ================================
@@ -26,7 +25,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Create a new webhook
    */
-  async createWebhook(params: any): Promise<any> {
+  async createWebhook(params: Record<string, unknown>): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/webhooks', params),
       'create webhook'
@@ -37,7 +36,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Get all webhooks
    */
-  async getAllWebhooks(params?: any): Promise<any> {
+  async getAllWebhooks(params?: Record<string, unknown>): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/webhooks', { params }),
       'get all webhooks'
@@ -48,7 +47,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Get webhook by ID
    */
-  async getWebhookById(webhookId: number): Promise<any> {
+  async getWebhookById(webhookId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/webhooks/${webhookId}`),
       'get webhook by ID'
@@ -59,7 +58,10 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Update webhook
    */
-  async updateWebhook(webhookId: number, params: any): Promise<any> {
+  async updateWebhook(
+    webhookId: number,
+    params: Record<string, unknown>
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.put(`/webhooks/${webhookId}`, params),
       'update webhook'
@@ -70,7 +72,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Delete webhook
    */
-  async deleteWebhook(webhookId: number): Promise<any> {
+  async deleteWebhook(webhookId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.delete(`/webhooks/${webhookId}`),
       'delete webhook'
@@ -81,7 +83,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Test webhook endpoint
    */
-  async testWebhook(webhookId: number, params?: any): Promise<any> {
+  async testWebhook(webhookId: number, params?: Record<string, unknown>): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/webhooks/${webhookId}/test`, params),
       'test webhook'
@@ -92,7 +94,10 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Get webhook events
    */
-  async getWebhookEvents(webhookId: number, params?: any): Promise<any> {
+  async getWebhookEvents(
+    webhookId: number,
+    params?: Record<string, unknown>
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/webhooks/${webhookId}/events`, { params }),
       'get webhook events'
@@ -103,7 +108,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Get webhook event types
    */
-  async getWebhookEventTypes(): Promise<any> {
+  async getWebhookEventTypes(): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/webhooks/event-types'),
       'get webhook event types'
@@ -114,7 +119,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Retry failed webhook event
    */
-  async retryWebhookEvent(webhookId: number, eventId: number): Promise<any> {
+  async retryWebhookEvent(webhookId: number, eventId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/webhooks/${webhookId}/events/${eventId}/retry`),
       'retry webhook event'
@@ -125,7 +130,10 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Get webhook analytics
    */
-  async getWebhookAnalytics(webhookId: number, params?: any): Promise<any> {
+  async getWebhookAnalytics(
+    webhookId: number,
+    params?: Record<string, unknown>
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/webhooks/${webhookId}/analytics`, { params }),
       'get webhook analytics'
@@ -136,7 +144,7 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Enable/disable webhook
    */
-  async toggleWebhookStatus(webhookId: number, enabled: boolean): Promise<any> {
+  async toggleWebhookStatus(webhookId: number, enabled: boolean): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.patch(`/webhooks/${webhookId}/status`, { enabled }),
       'toggle webhook status'
@@ -147,7 +155,10 @@ export class WebhooksClient extends BaseSmartLeadClient {
   /**
    * Get webhook delivery logs
    */
-  async getWebhookDeliveryLogs(webhookId: number, params?: any): Promise<any> {
+  async getWebhookDeliveryLogs(
+    webhookId: number,
+    params?: Record<string, unknown>
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/webhooks/${webhookId}/delivery-logs`, { params }),
       'get webhook delivery logs'
@@ -155,11 +166,14 @@ export class WebhooksClient extends BaseSmartLeadClient {
     return response.data;
   }
 
+  // ================================
+  // CAMPAIGN WEBHOOK METHODS
+  // ================================
+
   /**
-   * Get webhooks by campaign ID
    * GET /campaigns/{campaign_id}/webhooks
    */
-  async getWebhooksByCampaignId(campaignId: number): Promise<any> {
+  async getWebhooksByCampaignId(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/webhooks`),
       'get webhooks by campaign ID'
@@ -168,10 +182,12 @@ export class WebhooksClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Add or update campaign webhook
    * POST /campaigns/{campaign_id}/webhooks
    */
-  async addOrUpdateCampaignWebhook(campaignId: number, params: any): Promise<any> {
+  async addOrUpdateCampaignWebhook(
+    campaignId: number,
+    params: Record<string, unknown>
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/campaigns/${campaignId}/webhooks`, params),
       'add or update campaign webhook'
@@ -180,10 +196,9 @@ export class WebhooksClient extends BaseSmartLeadClient {
   }
 
   /**
-   * Delete campaign webhook
    * DELETE /campaigns/{campaign_id}/webhooks/{webhook_id}
    */
-  async deleteCampaignWebhook(campaignId: number, webhookId: number): Promise<any> {
+  async deleteCampaignWebhook(campaignId: number, webhookId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.delete(`/campaigns/${campaignId}/webhooks/${webhookId}`),
       'delete campaign webhook'
@@ -191,23 +206,25 @@ export class WebhooksClient extends BaseSmartLeadClient {
     return response.data;
   }
 
+  // ================================
+  // WEBHOOK ANALYTICS & MONITORING
+  // ================================
+
   /**
-   * Get webhooks publish summary
    * GET /webhooks/publish-summary
    */
-  async getWebhooksPublishSummary(params?: any): Promise<any> {
+  async getWebhooksPublishSummary(): Promise<SuccessResponse> {
     const response = await this.withRetry(
-      () => this.apiClient.get('/webhooks/publish-summary', { params }),
+      () => this.apiClient.get('/webhooks/publish-summary'),
       'get webhooks publish summary'
     );
     return response.data;
   }
 
   /**
-   * Retrigger failed webhook events
    * POST /webhooks/retrigger-failed-events
    */
-  async retriggerFailedEvents(params: any): Promise<any> {
+  async retriggerFailedEvents(params?: Record<string, unknown>): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/webhooks/retrigger-failed-events', params),
       'retrigger failed events'

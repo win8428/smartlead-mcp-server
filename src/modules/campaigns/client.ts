@@ -2,23 +2,37 @@
  * SmartLead MCP Server - Campaign Management Client
  *
  * Client module for campaign management API endpoints.
- * Handles all campaign-related operations including creation, updates, and analytics.
+ * Handles all campaign-related operations including creation, updates, sequences, and analytics.
  *
  * @author LeadMagic Team
  * @version 1.5.0
  */
 
 import { BaseSmartLeadClient } from '../../client/base.js';
+import type {
+  CreateCampaignRequest,
+  EmailSequence,
+  ExportCampaignDataRequest,
+  FetchAllCampaignsUsingLeadIdRequest,
+  FetchCampaignAnalyticsByDateRangeRequest,
+  GetCampaignSequenceAnalyticsRequest,
+  GetCampaignsWithAnalyticsRequest,
+  ListCampaignsRequest,
+  SuccessResponse,
+  UpdateCampaignScheduleRequest,
+  UpdateCampaignSettingsRequest,
+} from '../../types.js';
+
 /**
  * Campaign Management Client
  *
  * Provides methods for managing SmartLead campaigns including:
  * - Creating and updating campaigns
  * - Managing campaign schedules and settings
- * - Retrieving campaign details and analytics
- * - Managing campaign sequences
+ * - Email sequence management
+ * - Campaign analytics and reporting
  */
-export class CampaignClient extends BaseSmartLeadClient {
+export class CampaignManagementClient extends BaseSmartLeadClient {
   // ================================
   // CAMPAIGN MANAGEMENT METHODS
   // ================================
@@ -26,7 +40,7 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Create a new campaign
    */
-  async createCampaign(params: { name: string; client_id?: number }): Promise<any> {
+  async createCampaign(params: CreateCampaignRequest): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post('/campaigns/create', params),
       'create campaign'
@@ -37,7 +51,10 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Update campaign schedule
    */
-  async updateCampaignSchedule(campaignId: number, params: any): Promise<any> {
+  async updateCampaignSchedule(
+    campaignId: number,
+    params: UpdateCampaignScheduleRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/campaigns/${campaignId}/schedule`, params),
       'update campaign schedule'
@@ -48,7 +65,10 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Update campaign settings
    */
-  async updateCampaignSettings(campaignId: number, params: any): Promise<any> {
+  async updateCampaignSettings(
+    campaignId: number,
+    params: UpdateCampaignSettingsRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/campaigns/${campaignId}/settings`, params),
       'update campaign settings'
@@ -59,7 +79,7 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Update campaign status
    */
-  async updateCampaignStatus(campaignId: number, status: string): Promise<any> {
+  async updateCampaignStatus(campaignId: number, status: string): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.patch(`/campaigns/${campaignId}/status`, { status }),
       'update campaign status'
@@ -70,7 +90,7 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Get campaign by ID
    */
-  async getCampaign(campaignId: number): Promise<any> {
+  async getCampaign(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}`),
       'get campaign'
@@ -81,7 +101,7 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * List all campaigns
    */
-  async listCampaigns(params?: any): Promise<any> {
+  async listCampaigns(params?: ListCampaignsRequest): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/campaigns', { params }),
       'list campaigns'
@@ -92,7 +112,10 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Save campaign sequence
    */
-  async saveCampaignSequence(campaignId: number, sequence: any): Promise<any> {
+  async saveCampaignSequence(
+    campaignId: number,
+    sequence: EmailSequence
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/campaigns/${campaignId}/sequence`, sequence),
       'save campaign sequence'
@@ -103,7 +126,7 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Get campaign sequence
    */
-  async getCampaignSequence(campaignId: number): Promise<any> {
+  async getCampaignSequence(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/sequence`),
       'get campaign sequence'
@@ -114,7 +137,9 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Get campaigns with analytics (combined endpoint)
    */
-  async getCampaignsWithAnalytics(params?: any): Promise<any> {
+  async getCampaignsWithAnalytics(
+    params?: GetCampaignsWithAnalyticsRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get('/campaigns/analytics', { params }),
       'get campaigns with analytics'
@@ -125,7 +150,7 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Delete campaign
    */
-  async deleteCampaign(campaignId: number): Promise<any> {
+  async deleteCampaign(campaignId: number): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.delete(`/campaigns/${campaignId}`),
       'delete campaign'
@@ -136,7 +161,10 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Export campaign data
    */
-  async exportCampaignData(campaignId: number, params?: any): Promise<any> {
+  async exportCampaignData(
+    campaignId: number,
+    params?: ExportCampaignDataRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/export`, { params }),
       'export campaign data'
@@ -147,7 +175,10 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Fetch campaign analytics by date range
    */
-  async fetchCampaignAnalyticsByDateRange(campaignId: number, params: any): Promise<any> {
+  async fetchCampaignAnalyticsByDateRange(
+    campaignId: number,
+    params: FetchCampaignAnalyticsByDateRangeRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/analytics`, { params }),
       'fetch campaign analytics by date range'
@@ -158,7 +189,10 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Get campaign sequence analytics
    */
-  async getCampaignSequenceAnalytics(campaignId: number, params?: any): Promise<any> {
+  async getCampaignSequenceAnalytics(
+    campaignId: number,
+    params?: GetCampaignSequenceAnalyticsRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
       () => this.apiClient.get(`/campaigns/${campaignId}/sequence/analytics`, { params }),
       'get campaign sequence analytics'
@@ -169,9 +203,11 @@ export class CampaignClient extends BaseSmartLeadClient {
   /**
    * Fetch all campaigns using lead ID
    */
-  async fetchAllCampaignsUsingLeadId(leadId: number): Promise<any> {
+  async fetchAllCampaignsUsingLeadId(
+    params: FetchAllCampaignsUsingLeadIdRequest
+  ): Promise<SuccessResponse> {
     const response = await this.withRetry(
-      () => this.apiClient.get(`/campaigns/lead/${leadId}`),
+      () => this.apiClient.get('/campaigns/by-lead', { params }),
       'fetch all campaigns using lead ID'
     );
     return response.data;

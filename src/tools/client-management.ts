@@ -8,10 +8,10 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 
 // ================================
 // SCHEMAS
@@ -40,7 +40,10 @@ const ResetClientApiKeySchema = z.object({
 });
 
 const GetTeamDetailsSchema = z.object({
-  team_id: z.string().optional().describe('Optional team ID. If not provided, returns details for the default team'),
+  team_id: z
+    .string()
+    .optional()
+    .describe('Optional team ID. If not provided, returns details for the default team'),
 });
 
 // ================================
@@ -68,7 +71,7 @@ export function registerClientManagementTools(
         return formatSuccessResponse(
           `Added client "${validatedParams.name}" to system`,
           result,
-          `Client ID: ${result.id || 'N/A'}`
+          `Client ID: ${(result.data as any)?.id || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -91,7 +94,7 @@ export function registerClientManagementTools(
         return formatSuccessResponse(
           `Created client "${validatedParams.name}"`,
           result,
-          `Client ID: ${result.id || 'N/A'}`
+          `Client ID: ${(result.data as any)?.id || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -113,7 +116,7 @@ export function registerClientManagementTools(
         return formatSuccessResponse(
           'Retrieved all clients',
           result,
-          `Found ${result.length || 0} clients`
+          `Found ${Array.isArray(result) ? result.length : 0} clients`
         );
       } catch (error) {
         return handleError(error);
@@ -136,7 +139,7 @@ export function registerClientManagementTools(
         return formatSuccessResponse(
           `Created API key "${validatedParams.name}"`,
           result,
-          `API Key ID: ${result.id || 'N/A'}`
+          `API Key ID: ${(result.data as any)?.id || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -158,7 +161,7 @@ export function registerClientManagementTools(
         return formatSuccessResponse(
           'Retrieved client API keys',
           result,
-          `Found ${result.length || 0} API keys`
+          `Found ${(result.data as any)?.length || 0} API keys`
         );
       } catch (error) {
         return handleError(error);
@@ -200,7 +203,7 @@ export function registerClientManagementTools(
         return formatSuccessResponse(
           `Reset API key ${validatedParams.api_key_id}`,
           result,
-          `New API key: ${result.api_key || 'N/A'}`
+          `New API key: ${(result.data as any)?.api_key || 'N/A'}`
         );
       } catch (error) {
         return handleError(error);
@@ -225,29 +228,31 @@ export function registerClientManagementTools(
         } catch (zodError: any) {
           // Handle Zod validation errors with user-friendly messages
           const issues = zodError.issues || [];
-          const errorMessages = issues.map((issue: any) => {
-            return `${issue.path.join('.')}: ${issue.message}`;
-          }).join(', ');
-          
+          const errorMessages = issues
+            .map((issue: any) => {
+              return `${issue.path.join('.')}: ${issue.message}`;
+            })
+            .join(', ');
+
           return handleError({
             status: 400,
             code: 'VALIDATION_ERROR',
-            message: `Invalid parameters: ${errorMessages}`
+            message: `Invalid parameters: ${errorMessages}`,
           });
         }
 
         // Call the API method
         const result = await client.clientManagement.getTeamDetails(validatedParams.team_id);
-        
+
         // Validate the response
         if (!result || !result.data) {
           return handleError({
             status: 500,
             code: 'INVALID_RESPONSE',
-            message: 'Received invalid response from API'
+            message: 'Received invalid response from API',
           });
         }
-        
+
         // Extract data for summary
         const data = result.data;
         let summary = `Team: ${data.team_name}\n`;
@@ -259,47 +264,43 @@ export function registerClientManagementTools(
           summary += `  - Opened: ${data.recent_performance.stats.opened || 0}\n`;
           summary += `  - Replied: ${data.recent_performance.stats.replied || 0}`;
         }
-        
-        return formatSuccessResponse(
-          result.message,
-          result.data,
-          summary
-        );
+
+        return formatSuccessResponse(result.message || 'Team details retrieved', result.data, summary);
       } catch (error: any) {
         // Enhanced error handling for specific cases
         if (error.code === 'TEAM_DETAILS_ERROR') {
           return handleError({
             status: error.status || 500,
             code: error.code,
-            message: error.message
+            message: error.message,
           });
         }
-        
+
         // Handle specific HTTP status codes
         if (error.response?.status === 401) {
           return handleError({
             status: 401,
             code: 'UNAUTHORIZED',
-            message: 'Authentication failed. Please check your API key.'
+            message: 'Authentication failed. Please check your API key.',
           });
         }
-        
+
         if (error.response?.status === 404) {
           return handleError({
             status: 404,
             code: 'NOT_FOUND',
-            message: 'Team not found or endpoint not available'
+            message: 'Team not found or endpoint not available',
           });
         }
-        
+
         if (error.response?.status === 429) {
           return handleError({
             status: 429,
             code: 'RATE_LIMITED',
-            message: 'Rate limit exceeded. Please try again later.'
+            message: 'Rate limit exceeded. Please try again later.',
           });
         }
-        
+
         // Default error handling
         return handleError(error);
       }

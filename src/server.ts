@@ -41,7 +41,7 @@ import {
   registerStatisticsTools,
   registerSmartDeliveryTools,
 } from './tools/index.js';
-import { MCPToolResponse } from './types/config.js';
+import type { MCPToolResponse } from './types/config.js';
 
 /**
  * SmartLead MCP Server

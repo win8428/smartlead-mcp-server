@@ -8,10 +8,10 @@
  * @version 1.5.0
  */
 
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { SmartLeadClient } from '../client/index.js';
-import { MCPToolResponse } from '../types/config.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
+import type { SmartLeadClient } from '../client/index.js';
+import type { MCPToolResponse } from '../types/config.js';
 
 // ================================
 // SCHEMAS
@@ -74,7 +74,7 @@ export function registerWebhookTools(
         return formatSuccessResponse(
           `Retrieved webhooks for campaign ${validatedParams.campaign_id}`,
           result,
-          `Found ${result.length || 0} webhooks`
+          `Found webhooks for campaign ${validatedParams.campaign_id}`
         );
       } catch (error) {
         return handleError(error);
@@ -141,13 +141,8 @@ export function registerWebhookTools(
     },
     async (params) => {
       try {
-        const validatedParams = GetWebhooksPublishSummarySchema.parse(params);
-        const result = await client.webhooks.getWebhooksPublishSummary(validatedParams);
-        return formatSuccessResponse(
-          'Retrieved webhooks publish summary',
-          result,
-          `Summary for ${validatedParams.campaign_id ? `campaign ${validatedParams.campaign_id}` : 'all campaigns'}`
-        );
+        const result = await client.webhooks.getWebhooksPublishSummary();
+        return formatSuccessResponse('Webhook publish summary retrieved successfully', result);
       } catch (error) {
         return handleError(error);
       }
