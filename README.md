@@ -542,6 +542,7 @@ Consistent error format across all endpoints:
 ## 🔒 Security & Cold Email Best Practices
 
 ### **🛡️ Technical Security**
+
 ✅ **No API keys in code** - Always use environment variables
 ✅ **Type-safe requests** - Full TypeScript coverage with Zod validation
 ✅ **Error handling** - Comprehensive error catching and user-friendly messages
@@ -552,6 +553,7 @@ Consistent error format across all endpoints:
 ### **📧 Cold Email Compliance & Best Practices**
 
 #### **🏛️ Legal Compliance**
+
 ✅ **CAN-SPAM Act** - Automatic unsubscribe handling and sender identification
 ✅ **GDPR Compliance** - Proper consent management and data protection
 ✅ **CCPA Compliance** - California privacy rights and data handling
@@ -559,6 +561,7 @@ Consistent error format across all endpoints:
 ✅ **Sender Identification** - Clear sender information in all emails
 
 #### **🎯 Deliverability Best Practices**
+
 ✅ **Gradual Volume Ramping** - Start with low volumes and increase gradually
 ✅ **IP Warming** - Proper warmup sequences for new email accounts
 ✅ **Domain Reputation** - Monitor and maintain sender reputation
@@ -567,6 +570,7 @@ Consistent error format across all endpoints:
 ✅ **Spam Testing** - Regular placement tests and spam score monitoring
 
 #### **📝 Content Best Practices**
+
 ✅ **Personalization** - Use dynamic variables for relevant messaging
 ✅ **Value-First Approach** - Focus on prospect benefits, not features
 ✅ **Clear Call-to-Action** - Single, specific action per email
@@ -575,6 +579,7 @@ Consistent error format across all endpoints:
 ✅ **Natural Language** - Avoid spam trigger words and phrases
 
 #### **⚡ Performance Optimization**
+
 ✅ **Send Time Optimization** - Respect prospect time zones
 ✅ **Frequency Management** - Appropriate delays between sequence emails
 ✅ **Response Monitoring** - Track and analyze reply rates
