@@ -17,8 +17,8 @@
  * @version 1.0.0
  */
 
-import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
-import { SmartLeadConfig } from './types.js';
+import axios, { type AxiosError, type AxiosInstance, type AxiosResponse } from 'axios';
+import type { SmartLeadConfig } from './types.js';
 
 // ================================
 // ERROR HANDLING CLASSES
@@ -309,7 +309,7 @@ export class SmartLeadClient {
         attempt < this.config.maxRetries
       ) {
         const delayMs = Math.min(
-          this.config.retryDelay * Math.pow(2, attempt - 1),
+          this.config.retryDelay * 2 ** (attempt - 1),
           10000 // Max 10 second delay
         );
 
@@ -1731,7 +1731,7 @@ export class SmartLeadClient {
   async testConnection(): Promise<{ success: boolean; message?: string; error?: string }> {
     try {
       // Try to list campaigns as a simple test
-      await this.listCampaigns({ limit: 1 });
+      await this.listCampaigns({});
       return {
         success: true,
         message: 'Successfully connected to SmartLead API',

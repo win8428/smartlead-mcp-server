@@ -349,7 +349,7 @@ const SmartLeadInstaller: React.FC = () => {
 
       // Test API key with SmartLead API
       const response = await fetch(
-        `https://server.smartlead.ai/api/v1/campaigns?api_key=${key}&limit=1`
+        `https://server.smartlead.ai/api/v1/campaigns?api_key=${key}`
       );
 
       if (response.ok) {

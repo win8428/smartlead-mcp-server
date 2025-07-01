@@ -469,7 +469,8 @@ const DataExportScreen: React.FC<{
 
       if (exportOptions.campaigns) {
         setExportStatus('Exporting campaigns...');
-        const campaigns = await client.listCampaigns({ limit: 1000 });
+        const campaigns = await client.listCampaigns({});
+        console.log(`✅ Found ${campaigns.length} campaigns`);
         fs.writeFileSync(
           path.join(exportDir, 'campaigns.json'),
           JSON.stringify(campaigns, null, 2)
@@ -488,7 +489,8 @@ const DataExportScreen: React.FC<{
 
       if (exportOptions.leads) {
         setExportStatus('Exporting leads...');
-        const leads = await client.listLeads({ limit: 1000 });
+        const leads = await client.listLeads({});
+        console.log('🔍 Testing leads endpoint...');
         fs.writeFileSync(path.join(exportDir, 'leads.json'), JSON.stringify(leads, null, 2));
       }
 
