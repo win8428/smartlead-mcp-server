@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 /**
  * SmartLead MCP Server - Interactive Installer (Ink-powered)
  *
@@ -10,17 +11,18 @@
  * @version 1.0.0
  */
 
-import React, { useState, useEffect } from 'react';
-import { render, Box, Text, useInput, useApp, Newline } from 'ink';
-import Link from 'ink-link';
-import Spinner from 'ink-spinner';
-import Gradient from 'ink-gradient';
-import BigText from 'ink-big-text';
-import SelectInput from 'ink-select-input';
-import TextInput from 'ink-text-input';
 import fs from 'fs';
-import path from 'path';
+import { Box, Newline, render, Text, useApp, useInput } from 'ink';
+import BigText from 'ink-big-text';
+import Gradient from 'ink-gradient';
+import Link from 'ink-link';
+import SelectInput from 'ink-select-input';
+import Spinner from 'ink-spinner';
+import TextInput from 'ink-text-input';
 import os from 'os';
+import path from 'path';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { SmartLeadClient, SmartLeadError } from './client.js';
 
 // ===== TYPES =====
@@ -151,7 +153,8 @@ function writeConfig(configPath: string, config: Record<string, unknown>): void 
 }
 
 const smartleadServerConfig = (apiKey: string) => ({
-  command: 'smartlead-mcp-server',
+  command: 'npx',
+  args: ['smartlead-mcp-server'],
   env: {
     SMARTLEAD_API_KEY: apiKey,
   },

@@ -4,9 +4,11 @@
 
 **⚡ The Premier Model Context Protocol Server for Cold Email Marketing Automation**
 
-_Seamlessly integrate SmartLead's complete cold email API suite with Claude, Cursor, Windsurf, and all MCP-compatible AI tools_
+_Seamlessly integrate SmartLead's complete cold email API suite with Claude Desktop, Cursor, Windsurf, Continue.dev, and all MCP-compatible AI tools_
 
 **🎨 Powered by React Ink • 🚀 Built with TypeScript • ⚡ Optimized with Bun • 📧 Cold Email Focused**
+
+> **Keywords**: SmartLead MCP, Model Context Protocol, Cold Email Automation, Email Marketing API, Campaign Management, Lead Generation, Claude Desktop Integration, Cursor MCP, Windsurf MCP, Continue.dev MCP, Email Deliverability, Sales Automation, Outreach Tools, CRM Integration, Email Sequences, A/B Testing, Analytics, TypeScript MCP Server, NPX Installation, Zero Configuration
 
 > **🤝 Unofficial Partner Integration** - We are proud partners of [SmartLead](https://smartlead.ai) and absolutely love their product! This is an unofficial MCP server implementation that provides seamless access to SmartLead's powerful email marketing automation platform. SmartLead's API is incredibly well-designed, their deliverability is outstanding, and their feature set is unmatched.
 
@@ -590,12 +592,8 @@ Track these essential metrics to optimize your cold email campaigns:
 
 | Metric | Good Rate | Excellent Rate | How to Improve |
 |--------|-----------|----------------|-----------------|
-| **Open Rate** | 20-30% | 40%+ | Better subject lines, sender reputation |
 | **Reply Rate** | 1-3% | 5%+ | Personalization, value proposition |
-| **Click Rate** | 2-5% | 8%+ | Clear CTAs, relevant content |
 | **Bounce Rate** | <2% | <1% | List hygiene, email validation |
-| **Unsubscribe Rate** | <0.5% | <0.2% | Better targeting, value delivery |
-| **Spam Rate** | <0.1% | <0.05% | Reputation management, content quality |
 
 ### **📊 SmartLead Analytics Features**
 
