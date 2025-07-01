@@ -39,6 +39,10 @@ const ResetClientApiKeySchema = z.object({
   api_key_id: z.number().int().positive(),
 });
 
+const GetTeamDetailsSchema = z.object({
+  team_id: z.string().optional().describe('Optional team ID. If not provided, returns details for the default team'),
+});
+
 // ================================
 // TOOL REGISTRATION
 // ================================
@@ -199,6 +203,104 @@ export function registerClientManagementTools(
           `New API key: ${result.api_key || 'N/A'}`
         );
       } catch (error) {
+        return handleError(error);
+      }
+    }
+  );
+
+  // Get Team Details
+  server.registerTool(
+    'smartlead_get_team_details',
+    {
+      title: 'Get Team Details',
+      description: 'Get team details including members, campaigns, and performance metrics.',
+      inputSchema: GetTeamDetailsSchema.shape,
+    },
+    async (params) => {
+      try {
+        // Validate parameters with detailed error messages
+        let validatedParams;
+        try {
+          validatedParams = GetTeamDetailsSchema.parse(params);
+        } catch (zodError: any) {
+          // Handle Zod validation errors with user-friendly messages
+          const issues = zodError.issues || [];
+          const errorMessages = issues.map((issue: any) => {
+            return `${issue.path.join('.')}: ${issue.message}`;
+          }).join(', ');
+          
+          return handleError({
+            status: 400,
+            code: 'VALIDATION_ERROR',
+            message: `Invalid parameters: ${errorMessages}`
+          });
+        }
+
+        // Call the API method
+        const result = await client.clientManagement.getTeamDetails(validatedParams.team_id);
+        
+        // Validate the response
+        if (!result || !result.data) {
+          return handleError({
+            status: 500,
+            code: 'INVALID_RESPONSE',
+            message: 'Received invalid response from API'
+          });
+        }
+        
+        // Extract data for summary
+        const data = result.data;
+        let summary = `Team: ${data.team_name}\n`;
+        summary += `Members: ${data.members_count}\n`;
+        summary += `Active Campaigns: ${data.active_campaigns}\n`;
+        if (data.recent_performance?.stats) {
+          summary += `Recent Performance (${data.recent_performance.period}):\n`;
+          summary += `  - Sent: ${data.recent_performance.stats.sent || 0}\n`;
+          summary += `  - Opened: ${data.recent_performance.stats.opened || 0}\n`;
+          summary += `  - Replied: ${data.recent_performance.stats.replied || 0}`;
+        }
+        
+        return formatSuccessResponse(
+          result.message,
+          result.data,
+          summary
+        );
+      } catch (error: any) {
+        // Enhanced error handling for specific cases
+        if (error.code === 'TEAM_DETAILS_ERROR') {
+          return handleError({
+            status: error.status || 500,
+            code: error.code,
+            message: error.message
+          });
+        }
+        
+        // Handle specific HTTP status codes
+        if (error.response?.status === 401) {
+          return handleError({
+            status: 401,
+            code: 'UNAUTHORIZED',
+            message: 'Authentication failed. Please check your API key.'
+          });
+        }
+        
+        if (error.response?.status === 404) {
+          return handleError({
+            status: 404,
+            code: 'NOT_FOUND',
+            message: 'Team not found or endpoint not available'
+          });
+        }
+        
+        if (error.response?.status === 429) {
+          return handleError({
+            status: 429,
+            code: 'RATE_LIMITED',
+            message: 'Rate limit exceeded. Please try again later.'
+          });
+        }
+        
+        // Default error handling
         return handleError(error);
       }
     }
