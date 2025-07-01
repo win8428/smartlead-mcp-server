@@ -2,7 +2,7 @@
   "mcpServers": {
     "smartlead": {
       "command": "npx",
-      "args": ["@leadmagic/smartlead-mcp-server"],
+      "args": ["smartlead-mcp-by-leadmagic"],
       "env": {
         "SMARTLEAD_API_KEY": "your-api-key-here"
       }
