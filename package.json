@@ -1,6 +1,6 @@
 {
   "name": "smartlead-mcp-by-leadmagic",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "🚀 Production-ready Model Context Protocol server for SmartLead API - Complete cold email marketing automation suite with powerful campaign management, lead tracking, and analytics tools. Zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
   "type": "module",
   "keywords": [
@@ -49,7 +49,8 @@
   },
   "main": "dist/index.js",
   "bin": {
-    "smartlead-mcp-server": "dist/index.js"
+    "smartlead-mcp-server": "dist/index.js",
+    "smartlead-mcp-by-leadmagic": "dist/index.js"
   },
   "files": [
     "dist/",
