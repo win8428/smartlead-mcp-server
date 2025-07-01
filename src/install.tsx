@@ -154,7 +154,7 @@ function writeConfig(configPath: string, config: Record<string, unknown>): void 
 
 const smartleadServerConfig = (apiKey: string) => ({
   command: 'npx',
-  args: ['smartlead-mcp-server'],
+  args: ['@leadmagic/smartlead-mcp-server'],
   env: {
     SMARTLEAD_API_KEY: apiKey,
   },

@@ -50,7 +50,7 @@ The easiest way to get started - works on **macOS**, **Windows**, and **Linux**.
 
 ```bash
 # 🔥 Using npx (no installation required)
-npx smartlead-mcp-server install
+npx @leadmagic/smartlead-mcp-server install
 ```
 
 **✨ The enhanced installer features:**
@@ -71,7 +71,7 @@ If you prefer manual setup, you can configure the server directly:
 export SMARTLEAD_API_KEY=your-api-key-here
 
 # Run the server
-npx smartlead-mcp-server
+npx @leadmagic/smartlead-mcp-server
 ```
 
 ### 🔑 Get Your API Key
@@ -414,7 +414,7 @@ If you prefer manual setup, add this to your MCP client configuration:
   "mcpServers": {
     "smartlead": {
       "command": "npx",
-      "args": ["smartlead-mcp-server"],
+      "args": ["@leadmagic/smartlead-mcp-server"],
       "env": {
         "SMARTLEAD_API_KEY": "your-api-key-here"
       }
