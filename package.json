@@ -1,6 +1,6 @@
 {
   "name": "smartlead-mcp-by-leadmagic",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "🚀 Production-ready Model Context Protocol server for SmartLead API - Complete cold email marketing automation suite with powerful campaign management, lead tracking, and analytics tools. Zero-config setup for Claude, Cursor, Windsurf, Continue.dev, and all MCP clients.",
   "type": "module",
   "keywords": [
@@ -61,8 +61,9 @@
     "SECURITY.md"
   ],
   "scripts": {
-    "build": "bun run clean && bun run compile",
+    "build": "bun run clean && bun run compile && bun run postbuild",
     "compile": "tsc",
+    "postbuild": "chmod +x dist/index.js",
     "dev": "bun --watch src/index.ts",
     "start": "bun run dist/index.js",
     "watch": "bun --watch src/index.ts",
