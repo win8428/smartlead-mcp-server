@@ -4,7 +4,7 @@
  * Tests the API connection with safe, read-only endpoints
  */
 
-import { SmartLeadClient, SmartLeadError } from './client.js';
+import { SmartLeadClient, SmartLeadError } from './client/index.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -55,10 +55,12 @@ async function testAPI(): Promise<void> {
       // Test the specific campaign from the URL you provided
       try {
         console.log('   Testing campaign 602996 analytics...');
-        const analytics602996 = await client.getCampaignAnalyticsByDate(
+        const analytics602996 = await client.fetchCampaignAnalyticsByDateRange(
           602996,
-          '2024-01-01',
-          '2024-12-31'
+          {
+            start_date: '2024-01-01',
+            end_date: '2024-12-31'
+          }
         );
         console.log('   ✅ Campaign 602996 analytics retrieved successfully!');
         console.log(`   • Analytics data: ${JSON.stringify(analytics602996).substring(0, 100)}...`);
@@ -70,10 +72,12 @@ async function testAPI(): Promise<void> {
       // Test analytics for the first campaign we found
       try {
         console.log(`   Testing campaign ${firstCampaign.id} analytics...`);
-        const analyticsFirst = await client.getCampaignAnalyticsByDate(
+        const analyticsFirst = await client.fetchCampaignAnalyticsByDateRange(
           firstCampaign.id,
-          '2024-01-01',
-          '2024-12-31'
+          {
+            start_date: '2024-01-01',
+            end_date: '2024-12-31'
+          }
         );
         console.log(`   ✅ Campaign ${firstCampaign.id} analytics retrieved successfully!`);
         console.log(`   • Analytics data: ${JSON.stringify(analyticsFirst).substring(0, 100)}...`);
@@ -81,6 +85,74 @@ async function testAPI(): Promise<void> {
         const error = analyticsError as Error;
         console.log(`   ⚠️  Campaign ${firstCampaign.id} analytics failed: ${error.message}`);
       }
+
+      // Test 5: Download campaign data (new tool test)
+      console.log(`\n📥 Test 5: Testing download campaign data...`);
+      try {
+        // Test JSON format
+        console.log(`   Testing JSON download for campaign ${firstCampaign.id}...`);
+        const jsonData = await client.statistics.downloadCampaignData(
+          firstCampaign.id,
+          'statistics',
+          'json'
+        );
+        console.log('   ✅ JSON download successful!');
+        console.log(`   • Total records: ${jsonData.total_records || 0}`);
+        console.log(`   • Download type: ${jsonData.download_type}`);
+        
+        // Test CSV format
+        console.log(`   Testing CSV download for campaign ${firstCampaign.id}...`);
+        const csvData = await client.statistics.downloadCampaignData(
+          firstCampaign.id,
+          'statistics',
+          'csv'
+        );
+        console.log('   ✅ CSV download successful!');
+        console.log(`   • Format: ${csvData.format}`);
+        console.log(`   • Size: ${csvData.size} bytes`);
+      } catch (downloadError) {
+        const error = downloadError as Error;
+        console.log(`   ⚠️  Download campaign data failed: ${error.message}`);
+      }
+    }
+
+    // Test 6: View download statistics (safe read-only)
+    console.log('\n📊 Test 6: Testing view download statistics...');
+    try {
+      const downloadStats = await client.statistics.viewDownloadStatistics('last_30_days', 'date');
+      console.log('✅ Download statistics retrieved successfully!');
+      if (downloadStats.data) {
+        console.log(`   • Time period: ${downloadStats.data.time_period || 'N/A'}`);
+        console.log(`   • Group by: ${downloadStats.data.group_by || 'N/A'}`);
+        if (downloadStats.data.statistics) {
+          console.log(`   • Total campaigns: ${downloadStats.data.statistics.total_campaigns || 0}`);
+          console.log(`   • Emails sent: ${downloadStats.data.statistics.emails_sent || 0}`);
+        }
+      }
+    } catch (viewStatsError) {
+      const error = viewStatsError as Error;
+      console.log(`   ⚠️  View download statistics failed: ${error.message}`);
+    }
+
+    // Test 7: Get team details (safe read-only)
+    console.log('\n👥 Test 7: Testing get team details...');
+    try {
+      const teamDetails = await client.clientManagement.getTeamDetails();
+      console.log('✅ Team details retrieved successfully!');
+      if (teamDetails.data) {
+        console.log(`   • Team name: ${teamDetails.data.team_name || 'N/A'}`);
+        console.log(`   • Members count: ${teamDetails.data.members_count || 0}`);
+        console.log(`   • Active campaigns: ${teamDetails.data.active_campaigns || 0}`);
+        if (teamDetails.data.recent_performance) {
+          console.log(`   • Recent performance (${teamDetails.data.recent_performance.period}):`);
+          console.log(`     - Sent: ${teamDetails.data.recent_performance.stats.sent || 0}`);
+          console.log(`     - Opened: ${teamDetails.data.recent_performance.stats.opened || 0}`);
+          console.log(`     - Replied: ${teamDetails.data.recent_performance.stats.replied || 0}`);
+        }
+      }
+    } catch (teamError) {
+      const error = teamError as Error;
+      console.log(`   ⚠️  Get team details failed: ${error.message}`);
     }
 
     console.log('\n🎉 All API tests completed successfully!');
