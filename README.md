@@ -1,26 +1,31 @@
-# 🚀 SmartLead MCP Server
+# 🚀 SmartLead MCP Server by LeadMagic
 
 [![SmartLead MCP Server](https://img.shields.io/badge/%F0%9F%9A%80-SmartLead%20MCP%20Server-blue?style=for-the-badge&labelColor=000000)](https://github.com/LeadMagic/smartlead-mcp-server)
 
-**⚡ The Ultimate Model Context Protocol Server for Email Marketing Automation**
+**⚡ The Premier Model Context Protocol Server for Email Marketing Automation**
 
 _Seamlessly integrate SmartLead's complete API suite with Claude, Cursor, Windsurf, and all MCP-compatible AI tools_
+
+**🎨 Powered by React Ink • 🚀 Built with TypeScript • ⚡ Optimized with Bun**
 
 > **🤝 Unofficial Partner Integration** - We are proud partners of [SmartLead](https://smartlead.ai) and absolutely love their product! This is an unofficial MCP server implementation that provides seamless access to SmartLead's powerful email marketing automation platform. SmartLead's API is incredibly well-designed, their deliverability is outstanding, and their feature set is unmatched.
 
 [![npm version](https://img.shields.io/npm/v/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/smartlead-mcp-server) [![Downloads](https://img.shields.io/npm/dm/smartlead-mcp-server?style=for-the-badge&logo=npm&logoColor=white&color=brightgreen)](https://www.npmjs.com/package/smartlead-mcp-server) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&logo=opensource&logoColor=white)](https://opensource.org/licenses/MIT) [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.0.0-brightgreen.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue?style=for-the-badge&logo=protocol&logoColor=white)](https://modelcontextprotocol.io) [![Production Ready](https://img.shields.io/badge/Production-Ready-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server) [![Security](https://img.shields.io/badge/Security-Verified-green?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server/security)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/) [![Ink](https://img.shields.io/badge/Ink-000000?style=for-the-badge&logo=react&logoColor=white)](https://github.com/vadimdemedes/ink) [![Bun](https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh/)
+
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue?style=for-the-badge&logo=protocol&logoColor=white)](https://modelcontextprotocol.io) [![Production Ready](https://img.shields.io/badge/Production-Ready-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server) [![Security](https://img.shields.io/badge/Security-Verified-green?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/LeadMagic/smartlead-mcp-server/security)
 
 ---
 
-**🎯 120+ Powerful Tools • 🔥 Zero Configuration • ⚡ One-Line Setup • 🛡️ Enterprise Security • 🤝 SmartLead Partner**
+**🎯 113 Powerful Tools • 🔥 Zero Configuration • ⚡ One-Line Setup • 🛡️ Enterprise Security • 🤝 SmartLead Partner**
 
 ---
 
 ## 📖 Table of Contents
 
 - [🚀 Super Easy Installation](#-super-easy-installation)
+- [🏗️ Technology Stack](#️-technology-stack)
 - [🛠️ Available Tools](#️-available-tools)
 - [💡 Usage Examples](#-usage-examples)
 - [🌐 Supported MCP Clients](#-supported-mcp-clients)
@@ -87,6 +92,50 @@ npx smartlead-mcp-server install
 # ❓ Check available commands
 npx smartlead-mcp-server --help
 ```
+
+---
+
+## 🏗️ Technology Stack
+
+### **🎨 Interactive Installer - Powered by React Ink**
+
+Our beautiful command-line installer is built with **[React Ink](https://github.com/vadimdemedes/ink)** - React for CLI applications:
+
+- **🎭 Animated ASCII Art** - Beautiful SmartLead branding with gradient effects
+- **🎯 Interactive Components** - Select inputs, text inputs, progress bars
+- **🔐 Real-time Validation** - Live API key verification with SmartLead
+- **🛡️ Error Recovery** - Comprehensive error handling with user guidance
+- **📱 Responsive Design** - Works perfectly in any terminal size
+- **⚡ Fast Performance** - Optimized React components for CLI
+
+### **🚀 Core Technologies**
+
+| Technology | Purpose | Why We Chose It |
+|------------|---------|-----------------|
+| **[TypeScript](https://www.typescriptlang.org/)** | Type-safe development | Zero runtime errors, excellent DX |
+| **[React Ink](https://github.com/vadimdemedes/ink)** | CLI interface | Beautiful, interactive command-line UIs |
+| **[Bun](https://bun.sh/)** | Runtime & package manager | 3x faster than Node.js, modern tooling |
+| **[MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk)** | Protocol implementation | Official TypeScript SDK for MCP |
+| **[Zod](https://zod.dev/)** | Schema validation | Runtime type safety, excellent errors |
+| **[Axios](https://axios-http.com/)** | HTTP client | Robust, feature-rich API communication |
+
+### **🎨 React Ink Components Used**
+
+- **`<Box>`** - Layout and styling
+- **`<Text>`** - Styled text with gradients and colors
+- **`<Spinner>`** - Loading animations
+- **`<SelectInput>`** - Interactive selection menus
+- **`<TextInput>`** - User input with validation
+- **`<Gradient>`** - Beautiful gradient text effects
+- **`<BigText>`** - ASCII art logo rendering
+
+### **⚡ Performance & Quality**
+
+- **Zero TypeScript Errors** - Strict compilation with comprehensive types
+- **113 API Endpoints** - Complete SmartLead API coverage
+- **Production Ready** - Comprehensive error handling and recovery
+- **MCP Compliant** - Follows all Model Context Protocol standards
+- **Modern Architecture** - Modular, maintainable, and extensible
 
 ---
 

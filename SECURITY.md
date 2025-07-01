@@ -18,7 +18,7 @@ Please **do not** create public GitHub issues for security vulnerabilities. This
 
 ### 2. Report Privately
 
-Send your security report to: **jesse@leadmagic.io**
+Send your security report to: **security@leadmagic.io**
 
 Include the following information:
 - Description of the vulnerability
@@ -115,7 +115,7 @@ Security updates will be released as patch versions and announced through:
 
 For security-related questions or concerns:
 
-- **Email**: jesse@leadmagic.io
+- **Email**: support@leadmagic.io
 - **GitHub**: Create a private security advisory
 - **Website**: https://leadmagic.io
 
