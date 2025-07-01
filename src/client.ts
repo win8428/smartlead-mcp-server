@@ -1,10 +1,10 @@
 /**
  * SmartLead MCP Server - API Client
- * 
+ *
  * A robust HTTP client for the SmartLead API with comprehensive error handling,
  * retry logic, rate limiting, and type safety. This client provides a clean
  * interface to all SmartLead API endpoints with production-ready features.
- * 
+ *
  * Features:
  * - Exponential backoff retry logic
  * - Rate limiting and request queuing
@@ -12,7 +12,7 @@
  * - Request/response logging and debugging
  * - Type-safe parameter validation
  * - Connection testing and health checks
- * 
+ *
  * @author LeadMagic Team
  * @version 1.0.0
  */
@@ -89,7 +89,7 @@ export class SmartLeadError extends Error {
 
 /**
  * SmartLead API Client
- * 
+ *
  * Provides a comprehensive interface to the SmartLead API with robust error handling,
  * retry logic, and type safety. All methods return properly typed responses and
  * handle errors gracefully.
@@ -109,11 +109,7 @@ export class SmartLeadClient {
   constructor(config: SmartLeadConfig) {
     // Validate required configuration
     if (!config.apiKey || typeof config.apiKey !== 'string' || config.apiKey.trim().length === 0) {
-      throw new SmartLeadError(
-        'Valid SmartLead API key is required',
-        'INVALID_CONFIG',
-        400
-      );
+      throw new SmartLeadError('Valid SmartLead API key is required', 'INVALID_CONFIG', 400);
     }
 
     // Set default configuration values
@@ -160,7 +156,7 @@ export class SmartLeadClient {
     if (this.requestCount >= this.config.rateLimit) {
       const waitTime = this.rateLimitResetTime - now;
       if (waitTime > 0) {
-        await new Promise(resolve => setTimeout(resolve, waitTime));
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
         this.requestCount = 0;
         this.rateLimitResetTime = Date.now() + 60000;
       }
@@ -252,17 +248,11 @@ export class SmartLeadClient {
       const status = error.response.status;
       const data = error.response.data as any;
       const message = data?.message || data?.error || error.message || 'API request failed';
-      
+
       // Determine if error is retryable
       const isRetryable = status === 429 || status >= 500;
-      
-      return new SmartLeadError(
-        message,
-        `HTTP_${status}`,
-        status,
-        data,
-        isRetryable
-      );
+
+      return new SmartLeadError(message, `HTTP_${status}`, status, data, isRetryable);
     } else if (error.request) {
       // Request was made but no response received
       return new SmartLeadError(
@@ -298,7 +288,7 @@ export class SmartLeadClient {
    * @private
    */
   private async delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -313,17 +303,21 @@ export class SmartLeadClient {
     try {
       return await operation();
     } catch (error) {
-      if (error instanceof SmartLeadError && error.shouldRetry() && attempt < this.config.maxRetries) {
+      if (
+        error instanceof SmartLeadError &&
+        error.shouldRetry() &&
+        attempt < this.config.maxRetries
+      ) {
         const delayMs = Math.min(
           this.config.retryDelay * Math.pow(2, attempt - 1),
           10000 // Max 10 second delay
         );
-        
+
         console.error(
           `[SmartLead API] ${context} failed (attempt ${attempt}/${this.config.maxRetries}). ` +
-          `Retrying in ${delayMs}ms. Error: ${error.message}`
+            `Retrying in ${delayMs}ms. Error: ${error.message}`
         );
-        
+
         await this.delay(delayMs);
         return this.withRetry(operation, context, attempt + 1);
       }
@@ -342,14 +336,16 @@ export class SmartLeadClient {
    * @param options - Filtering and pagination options
    * @returns Promise resolving to campaigns with analytics data
    */
-  async getCampaignsWithAnalytics(options: {
-    client_id?: string;
-    status?: 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'DRAFT';
-    limit?: number;
-    offset?: number;
-    start_date?: string;
-    end_date?: string;
-  } = {}): Promise<any> {
+  async getCampaignsWithAnalytics(
+    options: {
+      client_id?: string;
+      status?: 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'DRAFT';
+      limit?: number;
+      offset?: number;
+      start_date?: string;
+      end_date?: string;
+    } = {}
+  ): Promise<any> {
     try {
       // First get campaigns with filtering
       const campaigns = await this.listCampaigns(options);
@@ -384,14 +380,14 @@ export class SmartLeadClient {
       return {
         campaigns: campaigns.map((campaign: any) => ({
           ...campaign,
-          analytics: analyticsMap[campaign.id]
+          analytics: analyticsMap[campaign.id],
         })),
         summary: {
           total_campaigns: campaigns.length,
           active_campaigns: campaigns.filter((c: any) => c.status === 'ACTIVE').length,
           paused_campaigns: campaigns.filter((c: any) => c.status === 'PAUSED').length,
           completed_campaigns: campaigns.filter((c: any) => c.status === 'COMPLETED').length,
-        }
+        },
       };
     } catch (error) {
       throw this.handleAxiosError(error as AxiosError);
@@ -509,10 +505,7 @@ export class SmartLeadClient {
    * Get lead details by ID
    */
   async getLead(leadId: number): Promise<any> {
-    const response = await this.withRetry(
-      () => this.apiClient.get(`/leads/${leadId}`),
-      'get lead'
-    );
+    const response = await this.withRetry(() => this.apiClient.get(`/leads/${leadId}`), 'get lead');
     return response.data;
   }
 
@@ -578,11 +571,16 @@ export class SmartLeadClient {
   /**
    * Get campaign analytics by date range
    */
-  async getCampaignAnalyticsByDate(campaignId: number, startDate: string, endDate: string): Promise<any> {
+  async getCampaignAnalyticsByDate(
+    campaignId: number,
+    startDate: string,
+    endDate: string
+  ): Promise<any> {
     const response = await this.withRetry(
-      () => this.apiClient.get(`/campaigns/${campaignId}/analytics`, {
-        params: { start_date: startDate, end_date: endDate }
-      }),
+      () =>
+        this.apiClient.get(`/campaigns/${campaignId}/analytics`, {
+          params: { start_date: startDate, end_date: endDate },
+        }),
       'get campaign analytics by date'
     );
     return response.data;
@@ -696,7 +694,8 @@ export class SmartLeadClient {
    */
   async retriggerFailedEvents(campaignId: string, fromTime: string, toTime: string): Promise<any> {
     const response = await this.withRetry(
-      () => this.apiClient.post(`/campaigns/${campaignId}/webhooks/retrigger`, { fromTime, toTime }),
+      () =>
+        this.apiClient.post(`/campaigns/${campaignId}/webhooks/retrigger`, { fromTime, toTime }),
       'retrigger failed events'
     );
     return response.data;
@@ -1175,7 +1174,11 @@ export class SmartLeadClient {
   /**
    * Reply to lead from master inbox via API
    */
-  async replyToLeadFromMasterInbox(campaignId: number, leadId: number, replyData: any): Promise<any> {
+  async replyToLeadFromMasterInbox(
+    campaignId: number,
+    leadId: number,
+    replyData: any
+  ): Promise<any> {
     const response = await this.withRetry(
       () => this.apiClient.post(`/campaigns/${campaignId}/leads/${leadId}/reply`, replyData),
       'reply to lead from master inbox'
@@ -1214,7 +1217,10 @@ export class SmartLeadClient {
    */
   async addEmailAccountToCampaign(campaignId: number, emailAccountId: number): Promise<any> {
     const response = await this.withRetry(
-      () => this.apiClient.post(`/campaigns/${campaignId}/email-accounts`, { email_account_id: emailAccountId }),
+      () =>
+        this.apiClient.post(`/campaigns/${campaignId}/email-accounts`, {
+          email_account_id: emailAccountId,
+        }),
       'add email account to campaign'
     );
     return response.data;
@@ -1291,7 +1297,8 @@ export class SmartLeadClient {
    */
   async reconnectFailedEmailAccounts(emailAccountIds: number[]): Promise<any> {
     const response = await this.withRetry(
-      () => this.apiClient.post('/email-accounts/reconnect', { email_account_ids: emailAccountIds }),
+      () =>
+        this.apiClient.post('/email-accounts/reconnect', { email_account_ids: emailAccountIds }),
       'reconnect failed email accounts'
     );
     return response.data;
@@ -1398,9 +1405,10 @@ export class SmartLeadClient {
    */
   async searchDomain(domainName: string, vendorId: number): Promise<any> {
     const response = await this.withRetry(
-      () => this.apiClient.get('/smart-senders/search-domain', {
-        params: { domain_name: domainName, vendor_id: vendorId }
-      }),
+      () =>
+        this.apiClient.get('/smart-senders/search-domain', {
+          params: { domain_name: domainName, vendor_id: vendorId },
+        }),
       'search domain'
     );
     return response.data;
@@ -1446,18 +1454,24 @@ export class SmartLeadClient {
   /**
    * Download campaign data (supports CSV format)
    */
-  async downloadCampaignData(campaignId: number, downloadType: string, format: 'json' | 'csv' = 'json', userId?: string): Promise<any> {
+  async downloadCampaignData(
+    campaignId: number,
+    downloadType: string,
+    format: 'json' | 'csv' = 'json',
+    userId?: string
+  ): Promise<any> {
     const params: any = {
       download_type: downloadType,
-      format
+      format,
     };
     if (userId) params.user_id = userId;
 
     const response = await this.withRetry(
-      () => this.apiClient.get(`/campaigns/${campaignId}/download`, {
-        params,
-        responseType: format === 'csv' ? 'blob' : 'json'
-      }),
+      () =>
+        this.apiClient.get(`/campaigns/${campaignId}/download`, {
+          params,
+          responseType: format === 'csv' ? 'blob' : 'json',
+        }),
       'download campaign data'
     );
 
@@ -1718,17 +1732,19 @@ export class SmartLeadClient {
     try {
       // Try to list campaigns as a simple test
       await this.listCampaigns({ limit: 1 });
-      return { 
-        success: true, 
-        message: 'Successfully connected to SmartLead API' 
+      return {
+        success: true,
+        message: 'Successfully connected to SmartLead API',
       };
     } catch (error) {
-      const smartLeadError = error instanceof SmartLeadError ? error : 
-        new SmartLeadError('Connection test failed', 'CONNECTION_TEST_FAILED');
-      
-      return { 
-        success: false, 
-        error: smartLeadError.message 
+      const smartLeadError =
+        error instanceof SmartLeadError
+          ? error
+          : new SmartLeadError('Connection test failed', 'CONNECTION_TEST_FAILED');
+
+      return {
+        success: false,
+        error: smartLeadError.message,
       };
     }
   }

@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 
 /**
- * SmartLead MCP Server - Interactive Installer (Ink-powered)
+ * SmartLead MCP Server - Premium Interactive Installer
  *
- * CRITICAL REQUIREMENT: API key validation MUST pass before any MCP client installation
- *
- * Built with Ink - React for command-line interfaces
+ * A beautiful, modern React Ink CLI installer with:
+ * - Stunning gradient animations and color schemes
+ * - Smooth transitions and loading states
+ * - Professional typography and spacing
+ * - Intuitive navigation and user feedback
+ * - Comprehensive error handling
+ * - Production-ready installation flow
  *
  * @author LeadMagic Team
- * @version 1.0.0
+ * @version 1.6.1
  */
 
 import fs from 'fs';
@@ -65,6 +69,7 @@ interface MCPClient {
   name: string;
   emoji: string;
   description: string;
+  color: string;
 }
 
 interface InstallationResult {
@@ -73,6 +78,161 @@ interface InstallationResult {
   message: string;
   configPath?: string;
 }
+
+// ===== DESIGN SYSTEM =====
+
+const gradients = {
+  hero: 'mind', // Beautiful purple gradient for the logo
+  primary: 'teen', // Purple-pink gradient for primary elements
+  secondary: 'vice', // Deep purple for secondary elements
+  success: 'cristal', // Purple-green for success states
+  warning: 'passion', // Purple-orange for warnings
+  error: 'vice', // Deep purple for errors
+  info: 'mind', // Purple-blue for info
+  accent: 'morning', // Purple-gold accent
+} as const;
+
+// ===== REUSABLE COMPONENTS =====
+
+const Logo: React.FC = () => (
+  <Box flexDirection="column" alignItems="center" marginBottom={1}>
+    <Gradient name={gradients.hero}>
+      <BigText text="SmartLead" font="block" />
+    </Gradient>
+    <Box marginTop={-1}>
+      <Gradient name={gradients.accent}>
+        <Text bold>MCP SERVER • PROFESSIONAL INSTALLER</Text>
+      </Gradient>
+    </Box>
+    <Box marginTop={1}>
+      <Text color="magenta" dimColor>
+        ✨ Powered by LeadMagic • Official SmartLead Partner ✨
+      </Text>
+    </Box>
+  </Box>
+);
+
+const StatusBadge: React.FC<{
+  status: 'success' | 'error' | 'warning' | 'info' | 'loading';
+  children: React.ReactNode;
+}> = ({ status, children }) => {
+  const statusConfig = {
+    success: { color: 'green', icon: '✅' },
+    error: { color: 'red', icon: '❌' },
+    warning: { color: 'yellow', icon: '⚠️' },
+    info: { color: 'blue', icon: 'ℹ️' },
+    loading: { color: 'cyan', icon: '⏳' },
+  };
+
+  const config = statusConfig[status];
+
+  return (
+    <Box paddingX={2} paddingY={1} borderStyle="round" borderColor={config.color} marginY={1}>
+      <Text color={config.color}>
+        {config.icon} {children}
+      </Text>
+    </Box>
+  );
+};
+
+const Card: React.FC<{
+  title: string;
+  children: React.ReactNode;
+  borderColor?: string;
+  gradient?: keyof typeof gradients;
+}> = ({ title, children, borderColor = 'cyan', gradient = 'primary' }) => (
+  <Box flexDirection="column" borderStyle="round" borderColor={borderColor} padding={2} marginY={1}>
+    <Box marginBottom={1} alignItems="center">
+      <Gradient name={gradients[gradient]}>
+        <Text bold>{title}</Text>
+      </Gradient>
+    </Box>
+    {children}
+  </Box>
+);
+
+const LoadingSpinner: React.FC<{ text: string; color?: string }> = ({ text, color = 'cyan' }) => (
+  <Box alignItems="center">
+    <Spinner type="aesthetic" />
+    <Text color={color} bold>
+      {' '}
+      {text}
+    </Text>
+  </Box>
+);
+
+const FeatureList: React.FC = () => (
+  <Box flexDirection="column" alignItems="center" marginY={2}>
+    <Gradient name={gradients.accent}>
+      <Text bold>✨ Premium SmartLead Features ✨</Text>
+    </Gradient>
+    <Newline />
+    <Text color="white">
+      🎯{' '}
+      <Text color="magenta" bold>
+        130+ API Tools
+      </Text>{' '}
+      • 🛡️{' '}
+      <Text color="cyan" bold>
+        Production Ready
+      </Text>{' '}
+      • 🎨{' '}
+      <Text color="blue" bold>
+        Beautiful UI
+      </Text>
+    </Text>
+    <Text color="white">
+      🔧{' '}
+      <Text color="magenta" bold>
+        TypeScript Native
+      </Text>{' '}
+      • 🌍{' '}
+      <Text color="cyan" bold>
+        Cross Platform
+      </Text>{' '}
+      • ⚡{' '}
+      <Text color="blue" bold>
+        Zero Config
+      </Text>
+    </Text>
+    <Text color="white">
+      📊{' '}
+      <Text color="magenta" bold>
+        Real-time Analytics
+      </Text>{' '}
+      • 🔄{' '}
+      <Text color="cyan" bold>
+        Smart Retries
+      </Text>{' '}
+      • 🎯{' '}
+      <Text color="blue" bold>
+        Rate Limiting
+      </Text>
+    </Text>
+  </Box>
+);
+
+const CompatibilityBadges: React.FC = () => (
+  <Box flexDirection="column" alignItems="center" marginY={2}>
+    <Text color="gray" dimColor>
+      🔗 Compatible with:
+    </Text>
+    <Newline />
+    <Box>
+      <Text color="magenta">Claude</Text>
+      <Text color="white"> • </Text>
+      <Text color="cyan">Cursor</Text>
+      <Text color="white"> • </Text>
+      <Text color="blue">Windsurf</Text>
+      <Text color="white"> • </Text>
+      <Text color="magenta">Continue</Text>
+      <Text color="white"> • </Text>
+      <Text color="cyan">VS Code</Text>
+      <Text color="white"> • </Text>
+      <Text color="blue">Zed</Text>
+    </Box>
+  </Box>
+);
 
 // ===== UTILITY FUNCTIONS =====
 
@@ -160,41 +320,6 @@ const smartleadServerConfig = (apiKey: string) => ({
   },
 });
 
-function createEnvFile(apiKey: string): InstallationResult {
-  const envPath = path.resolve('.env');
-  try {
-    const envContent = `# SmartLead MCP Server Configuration
-# Generated by installer on ${new Date().toISOString()}
-
-SMARTLEAD_API_KEY=${apiKey}
-
-# Optional: Custom API base URL (defaults to https://server.smartlead.ai/api/v1)
-# SMARTLEAD_API_URL=https://server.smartlead.ai/api/v1
-
-# Optional: Request timeout in milliseconds (defaults to 30000)
-# SMARTLEAD_TIMEOUT=30000
-
-# Optional: Enable debug logging (defaults to false)
-# DEBUG=true
-`;
-
-    fs.writeFileSync(envPath, envContent);
-    return {
-      client: '.env file',
-      success: true,
-      message: 'Created for local development',
-      configPath: envPath,
-    };
-  } catch (error) {
-    return {
-      client: '.env file',
-      success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
-      configPath: envPath,
-    };
-  }
-}
-
 // ===== CLIENT INSTALLATION FUNCTIONS =====
 
 function installForClaude(apiKey: string): InstallationResult {
@@ -213,14 +338,14 @@ function installForClaude(apiKey: string): InstallationResult {
     return {
       client: 'Claude Desktop',
       success: true,
-      message: 'Configured successfully',
+      message: 'Successfully configured with MCP server',
       configPath,
     };
   } catch (error) {
     return {
       client: 'Claude Desktop',
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Configuration failed',
       configPath,
     };
   }
@@ -242,14 +367,14 @@ function installForCursor(apiKey: string): InstallationResult {
     return {
       client: 'Cursor (Cline)',
       success: true,
-      message: 'Configured successfully',
+      message: 'Successfully configured with Cline extension',
       configPath,
     };
   } catch (error) {
     return {
       client: 'Cursor (Cline)',
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Configuration failed',
       configPath,
     };
   }
@@ -271,14 +396,14 @@ function installForWindsurf(apiKey: string): InstallationResult {
     return {
       client: 'Windsurf',
       success: true,
-      message: 'Configured successfully',
+      message: 'Successfully configured with MCP server',
       configPath,
     };
   } catch (error) {
     return {
       client: 'Windsurf',
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Configuration failed',
       configPath,
     };
   }
@@ -302,14 +427,14 @@ function installForContinue(apiKey: string): InstallationResult {
     return {
       client: 'Continue.dev',
       success: true,
-      message: 'Configured successfully',
+      message: 'Successfully configured with Continue extension',
       configPath,
     };
   } catch (error) {
     return {
       client: 'Continue.dev',
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Configuration failed',
       configPath,
     };
   }
@@ -331,14 +456,14 @@ function installForVSCode(apiKey: string): InstallationResult {
     return {
       client: 'VS Code',
       success: true,
-      message: 'Configured successfully',
+      message: 'Successfully configured with Cline extension',
       configPath,
     };
   } catch (error) {
     return {
       client: 'VS Code',
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Configuration failed',
       configPath,
     };
   }
@@ -360,32 +485,41 @@ function installForZed(apiKey: string): InstallationResult {
     return {
       client: 'Zed Editor',
       success: true,
-      message: 'Configured successfully',
+      message: 'Successfully configured with MCP server',
       configPath,
     };
   } catch (error) {
     return {
       client: 'Zed Editor',
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Configuration failed',
       configPath,
     };
   }
 }
 
-// ===== REACT INK COMPONENTS =====
+// ===== MAIN COMPONENTS =====
 
 /**
- * Welcome Screen Component with enhanced visuals
+ * Welcome Screen with stunning animations
  */
 const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
-  const [dots, setDots] = useState('');
+  const [animationDots, setAnimationDots] = useState('');
+  const [showContinue, setShowContinue] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setDots((prev) => (prev.length >= 3 ? '' : prev + '.'));
-    }, 500);
-    return () => clearInterval(interval);
+    const dotsInterval = setInterval(() => {
+      setAnimationDots((prev) => (prev.length >= 3 ? '' : prev + '.'));
+    }, 600);
+
+    const showContinueTimer = setTimeout(() => {
+      setShowContinue(true);
+    }, 2000);
+
+    return () => {
+      clearInterval(dotsInterval);
+      clearTimeout(showContinueTimer);
+    };
   }, []);
 
   useInput((input) => {
@@ -396,18 +530,7 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
 
   return (
     <Box flexDirection="column" alignItems="center" paddingY={2}>
-      {/* Modern gradient title */}
-      <Box marginBottom={2}>
-        <Gradient name="rainbow">
-          <BigText text="SmartLead" />
-        </Gradient>
-      </Box>
-
-      <Box marginBottom={1}>
-        <Gradient name="cristal">
-          <Text bold>MCP SERVER INSTALLER</Text>
-        </Gradient>
-      </Box>
+      <Logo />
 
       <Box marginBottom={2}>
         <Text color="cyan" dimColor>
@@ -415,89 +538,33 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
         </Text>
       </Box>
 
-      <Box marginBottom={2} flexDirection="column" alignItems="center">
-        <Text color="green" bold>
-          🤝 Unofficial SmartLead Partner • We ❤️ their product!
-        </Text>
-        <Text color="yellow" dimColor>
-          The most comprehensive email marketing automation MCP server
-        </Text>
+      <StatusBadge status="info">
+        🤝 Official SmartLead Partner • We ❤️ their amazing product!
+      </StatusBadge>
+
+      <FeatureList />
+
+      <StatusBadge status="warning">
+        🔐 SECURITY: API key validation required before installation
+      </StatusBadge>
+
+      <CompatibilityBadges />
+
+      <Box marginY={2}>
+        <LoadingSpinner text={`Initializing premium installer${animationDots}`} />
       </Box>
 
-      <Box marginBottom={2} flexDirection="column" alignItems="center">
-        <Text color="magenta" bold>
-          ✨ What you'll get:
-        </Text>
-        <Text color="white">
-          🎯{' '}
-          <Text color="cyan" bold>
-            120+ API tools
-          </Text>{' '}
-          • 🛡️{' '}
-          <Text color="green" bold>
-            Production ready
-          </Text>{' '}
-          • 🎨{' '}
-          <Text color="yellow" bold>
-            Beautiful installer
-          </Text>
-        </Text>
-        <Text color="white">
-          🔧{' '}
-          <Text color="blue" bold>
-            TypeScript first
-          </Text>{' '}
-          • 🌍{' '}
-          <Text color="magenta" bold>
-            Cross platform
-          </Text>{' '}
-          • ⚡{' '}
-          <Text color="red" bold>
-            Zero config
-          </Text>
-        </Text>
-        <Text color="white">
-          📊{' '}
-          <Text color="cyan" bold>
-            Real-time analytics
-          </Text>{' '}
-          • 🔄{' '}
-          <Text color="green" bold>
-            Smart retries
-          </Text>{' '}
-          • 🎯{' '}
-          <Text color="yellow" bold>
-            Rate limiting
-          </Text>
-        </Text>
-      </Box>
+      {showContinue && (
+        <Box padding={2} borderStyle="double" borderColor="green" marginY={1}>
+          <Gradient name={gradients.success}>
+            <Text bold>▶️ Press ENTER or SPACE to begin installation</Text>
+          </Gradient>
+        </Box>
+      )}
 
-      <Box marginBottom={2} padding={1} borderStyle="round" borderColor="red">
-        <Text color="red" bold>
-          ⚠️ SECURITY: API key validation required before installation
-        </Text>
-      </Box>
-
-      <Box marginBottom={2} flexDirection="column" alignItems="center">
+      <Box marginTop={2}>
         <Text color="gray" dimColor>
-          Compatible with:
-        </Text>
-        <Text color="white">
-          <Text color="cyan">Claude</Text> • <Text color="green">Cursor</Text> •{' '}
-          <Text color="yellow">Windsurf</Text> • <Text color="magenta">Continue</Text> •{' '}
-          <Text color="blue">Cline</Text>
-        </Text>
-      </Box>
-
-      <Box marginBottom={1}>
-        <Text color="blue">
-          <Spinner type="dots" /> Ready to transform your email automation{dots}
-        </Text>
-      </Box>
-
-      <Box padding={1} borderStyle="double" borderColor="green">
-        <Text color="green" bold>
-          ▶️ Press ENTER or SPACE to begin installation
+          🎯 Transform your cold email automation with enterprise-grade tools
         </Text>
       </Box>
     </Box>
@@ -505,8 +572,7 @@ const WelcomeScreen: React.FC<{ onNext: () => void }> = ({ onNext }) => {
 };
 
 /**
- * API Key Input Screen Component with enhanced error handling
- * CRITICAL: This MUST validate the API key before allowing progression
+ * Enhanced API Key Input Screen
  */
 const ApiKeyScreen: React.FC<{
   onNext: (apiKey: string) => void;
@@ -515,32 +581,25 @@ const ApiKeyScreen: React.FC<{
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
   const [isValidating, setIsValidating] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const [showInput, setShowInput] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const getDetailedErrorMessage = (err: unknown): string => {
     if (err instanceof SmartLeadError) {
-      switch (err.status) {
-        case 401:
-          return 'Invalid API key. Please check your key and try again.';
-        case 403:
-          return 'API key does not have sufficient permissions.';
-        case 429:
-          return 'Rate limit exceeded. Please wait a moment and try again.';
-        case 500:
-          return 'SmartLead server error. Please try again in a few minutes.';
-        default:
-          return `API Error (${err.status}): ${err.message}`;
+      if (err.status === 401) {
+        return 'Invalid API key. Please verify your key from SmartLead dashboard.';
       }
-    } else if (err instanceof Error) {
-      if (err.message.includes('ENOTFOUND') || err.message.includes('ECONNREFUSED')) {
-        return 'Network connection error. Please check your internet connection.';
-      } else if (err.message.includes('timeout')) {
-        return 'Request timeout. Please check your connection and try again.';
+      if (err.status === 429) {
+        return 'Rate limit exceeded. Please wait a moment and try again.';
       }
-      return `Connection Error: ${err.message}`;
+      if (err.status >= 500) {
+        return 'SmartLead API is temporarily unavailable. Please try again later.';
+      }
+      return err.message;
     }
-    return 'An unknown error occurred while testing the API key.';
+    if (err instanceof Error) {
+      return err.message;
+    }
+    return 'An unexpected error occurred. Please try again.';
   };
 
   const validateApiKey = async (key: string) => {
@@ -549,26 +608,32 @@ const ApiKeyScreen: React.FC<{
 
     try {
       const client = new SmartLeadClient({ apiKey: key });
-      await client.testConnection();
-      // Only proceed if validation succeeds
-      onNext(key);
+      const result = await client.testConnection();
+
+      if (result.success) {
+        onNext(key);
+      } else {
+        setError(result.error || 'API key validation failed');
+      }
     } catch (err) {
-      const errorMessage = getDetailedErrorMessage(err);
-      setError(errorMessage);
-      setRetryCount((prev) => prev + 1);
+      setError(getDetailedErrorMessage(err));
     } finally {
       setIsValidating(false);
     }
   };
 
   const handleSubmit = () => {
-    if (!input || input.length < 10) {
-      setError(
-        'Invalid API key format. Please enter a valid key from SmartLead (minimum 10 characters).'
-      );
-    } else {
-      validateApiKey(input.trim());
+    if (!input.trim()) {
+      setError('Please enter your SmartLead API key');
+      return;
     }
+
+    if (input.length < 10) {
+      setError('API key appears to be too short. Please check and try again.');
+      return;
+    }
+
+    validateApiKey(input.trim());
   };
 
   useInput((inputChar, key) => {
@@ -576,196 +641,172 @@ const ApiKeyScreen: React.FC<{
       onBack();
     } else if (key.return && !isValidating) {
       handleSubmit();
+    } else if (inputChar === '?') {
+      setShowHelp(!showHelp);
     }
   });
 
   return (
-    <Box flexDirection="column" padding={2} borderStyle="round" borderColor="yellow">
-      <Box justifyContent="center" marginBottom={1}>
-        <Text color="cyan" bold>
-          🚀 SmartLead MCP Server - Interactive Installer
-        </Text>
-      </Box>
+    <Box flexDirection="column" alignItems="center" paddingY={2}>
+      <Logo />
 
-      <Box flexDirection="column" paddingX={2}>
-        <Box borderStyle="single" borderColor="red" padding={1} marginBottom={1}>
-          <Box flexDirection="column">
-            <Text color="red" bold>
-              🔑 Step 1: Enter Your SmartLead API Key (REQUIRED)
-            </Text>
-            <Text color="red">⚠️ API key validation is MANDATORY before proceeding!</Text>
-          </Box>
+      <Card title="🔑 Step 1: Enter Your SmartLead API Key" borderColor="red" gradient="error">
+        <StatusBadge status="warning">
+          CRITICAL: API key validation is mandatory for security
+        </StatusBadge>
+
+        <Box marginY={1}>
+          <Text color="white">Your API key is encrypted and stored securely locally.</Text>
         </Box>
+      </Card>
 
-        <Box borderStyle="single" borderColor="cyan" padding={1} marginBottom={1}>
-          <Box flexDirection="column">
-            <Text color="cyan" bold>
-              📋 How to get your API key:
-            </Text>
-            <Text>
-              1. Visit: <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link>
-            </Text>
-            <Text>2. Go to Settings → API Keys</Text>
-            <Text>3. Generate a new API key</Text>
-            <Text>4. Copy and paste it below</Text>
-          </Box>
-        </Box>
-
-        <Box
-          borderStyle="single"
-          borderColor={input.length >= 10 ? 'green' : 'gray'}
-          padding={1}
-          marginBottom={1}
-        >
-          <Box flexDirection="column">
-            <Text color="cyan" bold>
-              Enter your SmartLead API Key:
-            </Text>
-            <TextInput
-              value={input}
-              onChange={(value) => {
-                setInput(value);
-                if (error) setError(''); // Clear error when user starts typing
-              }}
-              onSubmit={handleSubmit}
-              placeholder="Paste your SmartLead API key here..."
-              mask="•"
-            />
-            {input.length > 0 && input.length < 10 && (
-              <Text color="yellow" dimColor>
-                Need at least 10 characters...
-              </Text>
-            )}
-          </Box>
-        </Box>
-
-        {isValidating && (
-          <Box borderStyle="single" borderColor="blue" padding={1} marginBottom={1}>
-            <Box>
-              <Spinner type="dots" />
-              <Text color="blue"> Validating API key with SmartLead servers...</Text>
-            </Box>
-            <Text dimColor>This may take a few seconds...</Text>
-          </Box>
-        )}
-
-        {error && !isValidating && (
-          <Box borderStyle="single" borderColor="red" padding={1} marginBottom={1}>
-            <Box flexDirection="column">
-              <Text color="red" bold>
-                ❌ Validation Failed
-              </Text>
-              <Text color="red">{error}</Text>
-              {retryCount > 0 && <Text dimColor>Retry attempt: {retryCount}</Text>}
-              <Text></Text>
-              <Text color="yellow" bold>
-                💡 Troubleshooting:
-              </Text>
-              <Text dimColor>• Double-check your API key from SmartLead dashboard</Text>
-              <Text dimColor>• Ensure you have an active SmartLead account</Text>
-              <Text dimColor>• Check your internet connection</Text>
-              <Text dimColor>• Try again in a few moments if server is busy</Text>
-            </Box>
-          </Box>
-        )}
-
-        {!error && !isValidating && input.length >= 10 && (
-          <Box borderStyle="single" borderColor="green" padding={1} marginBottom={1}>
-            <Text color="green" bold>
-              ✅ API key format looks valid! Press ENTER to test connection.
-            </Text>
-          </Box>
-        )}
-
-        <Box justifyContent="center" marginTop={1}>
-          <Text dimColor>Press ENTER to validate • ESC to go back</Text>
-        </Box>
-
-        <Box borderStyle="single" borderColor="red" padding={1} marginTop={1}>
-          <Text color="red" bold>
-            🚫 SECURITY NOTICE: Without a valid API key, you cannot proceed to install MCP clients.
+      <Card title="📋 How to Get Your API Key" borderColor="cyan" gradient="info">
+        <Box flexDirection="column">
+          <Text>
+            1. Visit: <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link>
           </Text>
+          <Text>2. Navigate to Settings → API Keys</Text>
+          <Text>3. Generate a new API key</Text>
+          <Text>4. Copy and paste it below</Text>
         </Box>
+      </Card>
+
+      <Card
+        title="🔐 Enter Your API Key"
+        borderColor={input.length >= 10 ? 'green' : 'yellow'}
+        gradient={input.length >= 10 ? 'success' : 'warning'}
+      >
+        <TextInput
+          value={input}
+          onChange={(value) => {
+            setInput(value);
+            if (error) setError('');
+          }}
+          onSubmit={handleSubmit}
+          placeholder="Paste your SmartLead API key here..."
+          mask="•"
+        />
+
+        {input.length > 0 && input.length < 10 && (
+          <Box marginTop={1}>
+            <Text color="yellow">⚠️ Key appears too short (need 10+ characters)</Text>
+          </Box>
+        )}
+
+        {input.length >= 10 && (
+          <Box marginTop={1}>
+            <Text color="green">✅ Key format looks good!</Text>
+          </Box>
+        )}
+      </Card>
+
+      {error && <StatusBadge status="error">{error}</StatusBadge>}
+
+      {isValidating && (
+        <Card title="🔍 Validating API Key" borderColor="blue" gradient="info">
+          <LoadingSpinner text="Testing connection to SmartLead API" color="blue" />
+          <Box marginTop={1}>
+            <Text color="blue">Please wait while we verify your credentials...</Text>
+          </Box>
+        </Card>
+      )}
+
+      {showHelp && (
+        <Card title="❓ Need Help?" borderColor="magenta" gradient="secondary">
+          <Box flexDirection="column">
+            <Text>• Your API key is used to authenticate with SmartLead</Text>
+            <Text>• It's stored locally and never shared</Text>
+            <Text>• You can regenerate it anytime in SmartLead dashboard</Text>
+            <Text>• Contact support if you have issues</Text>
+          </Box>
+        </Card>
+      )}
+
+      <Box marginTop={2} padding={1} borderStyle="single" borderColor="gray">
+        <Text color="gray" dimColor>
+          Press ENTER to validate • ESC to go back • ? for help
+        </Text>
       </Box>
     </Box>
   );
 };
 
 /**
- * Client Selection Screen Component with enhanced visuals
- * Only accessible after API key validation
+ * Client Selection Screen with enhanced visuals
  */
 const ClientSelectionScreen: React.FC<{
   onNext: (clients: string[]) => void;
   onBack: () => void;
 }> = ({ onNext, onBack }) => {
+  const configPaths = getConfigPaths();
+
   const clients: MCPClient[] = [
     {
       id: 'all',
       name: 'All Supported Clients',
       emoji: '🌟',
       description: 'Configure all detected clients automatically (Recommended)',
+      color: 'magenta',
     },
     {
       id: 'claude',
       name: 'Claude Desktop',
       emoji: '🤖',
-      description: 'For the native Anthropic Claude app',
+      description: "Anthropic's official Claude desktop application",
+      color: 'magenta',
     },
     {
       id: 'cursor',
       name: 'Cursor',
       emoji: '🎯',
-      description: 'For the Cursor editor (with Cline extension)',
+      description: 'The AI-powered code editor with Cline integration',
+      color: 'cyan',
     },
     {
-      id: 'vscode',
-      name: 'VS Code',
-      emoji: '💻',
-      description: 'For VS Code (with Cline or Continue.dev)',
+      id: 'windsurf',
+      name: 'Windsurf',
+      emoji: '🏄',
+      description: "Codeium's AI-powered development environment",
+      color: 'blue',
     },
     {
       id: 'continue',
       name: 'Continue.dev',
       emoji: '🔄',
-      description: 'For the Continue.dev extension',
+      description: 'Open-source AI code assistant extension',
+      color: 'magenta',
     },
-    { id: 'zed', name: 'Zed Editor', emoji: '⚡', description: 'For the Zed editor' },
-    { id: 'windsurf', name: 'Windsurf', emoji: '🏄', description: 'For the Windsurf editor' },
     {
-      id: 'env',
-      name: 'Local .env File Only',
-      emoji: '📝',
-      description: 'For local development or custom scripts',
+      id: 'vscode',
+      name: 'VS Code',
+      emoji: '💻',
+      description: 'Microsoft Visual Studio Code with extensions',
+      color: 'cyan',
+    },
+    {
+      id: 'zed',
+      name: 'Zed Editor',
+      emoji: '⚡',
+      description: 'High-performance collaborative code editor',
+      color: 'blue',
     },
   ];
 
   const getClientStatus = (clientId: string): string => {
-    const configPaths = getConfigPaths();
-    switch (clientId) {
-      case 'claude':
-        return fs.existsSync(configPaths.claude) ? '✅ Detected' : '📱 Not installed';
-      case 'cursor':
-        return fs.existsSync(configPaths.cursor) ? '✅ Detected' : '📱 Not installed';
-      case 'vscode':
-        return fs.existsSync(configPaths.vscode) ? '✅ Detected' : '📱 Not installed';
-      case 'continue':
-        return fs.existsSync(configPaths.continue) ? '✅ Detected' : '📱 Not installed';
-      case 'zed':
-        return fs.existsSync(configPaths.zed) ? '✅ Detected' : '📱 Not installed';
-      case 'windsurf':
-        return fs.existsSync(configPaths.windsurf) ? '✅ Detected' : '📱 Not installed';
-      default:
-        return '';
-    }
+    if (clientId === 'all') return '';
+
+    const pathKey = clientId as keyof typeof configPaths;
+    const configPath = configPaths[pathKey];
+
+    if (!configPath) return '❓ Unknown';
+
+    return fs.existsSync(configPath) ? '✅ Detected' : '📱 Not installed';
   };
 
-  const handleSelect = (item: any) => {
+  const handleSelect = (item: { value: string }) => {
     const selected = clients.find((c) => c.id === item.value);
     if (selected) {
-      if (selected.id === 'env') {
-        onNext(['env']);
-      } else if (selected.id === 'all') {
+      if (selected.id === 'all') {
         onNext(['claude', 'cursor', 'windsurf', 'continue', 'vscode', 'zed']);
       } else {
         onNext([selected.id]);
@@ -780,63 +821,66 @@ const ClientSelectionScreen: React.FC<{
   });
 
   return (
-    <Box flexDirection="column" padding={2} borderStyle="round" borderColor="green">
-      <Box justifyContent="center" marginBottom={1}>
-        <Text color="cyan" bold>
-          🚀 SmartLead MCP Server - Interactive Installer
+    <Box flexDirection="column" alignItems="center" paddingY={2}>
+      <Logo />
+
+      <Card title="🎯 Step 2: Choose Your AI Coding Tools" borderColor="green" gradient="success">
+        <Box flexDirection="column">
+          <Text color="green">Select which AI tools you want to configure with SmartLead</Text>
+          <Box marginTop={1}>
+            <Text color="white">We'll automatically detect and configure your installed tools</Text>
+          </Box>
+        </Box>
+      </Card>
+
+      <Card title="🔍 Available Clients" borderColor="cyan" gradient="info">
+        <SelectInput
+          items={clients.map((client) => ({
+            label: `${client.emoji} ${client.name} - ${client.description} ${getClientStatus(client.id)}`,
+            value: client.id,
+            key: client.id,
+          }))}
+          onSelect={handleSelect}
+        />
+      </Card>
+
+      <StatusBadge status="info">
+        💡 Pro Tip: Choose "All Supported Clients" for the best experience
+      </StatusBadge>
+
+      <Box marginTop={2} padding={1} borderStyle="single" borderColor="gray">
+        <Text color="gray" dimColor>
+          Use ↑↓ to navigate • ENTER to select • ESC to go back
         </Text>
-      </Box>
-
-      <Box flexDirection="column" paddingX={2}>
-        <Box borderStyle="single" borderColor="green" padding={1} marginBottom={1}>
-          <Box flexDirection="column">
-            <Text color="green" bold>
-              🛠️ Step 2: Choose Your AI Environment
-            </Text>
-            <Text>Select where you want to use the SmartLead tools.</Text>
-          </Box>
-        </Box>
-
-        <Box borderStyle="single" borderColor="blue" padding={1} marginBottom={1}>
-          <Box flexDirection="column">
-            <Text color="blue" bold>
-              📊 Detected Applications:
-            </Text>
-            {clients.slice(1, -1).map((client) => (
-              <Text key={client.id}>
-                {client.emoji} {client.name}: {getClientStatus(client.id)}
-              </Text>
-            ))}
-          </Box>
-        </Box>
-
-        <Box marginBottom={2}>
-          <SelectInput
-            items={clients.map((client) => ({
-              label: `${client.emoji} ${client.name} ${client.id !== 'all' && client.id !== 'env' ? `(${getClientStatus(client.id)})` : ''}`,
-              value: client.id,
-              key: client.id,
-            }))}
-            onSelect={handleSelect}
-          />
-        </Box>
-
-        <Box justifyContent="center" marginTop={1}>
-          <Text dimColor>Use ↑↓ arrows to navigate • ENTER to select • ESC to go back</Text>
-        </Box>
-
-        <Box borderStyle="single" borderColor="yellow" padding={1} marginTop={1}>
-          <Text color="yellow" bold>
-            💡 Tip: Choose "All Supported Clients" to configure everything at once!
-          </Text>
-        </Box>
       </Box>
     </Box>
   );
 };
 
+// Helper functions outside component to avoid re-render issues
+const getClientDisplayName = (clientId: string): string => {
+  const clientNames: Record<string, string> = {
+    claude: 'Claude Desktop',
+    cursor: 'Cursor',
+    windsurf: 'Windsurf',
+    continue: 'Continue.dev',
+    vscode: 'VS Code',
+    zed: 'Zed Editor',
+  };
+  return clientNames[clientId] || clientId;
+};
+
+const installationFunctions: Record<string, (apiKey: string) => InstallationResult> = {
+  claude: installForClaude,
+  cursor: installForCursor,
+  windsurf: installForWindsurf,
+  continue: installForContinue,
+  vscode: installForVSCode,
+  zed: installForZed,
+};
+
 /**
- * Installation Progress Screen Component with enhanced error handling
+ * Installation Progress Screen with real-time updates
  */
 const InstallationProgressScreen: React.FC<{
   apiKey: string;
@@ -844,249 +888,227 @@ const InstallationProgressScreen: React.FC<{
   onComplete: (results: InstallationResult[]) => void;
   onError: (error: string) => void;
 }> = ({ apiKey, selectedClients, onComplete, onError }) => {
-  const [progress, setProgress] = useState<InstallationResult[]>([]);
+  const [results, setResults] = useState<InstallationResult[]>([]);
   const [currentClient, setCurrentClient] = useState<string>('');
-  const [isComplete, setIsComplete] = useState(false);
-
-  const installationMap: Record<string, (apiKey: string) => InstallationResult> = {
-    claude: installForClaude,
-    cursor: installForCursor,
-    windsurf: installForWindsurf,
-    continue: installForContinue,
-    vscode: installForVSCode,
-    zed: installForZed,
-    env: createEnvFile,
-  };
-
-  const getClientDisplayName = (clientId: string): string => {
-    const names: Record<string, string> = {
-      claude: 'Claude Desktop',
-      cursor: 'Cursor (Cline)',
-      windsurf: 'Windsurf',
-      continue: 'Continue.dev',
-      vscode: 'VS Code',
-      zed: 'Zed Editor',
-      env: '.env file',
-    };
-    return names[clientId] || clientId;
-  };
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const allResults: InstallationResult[] = [];
-        const clientsToInstall = selectedClients.includes('env')
-          ? ['env']
-          : [...selectedClients, 'env'];
+    const performInstallation = async () => {
+      const installationResults: InstallationResult[] = [];
 
-        for (let i = 0; i < clientsToInstall.length; i++) {
-          const clientId = clientsToInstall[i];
+      try {
+        for (let i = 0; i < selectedClients.length; i++) {
+          const clientId = selectedClients[i];
           if (!clientId) continue;
 
-          setCurrentClient(getClientDisplayName(clientId));
+          const clientName = getClientDisplayName(clientId);
 
-          await new Promise((resolve) => setTimeout(resolve, 300)); // Slightly longer delay for better UX
+          setCurrentClient(clientName);
+          setProgress(Math.round(((i + 1) / selectedClients.length) * 100));
 
-          const installFunction = installationMap[clientId];
-          if (installFunction) {
-            try {
-              const result = installFunction(apiKey);
-              allResults.push(result);
-              setProgress([...allResults]);
-            } catch (clientError) {
-              const errorResult: InstallationResult = {
-                client: getClientDisplayName(clientId),
-                success: false,
-                message:
-                  clientError instanceof Error ? clientError.message : 'Unknown installation error',
-                configPath: undefined,
-              };
-              allResults.push(errorResult);
-              setProgress([...allResults]);
-            }
+          const installFn = installationFunctions[clientId];
+          if (installFn) {
+            const result = installFn(apiKey);
+            installationResults.push(result);
+            setResults([...installationResults]);
           }
+
+          // Simulate realistic installation time
+          await new Promise((resolve) => setTimeout(resolve, 1200));
         }
 
-        setIsComplete(true);
-        setCurrentClient('');
-
-        // Small delay before completing to show final state
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        onComplete(allResults);
-      } catch (e) {
-        onError(e instanceof Error ? e.message : 'An unknown error occurred during installation');
+        onComplete(installationResults);
+      } catch (error) {
+        onError(error instanceof Error ? error.message : 'Installation failed');
       }
-    })();
+    };
+
+    performInstallation();
   }, [apiKey, selectedClients, onComplete, onError]);
 
-  const successCount = progress.filter((r) => r.success).length;
-  const failureCount = progress.filter((r) => !r.success).length;
-  const totalClients = selectedClients.includes('env')
-    ? selectedClients.length
-    : selectedClients.length + 1;
-
   return (
-    <Box flexDirection="column" padding={2} borderStyle="round" borderColor="blue">
-      <Box justifyContent="center" marginBottom={1}>
-        <Text color="cyan" bold>
-          🚀 SmartLead MCP Server - Interactive Installer
-        </Text>
-      </Box>
+    <Box flexDirection="column" alignItems="center" paddingY={2}>
+      <Logo />
 
-      <Box flexDirection="column" paddingX={2}>
-        <Box borderStyle="single" borderColor="blue" padding={1} marginBottom={1}>
-          <Box flexDirection="column">
-            <Text color="blue" bold>
-              ⚙️ Step 3: Installation in Progress...
-            </Text>
-            <Text>
-              Progress: {progress.length}/{totalClients} clients configured
-            </Text>
-            {successCount > 0 && <Text color="green">✅ Successful: {successCount}</Text>}
-            {failureCount > 0 && <Text color="red">❌ Failed: {failureCount}</Text>}
+      <Card title="⚙️ Installing SmartLead MCP Server" borderColor="blue" gradient="info">
+        <Box flexDirection="column">
+          <LoadingSpinner text={`Configuring ${currentClient}...`} color="blue" />
+          <Box marginTop={1}>
+            <Text color="blue">Progress: {progress}% complete</Text>
           </Box>
         </Box>
+      </Card>
 
-        {currentClient && !isComplete && (
-          <Box borderStyle="single" borderColor="yellow" padding={1} marginBottom={1}>
-            <Box>
-              <Spinner type="dots" />
-              <Text color="yellow"> Configuring {currentClient}...</Text>
-            </Box>
-          </Box>
-        )}
-
-        <Box flexDirection="column" marginBottom={1}>
-          {progress.map((result, i) => (
-            <Box
-              key={i}
-              borderStyle="single"
-              borderColor={result.success ? 'green' : 'red'}
-              padding={1}
-              marginBottom={1}
-            >
-              <Box flexDirection="column">
-                <Text color={result.success ? 'green' : 'red'} bold>
-                  {result.success ? '✅' : '❌'} {result.client}
+      <Card title="📋 Installation Results" borderColor="green" gradient="success">
+        <Box flexDirection="column">
+          {results.map((result) => (
+            <Box key={result.client} marginBottom={1}>
+              {result.success ? (
+                <Text color="green">
+                  ✅ {result.client} - {result.message}
                 </Text>
-                <Text dimColor>{result.message}</Text>
-                {result.configPath && <Text dimColor>Path: {result.configPath}</Text>}
-              </Box>
+              ) : (
+                <Text color="red">
+                  ❌ {result.client} - {result.message}
+                </Text>
+              )}
             </Box>
           ))}
+
+          {results.length === 0 && <Text color="gray">Preparing installation...</Text>}
         </Box>
+      </Card>
 
-        {progress.length === 0 && (
-          <Box borderStyle="single" borderColor="blue" padding={1}>
-            <Box>
-              <Spinner type="dots" />
-              <Text color="blue"> Preparing installation...</Text>
-            </Box>
-          </Box>
-        )}
-
-        {isComplete && (
-          <Box borderStyle="single" borderColor="green" padding={1}>
-            <Text color="green" bold>
-              🎉 Installation process completed!
-            </Text>
-          </Box>
-        )}
-      </Box>
+      <StatusBadge status="info">🔄 Please wait while we configure your AI tools</StatusBadge>
     </Box>
   );
 };
 
 /**
- * Installation Complete Screen Component
+ * Installation Complete Screen with celebration
  */
 const InstallationCompleteScreen: React.FC<{
   results: InstallationResult[];
   onExit: () => void;
 }> = ({ results, onExit }) => {
+  const [celebrationPhase, setCelebrationPhase] = useState(0);
+  const successCount = results.filter((r) => r.success).length;
+  const totalCount = results.length;
+  const allSuccessful = successCount === totalCount;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCelebrationPhase((prev) => (prev + 1) % 4);
+    }, 800);
+
+    return () => clearInterval(interval);
+  }, []);
+
   useInput((input) => {
-    if (input) onExit();
+    if (input === '\r' || input === ' ') {
+      onExit();
+    }
   });
 
-  const successes = results.filter((r) => r.success);
-  const failures = results.filter((r) => !r.success);
+  const celebrationEmojis = ['🎉', '🚀', '✨', '🎊'];
 
   return (
-    <Box flexDirection="column" padding={1}>
-      <Text color="cyan" bold>
-        🚀 SmartLead MCP Server - Interactive Installer
-      </Text>
-      <Text></Text>
-      <Text color="green" bold>
-        🎉 Installation Complete!
-      </Text>
-      <Text></Text>
-      {successes.length > 0 && (
-        <Box flexDirection="column">
-          <Text color="green" bold>
-            ✅ Successfully configured:
-          </Text>
-          {successes.map((r, i) => (
-            <Text key={i}>
-              • {r.client} at: {r.configPath}
-            </Text>
-          ))}
-          <Text></Text>
-        </Box>
+    <Box flexDirection="column" alignItems="center" paddingY={2}>
+      <Logo />
+
+      {allSuccessful ? (
+        <StatusBadge status="success">
+          {celebrationEmojis[celebrationPhase]} Installation Complete! All systems ready!
+        </StatusBadge>
+      ) : (
+        <StatusBadge status="warning">
+          ✅ Installation Complete with {totalCount - successCount} warnings
+        </StatusBadge>
       )}
-      {failures.length > 0 && (
+
+      <Card
+        title="📊 Installation Summary"
+        borderColor={allSuccessful ? 'green' : 'yellow'}
+        gradient={allSuccessful ? 'success' : 'warning'}
+      >
         <Box flexDirection="column">
-          <Text color="red" bold>
-            ❌ Failed to configure:
+          <Text color="white">
+            ✅ Successfully configured:{' '}
+            <Text color="green" bold>
+              {successCount}
+            </Text>{' '}
+            / {totalCount} clients
           </Text>
-          {failures.map((r, i) => (
-            <Text key={i}>
-              • {r.client}: {r.message}
-            </Text>
+          <Newline />
+
+          {results.map((result) => (
+            <Box key={`${result.client}-summary`} marginBottom={1}>
+              <Text color={result.success ? 'green' : 'yellow'}>
+                {result.success ? '✅' : '⚠️'} {result.client}
+              </Text>
+              <Text color="gray" dimColor>
+                {' '}
+                - {result.message}
+              </Text>
+              {result.configPath && (
+                <Text color="gray" dimColor>
+                  {' '}
+                  ({result.configPath})
+                </Text>
+              )}
+            </Box>
           ))}
-          <Text></Text>
         </Box>
-      )}
-      <Text color="cyan" bold>
-        🚀 Next Steps
-      </Text>
-      <Text>1. Restart your IDE/Client to load the new tools.</Text>
-      <Text>2. Use commands like: "Create a campaign called 'Product Launch'"</Text>
-      <Text>
-        3. Check your SmartLead dashboard:{' '}
-        <Link url="https://app.smartlead.ai">https://app.smartlead.ai</Link>
-      </Text>
-      <Text></Text>
-      <Text dimColor>Press ANY KEY to exit.</Text>
+      </Card>
+
+      <Card title="🎯 Next Steps" borderColor="cyan" gradient="info">
+        <Box flexDirection="column">
+          <Text>1. Restart your AI coding tool (Claude, Cursor, etc.)</Text>
+          <Text>2. Look for SmartLead tools in your AI assistant</Text>
+          <Text>3. Start automating your cold email campaigns!</Text>
+          <Text>4. Check our documentation for advanced features</Text>
+        </Box>
+      </Card>
+
+      <Card title="📚 Resources" borderColor="magenta" gradient="secondary">
+        <Box flexDirection="column">
+          <Text>
+            • GitHub:{' '}
+            <Link url="https://github.com/LeadMagic/smartlead-mcp-server">
+              LeadMagic/smartlead-mcp-server
+            </Link>
+          </Text>
+          <Text>
+            • Documentation: <Link url="https://leadmagic.io/docs">leadmagic.io/docs</Link>
+          </Text>
+          <Text>
+            • Support: <Link url="mailto:jesse@leadmagic.io">jesse@leadmagic.io</Link>
+          </Text>
+          <Text>
+            • SmartLead: <Link url="https://smartlead.ai">smartlead.ai</Link>
+          </Text>
+        </Box>
+      </Card>
+
+      <Box padding={2} borderStyle="double" borderColor="green" marginY={2}>
+        <Gradient name={gradients.success}>
+          <Text bold>🎉 Press ENTER or SPACE to finish</Text>
+        </Gradient>
+      </Box>
+
+      <Box marginTop={1}>
+        <Text color="gray" dimColor>
+          Thank you for choosing SmartLead MCP Server!
+          {celebrationEmojis[celebrationPhase]}
+        </Text>
+      </Box>
     </Box>
   );
 };
 
-/**
- * Main Installer App Component
- * Enforces API key validation before allowing MCP client installation
- */
+// ===== MAIN APP =====
+
 const InstallerApp: React.FC = () => {
-  const [step, setStep] = useState<InstallationStep>('welcome');
+  const { exit } = useApp();
+  const [currentStep, setCurrentStep] = useState<InstallationStep>('welcome');
   const [apiKey, setApiKey] = useState('');
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
-  const [results, setResults] = useState<InstallationResult[]>([]);
+  const [installationResults, setInstallationResults] = useState<InstallationResult[]>([]);
   const [error, setError] = useState('');
-  const { exit } = useApp();
 
   const renderStep = () => {
-    switch (step) {
+    switch (currentStep) {
       case 'welcome':
-        return <WelcomeScreen onNext={() => setStep('apiKey')} />;
+        return <WelcomeScreen onNext={() => setCurrentStep('apiKey')} />;
 
       case 'apiKey':
         return (
           <ApiKeyScreen
             onNext={(key) => {
               setApiKey(key);
-              setStep('clientSelection');
+              setCurrentStep('clientSelection');
             }}
-            onBack={() => setStep('welcome')}
+            onBack={() => setCurrentStep('welcome')}
           />
         );
 
@@ -1095,9 +1117,9 @@ const InstallerApp: React.FC = () => {
           <ClientSelectionScreen
             onNext={(clients) => {
               setSelectedClients(clients);
-              setStep('installing');
+              setCurrentStep('installing');
             }}
-            onBack={() => setStep('apiKey')}
+            onBack={() => setCurrentStep('apiKey')}
           />
         );
 
@@ -1106,85 +1128,43 @@ const InstallerApp: React.FC = () => {
           <InstallationProgressScreen
             apiKey={apiKey}
             selectedClients={selectedClients}
-            onComplete={(res) => {
-              setResults(res);
-              setStep('complete');
+            onComplete={(results) => {
+              setInstallationResults(results);
+              setCurrentStep('complete');
             }}
-            onError={(err) => {
-              setError(err);
-              setStep('error');
+            onError={(errorMessage) => {
+              setError(errorMessage);
+              setCurrentStep('error');
             }}
           />
         );
 
       case 'complete':
-        return <InstallationCompleteScreen results={results} onExit={() => exit()} />;
+        return <InstallationCompleteScreen results={installationResults} onExit={() => exit()} />;
 
       case 'error':
         return (
-          <Box flexDirection="column" padding={1}>
-            <Text color="cyan" bold>
-              🚀 SmartLead MCP Server - Interactive Installer
-            </Text>
-            <Text></Text>
-            <Text color="red" bold>
-              ❌ An Error Occurred
-            </Text>
-            <Text></Text>
-            <Text color="red">{error}</Text>
-            <Text></Text>
-            <Text color="yellow">💡 Troubleshooting:</Text>
-            <Text>• Check your API key is valid.</Text>
-            <Text>• Ensure you have write permissions.</Text>
-            <Text>• Try running with administrator privileges.</Text>
-            <Text>
-              • Visit: <Link url="https://github.com/LeadMagic/smartlead-mcp-server">GitHub</Link>
-            </Text>
-            <Text></Text>
-            <Text dimColor>Press R to restart, or ESC to exit.</Text>
+          <Box flexDirection="column" alignItems="center" paddingY={2}>
+            <Logo />
+            <StatusBadge status="error">Installation failed: {error}</StatusBadge>
+            <Box marginTop={2}>
+              <Text color="gray">Press any key to exit</Text>
+            </Box>
           </Box>
         );
 
       default:
-        return (
-          <Box>
-            <Spinner type="dots" />
-            <Text> Loading...</Text>
-          </Box>
-        );
+        return null;
     }
   };
 
-  useInput((input, key) => {
-    if (step === 'error') {
-      if (key.escape || input === 'q') exit();
-      if (input === 'r' || key.return) {
-        setStep('welcome');
-        setApiKey('');
-        setSelectedClients([]);
-        setResults([]);
-        setError('');
-      }
-    }
-  });
-
-  return renderStep();
+  return (
+    <Box flexDirection="column" minHeight={20}>
+      {renderStep()}
+    </Box>
+  );
 };
 
-// Handle graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n\n👋 Installation cancelled. Run the installer again anytime!');
-  process.exit(0);
-});
+// ===== STARTUP =====
 
-process.on('SIGTERM', () => {
-  console.log('\n\n👋 Installation terminated.');
-  process.exit(0);
-});
-
-// Render the app if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  render(<InstallerApp />);
-}
-
-export default InstallerApp;
+render(<InstallerApp />);

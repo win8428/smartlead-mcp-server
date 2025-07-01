@@ -19,7 +19,6 @@ import { BaseSmartLeadClient } from '../../client/base.js';
  * - Lead response analytics
  */
 export class AnalyticsClient extends BaseSmartLeadClient {
-
   // ================================
   // GLOBAL ANALYTICS METHODS
   // ================================

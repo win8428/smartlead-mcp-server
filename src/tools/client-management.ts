@@ -1,9 +1,9 @@
 /**
  * SmartLead MCP Server - Client Management Tools
- * 
+ *
  * Tools for managing SmartLead clients including creation, API key management,
  * and client configuration.
- * 
+ *
  * @author LeadMagic Team
  * @version 1.5.0
  */
@@ -174,10 +174,7 @@ export function registerClientManagementTools(
       try {
         const validatedParams = DeleteClientApiKeySchema.parse(params);
         const result = await client.clientManagement.deleteClientApiKey(validatedParams.api_key_id);
-        return formatSuccessResponse(
-          `Deleted API key ${validatedParams.api_key_id}`,
-          result
-        );
+        return formatSuccessResponse(`Deleted API key ${validatedParams.api_key_id}`, result);
       } catch (error) {
         return handleError(error);
       }

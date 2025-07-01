@@ -1,9 +1,9 @@
 /**
  * SmartLead MCP Server - Smart Delivery Client
- * 
+ *
  * Handles all Smart Delivery related operations including placement tests,
  * spam tests, reports, and folder management.
- * 
+ *
  * @author LeadMagic Team
  * @version 1.5.0
  */
@@ -91,13 +91,13 @@ interface SmartDeliveryResponse<T = unknown> {
 
 /**
  * Smart Delivery Client
- * 
+ *
  * Provides methods for managing SmartLead smart delivery including:
  * - Placement tests (manual and automated)
  * - Spam tests and reports
  * - Folder management
  * - Provider and geo-wise reports
- * 
+ *
  * Note: Smart Delivery uses a different base URL than the main API
  * Base URL: https://smartdelivery.smartlead.ai/api/v1
  */
@@ -106,7 +106,7 @@ export class SmartDeliveryClient extends BaseSmartLeadClient {
 
   constructor(config: SmartLeadConfig) {
     super(config);
-    
+
     // Create a separate Axios client for Smart Delivery with the correct base URL
     this.smartDeliveryClient = axios.create({
       baseURL: 'https://smartdelivery.smartlead.ai/api/v1',
