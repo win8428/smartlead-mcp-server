@@ -727,6 +727,11 @@ const SmartLeadInstaller: React.FC = () => {
         </Card>
       )}
 
+      <Card title="🎯 Smart Tool Loading" gradient="success">
+        Essential tools loaded by default (49 tools). Enable advanced/admin tools with environment
+        variables if needed.
+      </Card>
+
       <StatusBadge status="loading">🔄 Installing... Please do not close this window</StatusBadge>
     </Box>
   );

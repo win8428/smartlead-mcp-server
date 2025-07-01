@@ -126,14 +126,31 @@ export class SmartLeadMCPServer {
   /**
    * Registers all SmartLead API endpoints as MCP tools
    *
-   * This method sets up all SmartLead tools with proper schemas, descriptions,
-   * and error handling. Each tool is carefully configured to provide the best
-   * user experience in MCP clients.
+   * This method sets up SmartLead tools using a tiered approach to prevent overwhelming
+   * MCP clients. Tools are organized into categories that can be selectively enabled:
+   *
+   * **Essential Tools (Always Loaded):**
+   * - Campaign Management (13 tools)
+   * - Lead Management (17 tools)
+   * - Basic Email Accounts (10 tools)
+   * - Basic Statistics (9 tools)
+   *
+   * **Advanced Tools (Optional - Set SMARTLEAD_ADVANCED_TOOLS=true):**
+   * - Smart Delivery (25 tools)
+   * - Global Analytics (20 tools)
+   * - Webhooks (5 tools)
+   *
+   * **Administrative Tools (Optional - Set SMARTLEAD_ADMIN_TOOLS=true):**
+   * - Client Management (6 tools)
+   * - Smart Senders (5 tools)
    *
    * @private
    */
   private setupTools(): void {
-    // Register all modular tools
+    console.log('🔧 Configuring SmartLead MCP Tools...');
+
+    // Always load essential tools (49 tools total)
+    console.log('✅ Loading Essential Tools: Campaigns, Leads, Email Accounts, Statistics');
     registerCampaignTools(
       this.server,
       this.client,
@@ -146,31 +163,7 @@ export class SmartLeadMCPServer {
       this.formatSuccessResponse.bind(this),
       this.handleError.bind(this)
     );
-    registerAnalyticsTools(
-      this.server,
-      this.client,
-      this.formatSuccessResponse.bind(this),
-      this.handleError.bind(this)
-    );
     registerEmailAccountTools(
-      this.server,
-      this.client,
-      this.formatSuccessResponse.bind(this),
-      this.handleError.bind(this)
-    );
-    registerWebhookTools(
-      this.server,
-      this.client,
-      this.formatSuccessResponse.bind(this),
-      this.handleError.bind(this)
-    );
-    registerClientManagementTools(
-      this.server,
-      this.client,
-      this.formatSuccessResponse.bind(this),
-      this.handleError.bind(this)
-    );
-    registerSmartSendersTools(
       this.server,
       this.client,
       this.formatSuccessResponse.bind(this),
@@ -182,12 +175,70 @@ export class SmartLeadMCPServer {
       this.formatSuccessResponse.bind(this),
       this.handleError.bind(this)
     );
-    registerSmartDeliveryTools(
-      this.server,
-      this.client,
-      this.formatSuccessResponse.bind(this),
-      this.handleError.bind(this)
+
+    // Load advanced tools if enabled (50 additional tools)
+    const enableAdvancedTools = process.env.SMARTLEAD_ADVANCED_TOOLS === 'true';
+    if (enableAdvancedTools) {
+      console.log('🚀 Loading Advanced Tools: Smart Delivery, Analytics, Webhooks');
+      registerSmartDeliveryTools(
+        this.server,
+        this.client,
+        this.formatSuccessResponse.bind(this),
+        this.handleError.bind(this)
+      );
+      registerAnalyticsTools(
+        this.server,
+        this.client,
+        this.formatSuccessResponse.bind(this),
+        this.handleError.bind(this)
+      );
+      registerWebhookTools(
+        this.server,
+        this.client,
+        this.formatSuccessResponse.bind(this),
+        this.handleError.bind(this)
+      );
+    } else {
+      console.log('⏸️  Advanced Tools disabled (set SMARTLEAD_ADVANCED_TOOLS=true to enable)');
+    }
+
+    // Load administrative tools if enabled (11 additional tools)
+    const enableAdminTools = process.env.SMARTLEAD_ADMIN_TOOLS === 'true';
+    if (enableAdminTools) {
+      console.log('🔐 Loading Administrative Tools: Client Management, Smart Senders');
+      registerClientManagementTools(
+        this.server,
+        this.client,
+        this.formatSuccessResponse.bind(this),
+        this.handleError.bind(this)
+      );
+      registerSmartSendersTools(
+        this.server,
+        this.client,
+        this.formatSuccessResponse.bind(this),
+        this.handleError.bind(this)
+      );
+    } else {
+      console.log('⏸️  Administrative Tools disabled (set SMARTLEAD_ADMIN_TOOLS=true to enable)');
+    }
+
+    // Show summary
+    const toolCount = this.getLoadedToolCount(enableAdvancedTools, enableAdminTools);
+    console.log(`📊 Total Tools Loaded: ${toolCount}/113+ available`);
+    console.log(
+      '💡 To enable more tools, see: https://github.com/LeadMagic/smartlead-mcp-server#readme'
     );
+  }
+
+  /**
+   * Calculates the number of loaded tools based on enabled features
+   * @private
+   */
+  private getLoadedToolCount(advancedEnabled: boolean, adminEnabled: boolean): number {
+    let count = 49; // Essential tools
+    if (advancedEnabled) count += 50; // Advanced tools
+    if (adminEnabled) count += 11; // Admin tools
+    return count;
   }
 
   /**

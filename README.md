@@ -226,6 +226,58 @@ SmartLead is the industry leader in cold email marketing, and our MCP server pro
 
 ## 🛠️ Complete API Coverage
 
+### **🎯 Smart Tool Loading System**
+
+To prevent overwhelming your MCP client, SmartLead MCP Server uses a **tiered tool loading system**. By default, only the most essential tools are loaded (49 tools), with advanced and administrative tools available on-demand.
+
+#### **✅ Essential Tools (Always Loaded - 49 Tools)**
+These core tools are loaded by default for the best user experience:
+
+- **📧 Campaign Management** (13 tools) - Create, manage, and optimize campaigns
+- **👥 Lead Management** (17 tools) - Import, organize, and track prospects  
+- **📧 Email Account Management** (10 tools) - Manage sending accounts and warmup
+- **📊 Basic Statistics** (9 tools) - Essential performance metrics
+
+#### **🚀 Advanced Tools (Optional - 50 Tools)**
+Enable with: `SMARTLEAD_ADVANCED_TOOLS=true`
+
+- **🎯 Smart Delivery** (25 tools) - Deliverability testing and optimization
+- **📊 Global Analytics** (20 tools) - Advanced reporting and insights
+- **🔗 Webhooks** (5 tools) - Real-time event integration
+
+#### **🔐 Administrative Tools (Optional - 11 Tools)**  
+Enable with: `SMARTLEAD_ADMIN_TOOLS=true`
+
+- **👥 Client Management** (6 tools) - White-label client administration
+- **🌐 Smart Senders** (5 tools) - Domain purchasing and management
+
+### **⚙️ Enabling Additional Tools**
+
+```bash
+# Enable advanced tools (Smart Delivery, Analytics, Webhooks)
+export SMARTLEAD_ADVANCED_TOOLS=true
+
+# Enable administrative tools (Client Management, Smart Senders)  
+export SMARTLEAD_ADMIN_TOOLS=true
+
+# Enable all tools (113+ total)
+export SMARTLEAD_ADVANCED_TOOLS=true
+export SMARTLEAD_ADMIN_TOOLS=true
+
+# Run with enhanced tool set
+npx smartlead-mcp-by-leadmagic
+```
+
+### **📊 Tool Loading Summary**
+
+| Configuration | Tools Loaded | Best For |
+|---------------|--------------|----------|
+| **Default** | 49 tools | New users, essential workflows |
+| **+ Advanced** | 99 tools | Power users, deliverability optimization |
+| **+ Admin** | 110+ tools | Agencies, white-label implementations |
+
+---
+
 ### 🚀 **PRIORITY: SmartLead Campaign Analytics**
 - 📊 `smartlead_get_campaigns_with_analytics` - **Efficient combined endpoint** that fetches cold email campaigns with their performance analytics in one call. Supports client/status filtering for large datasets. **Perfect for SmartLead performance reporting!**
 
@@ -429,7 +481,27 @@ If you prefer manual setup, add this to your MCP client configuration:
       "command": "npx",
       "args": ["smartlead-mcp-by-leadmagic"],
       "env": {
-        "SMARTLEAD_API_KEY": "your-api-key-here"
+        "SMARTLEAD_API_KEY": "your-api-key-here",
+        "SMARTLEAD_ADVANCED_TOOLS": "false",
+        "SMARTLEAD_ADMIN_TOOLS": "false"
+      }
+    }
+  }
+}
+```
+
+**⚙️ Tool Configuration Options:**
+
+```json
+{
+  "mcpServers": {
+    "smartlead": {
+      "command": "npx",
+      "args": ["smartlead-mcp-by-leadmagic"],
+      "env": {
+        "SMARTLEAD_API_KEY": "your-api-key-here",
+        "SMARTLEAD_ADVANCED_TOOLS": "true",  // Enable Smart Delivery, Analytics, Webhooks
+        "SMARTLEAD_ADMIN_TOOLS": "true"      // Enable Client Management, Smart Senders
       }
     }
   }
@@ -579,10 +651,15 @@ Consistent error format across all endpoints:
 ### **🛡️ Technical Security**
 
 ✅ **No API keys in code** - Always use environment variables
+
 ✅ **Type-safe requests** - Full TypeScript coverage with Zod validation
+
 ✅ **Error handling** - Comprehensive error catching and user-friendly messages
+
 ✅ **Rate limiting** - Respects SmartLead API rate limits
+
 ✅ **Secure defaults** - Production-ready configuration out of the box
+
 ✅ **Interactive installer** - No manual config file editing required
 
 ### **📧 SmartLead Cold Email Compliance & Best Practices**
@@ -590,36 +667,55 @@ Consistent error format across all endpoints:
 #### **🏛️ Legal Compliance**
 
 ✅ **CAN-SPAM Act** - Automatic unsubscribe handling and sender identification
+
 ✅ **GDPR Compliance** - Proper consent management and data protection
+
 ✅ **CCPA Compliance** - California privacy rights and data handling
+
 ✅ **Opt-out Management** - Immediate unsubscribe processing
+
 ✅ **Sender Identification** - Clear sender information in all emails
 
 #### **🎯 SmartLead Deliverability Best Practices**
 
 ✅ **Gradual Volume Ramping** - Start with low volumes and increase gradually
+
 ✅ **IP Warming** - Proper warmup sequences for new email accounts
+
 ✅ **Domain Reputation** - Monitor and maintain sender reputation
+
 ✅ **List Hygiene** - Regular cleaning and validation of prospect lists
+
 ✅ **Engagement Tracking** - Monitor opens, clicks, and replies
+
 ✅ **Spam Testing** - Regular placement tests and spam score monitoring
 
 #### **📝 Content Best Practices**
 
 ✅ **Personalization** - Use dynamic variables for relevant messaging
+
 ✅ **Value-First Approach** - Focus on prospect benefits, not features
+
 ✅ **Clear Call-to-Action** - Single, specific action per email
+
 ✅ **Mobile Optimization** - Ensure emails render well on all devices
+
 ✅ **A/B Testing** - Test subject lines, content, and send times
+
 ✅ **Natural Language** - Avoid spam trigger words and phrases
 
 #### **⚡ Performance Optimization**
 
 ✅ **Send Time Optimization** - Respect prospect time zones
+
 ✅ **Frequency Management** - Appropriate delays between sequence emails
+
 ✅ **Response Monitoring** - Track and analyze reply rates
+
 ✅ **Bounce Handling** - Automatic removal of invalid email addresses
+
 ✅ **Engagement Scoring** - Prioritize highly engaged prospects
+
 ✅ **Campaign Analytics** - Regular performance review and optimization
 
 ---
