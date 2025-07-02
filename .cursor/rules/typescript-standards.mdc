@@ -1,15 +1,11 @@
 ---
-description:
-globs:
-alwaysApply: false
----
----
-name: SmartLead MCP TypeScript Standards  
+name: SmartLead MCP TypeScript Standards
 description: TypeScript coding standards, patterns, and best practices for the SmartLead MCP Server
 author: LeadMagic Team
 version: 1.0.0
 tags: [typescript, coding-standards, best-practices, types]
-applies_to: ["src/**/*.ts", "src/**/*.tsx"]
+globs: ["src/**/*.ts", "src/**/*.tsx"]
+alwaysApply: false
 priority: high
 ---
 

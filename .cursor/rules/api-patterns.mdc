@@ -1,15 +1,11 @@
 ---
-description:
-globs:
-alwaysApply: false
----
----
 name: SmartLead MCP API Development Patterns
 description: Development patterns for API clients and MCP tools in the SmartLead server
 author: LeadMagic Team
 version: 1.0.0
 tags: [api, patterns, development, typescript, mcp-tools]
-applies_to: ["src/modules/**/*.ts", "src/tools/**/*.ts", "src/client/**/*.ts"]
+globs: ["src/modules/**/*.ts", "src/tools/**/*.ts", "src/client/**/*.ts"]
+alwaysApply: false
 priority: high
 ---
 
