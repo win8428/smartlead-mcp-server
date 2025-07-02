@@ -1,0 +1,188 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# API Development Patterns
+
+## 🏗️ **SmartLead API Client Architecture**
+
+### **Base Client Pattern**
+All API modules extend from **[src/client/base.ts](mdc:src/client/base.ts)** which provides:
+- **HTTP request handling** with Axios
+- **Automatic retry logic** with exponential backoff
+- **Rate limiting** and request queuing
+- **Error handling** with SmartLeadError class
+- **Request/response logging** for debugging
+
+### **Module Structure**
+Each API module in `src/modules/` follows this pattern:
+```typescript
+export class ModuleNameClient extends BaseSmartLeadClient {
+  // API methods that call SmartLead endpoints
+  async methodName(params: TypedParams): Promise<TypedResponse> {
+    return this.withRetry(() => this.post('/endpoint', params));
+  }
+}
+```
+
+## 🛠️ **MCP Tool Patterns**
+
+### **Tool Registration Pattern**
+All MCP tools in `src/tools/` follow this structure:
+```typescript
+export function registerModuleTools(
+  server: McpServer,
+  client: SmartLeadClient,
+  formatSuccessResponse: (message: string, data: unknown, summary?: string) => MCPToolResponse,
+  handleError: (error: unknown) => MCPToolResponse
+): void {
+  server.registerTool(
+    'smartlead_tool_name',
+    {
+      title: 'Human Readable Title',
+      description: 'Clear description of what this tool does',
+      inputSchema: ZodSchema.shape,
+    },
+    async (params) => {
+      try {
+        const validatedParams = ZodSchema.parse(params);
+        const result = await client.module.method(validatedParams);
+        return formatSuccessResponse('Success message', result, 'Optional summary');
+      } catch (error) {
+        return handleError(error);
+      }
+    }
+  );
+}
+```
+
+### **Tool Naming Convention**
+- **Prefix**: All tools start with `smartlead_`
+- **Action**: Use clear action verbs (`get`, `create`, `update`, `delete`, `list`)
+- **Resource**: Include the resource being acted upon
+- **Examples**: `smartlead_create_campaign`, `smartlead_get_leads`, `smartlead_update_email_account`
+
+## 📝 **Type Safety Patterns**
+
+### **Zod Schema Validation**
+All API inputs use Zod schemas defined in **[src/types.ts](mdc:src/types.ts)**:
+```typescript
+const CreateCampaignSchema = z.object({
+  name: z.string(),
+  from_email: z.string().email(),
+  // ... other fields
+});
+
+type CreateCampaignRequest = z.infer<typeof CreateCampaignSchema>;
+```
+
+### **Response Type Patterns**
+API responses follow consistent patterns:
+```typescript
+interface SuccessResponse {
+  success: boolean;
+  message?: string;
+  data?: unknown;
+}
+
+interface ErrorResponse {
+  success: false;
+  error: string;
+  code?: string;
+  status?: number;
+}
+```
+
+## 🔄 **Error Handling Patterns**
+
+### **SmartLeadError Class**
+Defined in **[src/client/base.ts](mdc:src/client/base.ts)**:
+```typescript
+export class SmartLeadError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public status: number,
+    public data?: unknown,
+    public isRetryable: boolean = false
+  ) {
+    super(message);
+    this.name = 'SmartLeadError';
+  }
+}
+```
+
+### **Retry Logic Pattern**
+```typescript
+async withRetry<T>(operation: () => Promise<T>): Promise<T> {
+  let lastError: Error;
+  
+  for (let attempt = 1; attempt <= this.config.retryAttempts; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      if (!this.shouldRetry(error) || attempt === this.config.retryAttempts) {
+        throw error;
+      }
+      await this.delay(this.getRetryDelay(attempt));
+    }
+  }
+  
+  throw lastError!;
+}
+```
+
+## 🔗 **Integration Patterns**
+
+### **Client Integration**
+The main client in **[src/client/index.ts](mdc:src/client/index.ts)** aggregates all modules:
+```typescript
+export class SmartLeadClient extends BaseSmartLeadClient {
+  public readonly campaigns: CampaignManagementClient;
+  public readonly leads: LeadManagementClient;
+  public readonly emailAccounts: EmailAccountManagementClient;
+  // ... other modules
+  
+  constructor(config: SmartLeadConfig) {
+    super(config);
+    this.campaigns = new CampaignManagementClient(this);
+    this.leads = new LeadManagementClient(this);
+    // ... initialize other modules
+  }
+}
+```
+
+### **Server Integration**
+The MCP server in **[src/server.ts](mdc:src/server.ts)** registers all tools:
+```typescript
+// Register all tool categories
+registerCampaignTools(server, client, formatSuccessResponse, handleError);
+registerLeadTools(server, client, formatSuccessResponse, handleError);
+registerEmailAccountTools(server, client, formatSuccessResponse, handleError);
+// ... register other tools
+```
+
+## 🎯 **Best Practices**
+
+### **API Method Guidelines**
+1. **Use descriptive method names** that clearly indicate the action
+2. **Accept typed parameters** using Zod schemas
+3. **Return typed responses** with proper error handling
+4. **Include JSDoc comments** for complex methods
+5. **Use async/await** consistently
+
+### **MCP Tool Guidelines**
+1. **Provide clear titles and descriptions** for each tool
+2. **Use Zod schemas** for input validation
+3. **Return consistent response formats** using helper functions
+4. **Include helpful error messages** for users
+5. **Add summary information** when useful
+
+### **Error Handling Guidelines**
+1. **Catch and handle all errors** appropriately
+2. **Use SmartLeadError** for API-related errors
+3. **Provide user-friendly error messages** in MCP tools
+4. **Log errors appropriately** for debugging
+5. **Implement retry logic** for transient failures

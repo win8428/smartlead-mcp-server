@@ -1,0 +1,67 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# SmartLead MCP Server - Project Overview
+
+## 🎯 **Project Purpose**
+This is the **SmartLead MCP Server** - a comprehensive Model Context Protocol server that provides complete access to SmartLead's cold email automation platform through AI coding assistants like Claude, Cursor, Windsurf, and Continue.dev.
+
+## 🏗️ **Architecture Overview**
+
+### **Entry Points**
+- **[src/index.ts](mdc:src/index.ts)** - Main CLI entry point that routes between server and installer modes
+- **[src/server.ts](mdc:src/server.ts)** - MCP server implementation that registers all 116+ tools
+- **[src/installer.tsx](mdc:src/installer.tsx)** - Beautiful React Ink installer with purple gradients
+
+### **Core Components**
+- **[src/client/index.ts](mdc:src/client/index.ts)** - Modern SmartLead API client with modular architecture
+- **[src/client/base.ts](mdc:src/client/base.ts)** - Base HTTP client with retry logic and error handling
+- **[src/types.ts](mdc:src/types.ts)** - Global TypeScript types and Zod validation schemas
+
+## 📂 **Directory Structure**
+
+### **API Modules** (`src/modules/`)
+Each module handles a specific SmartLead API category:
+- **[src/modules/campaigns/client.ts](mdc:src/modules/campaigns/client.ts)** - Campaign management
+- **[src/modules/leads/client.ts](mdc:src/modules/leads/client.ts)** - Lead and prospect management
+- **[src/modules/email-accounts/client.ts](mdc:src/modules/email-accounts/client.ts)** - Email account management
+- **[src/modules/analytics/client.ts](mdc:src/modules/analytics/client.ts)** - Analytics and reporting
+- **[src/modules/statistics/client.ts](mdc:src/modules/statistics/client.ts)** - Statistics and metrics
+- **[src/modules/smart-delivery/client.ts](mdc:src/modules/smart-delivery/client.ts)** - Deliverability optimization
+- **[src/modules/smart-senders/client.ts](mdc:src/modules/smart-senders/client.ts)** - Domain and sender management
+- **[src/modules/webhooks/client.ts](mdc:src/modules/webhooks/client.ts)** - Webhook management
+- **[src/modules/client-management/client.ts](mdc:src/modules/client-management/client.ts)** - Team and client management
+
+### **MCP Tools** (`src/tools/`)
+Each tool file exposes SmartLead functionality as MCP tools:
+- **[src/tools/index.ts](mdc:src/tools/index.ts)** - Central tool registration exports
+- Tool files mirror the module structure (e.g., `campaigns.ts`, `leads.ts`, etc.)
+
+## 🔧 **Configuration Files**
+- **[package.json](mdc:package.json)** - NPM package configuration and dependencies
+- **[tsconfig.json](mdc:tsconfig.json)** - TypeScript compiler configuration
+- **[biome.json](mdc:biome.json)** - Biome linter and formatter configuration
+- **[.env.example](mdc:.env.example)** - Environment variables template
+
+## 📚 **Documentation**
+- **[README.md](mdc:README.md)** - Marketing-optimized project overview
+- **[INSTALLATION.md](mdc:INSTALLATION.md)** - Detailed installation guide
+- **[PROJECT_STRUCTURE.md](mdc:PROJECT_STRUCTURE.md)** - Comprehensive project structure documentation
+- **[SECURITY.md](mdc:SECURITY.md)** - Security best practices and guidelines
+- **[CHANGELOG.md](mdc:CHANGELOG.md)** - Version history and release notes
+
+## 🚀 **Key Features**
+- **116+ MCP Tools** covering the complete SmartLead API
+- **Beautiful React Ink Installer** with purple gradient design
+- **Zero-config setup** for all major MCP clients
+- **TypeScript-first** development with comprehensive type safety
+- **Production-ready** error handling and security practices
+- **Cross-platform** compatibility (macOS, Linux, Windows)
+
+## 🛠️ **Development Workflow**
+1. **Source files** are in TypeScript under `src/`
+2. **Build process** compiles to `dist/` directory
+3. **Package** is published to NPM as `smartlead-mcp-by-leadmagic`
+4. **Users install** via `npx smartlead-mcp-by-leadmagic install`
