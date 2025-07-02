@@ -3,11 +3,25 @@ name: SmartLead MCP TypeScript Standards
 description: TypeScript coding standards, patterns, and best practices for the SmartLead MCP Server
 author: LeadMagic Team
 version: 1.0.0
-tags: [typescript, coding-standards, best-practices, types]
-globs: ["src/**/*.ts", "src/**/*.tsx"]
-alwaysApply: false
-priority: high
----
+# 📝 SmartLead TypeScript Standards & Best Practices
+
+> **Code Quality Guide**: Master TypeScript patterns and standards used in the SmartLead MCP Server. Write clean, type-safe, maintainable code that follows our established conventions.
+
+## 🎯 **Quick Reference**
+
+### **🔥 Core Principles**
+1. **Strict Type Safety** → No `any` types, use proper interfaces
+2. **Zod Integration** → All inputs validated with Zod schemas
+3. **Error Handling** → Use `SmartLeadError` for API errors
+4. **Async Patterns** → Consistent async/await usage
+5. **Documentation** → JSDoc for public APIs
+
+### **⚡ Quick Checklist**
+- [ ] No `any` types used
+- [ ] Zod schemas for validation
+- [ ] Proper error handling
+- [ ] JSDoc for public methods
+- [ ] Consistent naming conventions
 
 # SmartLead MCP Server - TypeScript Standards
 
@@ -355,6 +369,11 @@ import { z } from 'zod';
  * @returns Promise resolving to the created campaign data
  * @throws SmartLeadError when API request fails
  */
+async createCampaign(params: CreateCampaignRequest): Promise<CampaignResponse> {
+  // Implementation
+}
+```
+
 async createCampaign(params: CreateCampaignRequest): Promise<CampaignResponse> {
   // Implementation
 }
