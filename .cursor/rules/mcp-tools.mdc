@@ -3,7 +3,17 @@ description:
 globs:
 alwaysApply: false
 ---
-# MCP Tool Development Guide
+---
+name: SmartLead MCP Tools Reference
+description: Complete reference guide for all 116+ MCP tools organized by category
+author: LeadMagic Team
+version: 1.0.0
+tags: [mcp-tools, smartlead-api, tools-reference, automation]
+applies_to: ["src/tools/**/*.ts", "src/server.ts"]
+priority: medium
+---
+
+# SmartLead MCP Tools - Complete Reference Guide
 
 ## 🛠️ **MCP Tool Categories**
 

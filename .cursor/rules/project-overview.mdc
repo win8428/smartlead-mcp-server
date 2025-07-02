@@ -3,6 +3,16 @@ description:
 globs:
 alwaysApply: false
 ---
+---
+name: SmartLead MCP Server Project Overview
+description: Complete project structure guide and navigation for the SmartLead MCP Server
+author: LeadMagic Team
+version: 1.0.0
+tags: [project-structure, navigation, architecture, mcp-server, smartlead]
+applies_to: ["**/*"]
+priority: high
+---
+
 # SmartLead MCP Server - Project Overview
 
 ## 🎯 **Project Purpose**
