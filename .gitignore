@@ -102,3 +102,22 @@ jest.config.js
 
 # TernJS port file
 .tern-port
+-e 
+# Temporary and junk files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*~
+*.log
+*.tgz
+*.tar.gz
+
+# Package files
+package-lock.json
+yarn.lock
+
+# IDE files
+.vscode/
+.idea/
